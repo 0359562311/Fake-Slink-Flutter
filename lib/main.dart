@@ -5,6 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'app/domain/entities/session.dart';
+import 'core/const/app_routes.dart';
+import 'core/utils/interceptor.dart';
 import 'core/utils/network_info.dart';
 import 'core/utils/share_preferences.dart';
 
@@ -18,29 +21,29 @@ void main() async {
 Future<void> init() async {
   GetIt getIt = GetIt.instance;
   await SharePreferencesUtils.init();
-  // if(SharePreferencesUtils.getString("refresh") != null) {
-  //   getIt.registerSingleton(
-  //       Session(
-  //           access: SharePreferencesUtils.getString("access")!,
-  //           refresh: SharePreferencesUtils.getString("refresh")!
-  //       )
-  //   );
-  // }
+  if(SharePreferencesUtils.getString("refresh") != null) {
+    getIt.registerSingleton(
+        Session(
+            access: SharePreferencesUtils.getString("access")!,
+            refresh: SharePreferencesUtils.getString("refresh")!
+        )
+    );
+  }
   var options = BaseOptions(
       baseUrl: 'http://192.168.1.86:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
       responseType: ResponseType.json
   );
-  // getIt.registerSingleton<StreamController<bool>>(StreamController<bool>());
-  // getIt.registerSingleton(Dio(options)
-  //   ..interceptors.addAll(
-  //       [AuthenticationInterceptor(),
-  //         LogInterceptor(
-  //             requestBody: true, requestHeader: false, responseBody: true,
-  //             request: false, responseHeader: false,error: true
-  //         ),]
-  //   ));
+  getIt.registerSingleton<StreamController<bool>>(StreamController<bool>());
+  getIt.registerSingleton(Dio(options)
+    ..interceptors.addAll(
+        [AuthenticationInterceptor(),
+          LogInterceptor(
+              requestBody: true, requestHeader: false, responseBody: true,
+              request: false, responseHeader: false,error: true
+          ),]
+    ));
 }
 
 class MyApp extends StatefulWidget {
@@ -68,15 +71,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(
-        SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+    // SystemChrome.setSystemUIOverlayStyle(
+    //     SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      // initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoutes.routeMain : AppRoutes.routeLogin,
+      initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
       // routes: {
       //   AppRoutes.routeQRGenerator: (context) => QRGenerator(),
       //   AppRoutes.routeQRScan: (_) => QRScan(),
