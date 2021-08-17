@@ -20,10 +20,16 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     // TODO: implement onError
     // TODO: implement onError
-    if (err.response?.requestOptions.path.startsWith("/auth") ?? true) {
+    if (err.response?.statusCode == 408) {
+      GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối, hãy kiểm tra lại kết nối mạng");
+    }
+    else if (err.response?.statusCode != null && err.response!.statusCode! >= 500) {
+      GetIt.instance<StreamController<String>>().add("Máy chủ đang bảo trì.");
+    }
+    else if (err.response?.requestOptions.path.startsWith("/auth") ?? true) {
       handler.next(err);
-    } else if (err.response?.statusCode == 401
-    ) {
+    }
+    else if (err.response?.statusCode == 401) {
       var dio = GetIt.instance<Dio>();
       dio.interceptors.requestLock.lock();
       RequestOptions options = err.requestOptions;
@@ -56,9 +62,10 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
       }).catchError((error) {
         print("Refresh token expired");
         dio.clear();
-        GetIt.instance<StreamController<bool>>().add(false);
+        GetIt.instance<StreamController<String>>().add("Phiên đăng nhập đã hết hạn.");
       });
-    } else
+    }
+    else
       handler.reject(err);
   }
 

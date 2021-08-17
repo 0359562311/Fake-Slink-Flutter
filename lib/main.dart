@@ -35,7 +35,7 @@ Future<void> init() async {
       receiveTimeout: 15000,
       responseType: ResponseType.json
   );
-  getIt.registerSingleton<StreamController<bool>>(StreamController<bool>());
+  getIt.registerSingleton<StreamController<String>>(StreamController<String>());
   getIt.registerSingleton(Dio(options)
     ..interceptors.addAll(
         [AuthenticationInterceptor(),
