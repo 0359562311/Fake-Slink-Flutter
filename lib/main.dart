@@ -2,6 +2,11 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
+import 'package:fakeslink/app/data/sources/authentication_sources.dart';
+import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
+import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
+import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -30,7 +35,7 @@ Future<void> init() async {
     );
   }
   var options = BaseOptions(
-      baseUrl: 'http://192.168.1.86:8000',
+      baseUrl: 'http://192.168.0.100:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
       responseType: ResponseType.json
@@ -44,6 +49,15 @@ Future<void> init() async {
               request: false, responseHeader: false,error: true
           ),]
     ));
+
+  /// repositories
+  getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
+
+  /// sources
+  getIt.registerLazySingleton(() => AuthenticationRemoteSource());
+
+  /// use cases
+  getIt.registerLazySingleton(() => LogInUseCase(getIt()));
 }
 
 class MyApp extends StatefulWidget {
@@ -80,17 +94,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
-      // routes: {
-      //   AppRoutes.routeQRGenerator: (context) => QRGenerator(),
-      //   AppRoutes.routeQRScan: (_) => QRScan(),
-      //   AppRoutes.routeMain: (_) => MainScreen(),
-      //   AppRoutes.routeLogin: (context) => Login(),
-      //   AppRoutes.routeUserInfor: (context) => UserInformation(),
-      //   AppRoutes.routeListClass: (context) => ListSchedule(),
-      //   AppRoutes.routeAttendance: (context) => AttendanceStat(),
-      //   AppRoutes.routeClassDetail: (context) => ClassDetail(),
-      //   // '/profile':(context) => ProfileScreen(),
-      // },
+      routes: {
+        AppRoute.login: (context) => Login(),
+        AppRoute.main: (context) => Container()
+      },
     );
   }
 }

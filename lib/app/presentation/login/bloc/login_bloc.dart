@@ -27,7 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield LoginSuccessfulState();
       }
     } on DioError catch (e) {
-      yield LoginFailState(e.response?.data['data']['detail']??"Đã có lỗi xảy ra.");
+      yield LoginFailState("Tên đăng nhập hoặc mật khẩu không chính xác");
     }
   }
 
