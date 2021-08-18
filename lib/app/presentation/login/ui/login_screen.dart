@@ -86,112 +86,118 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 10),
                   //Account
                   Padding(padding: const  EdgeInsets.symmetric( vertical: 10, horizontal: 20),
-                    child: SizedBox(
-                      height: 55,
-                      child: TextFormField(
-                        controller: usernameController,
-                        obscureText: false,
-                        validator: (value){
-                          if(value == null || value.isEmpty) {
-                            return "Account mustn't be emptied.";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            prefixIcon: Icon(
-                              Icons.person_pin,
-                              color: Colors.grey[400],
-                              size: 23,
-                            ),
-                            labelText: '*Account',
-                            labelStyle: TextStyle(
-                                fontSize: 15,
-                                color: Colors.black
-                            ),
-                            hintText: 'Account',
-                            hintStyle: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey[400]!
-                            ),
-                            errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide( color: Colors.grey[400]!)
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide( width: 1 ,color: Colors.red[900]!)
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(width: 1, color: Colors.grey[400]!)
-                            )
-                        ),
-                      ),
-                    ),
-                  ),
-                  //Password
-                  Padding(padding: const  EdgeInsets.symmetric( vertical: 10, horizontal: 20),
-                    child: SizedBox(
-                      height: 55.0,
-                      child: TextFormField(
-                        controller: passwordController,
-                        validator: (value){
-                          if(value == null || value.isEmpty) {
-                            return "Password mustn't be emptied.";
-                          }else if(value.length < 8) return "Password must be > 8 characters";
-                        },
-                        decoration: InputDecoration(
+                    child: TextFormField(
+                      textAlign: TextAlign.start,
+                      controller: usernameController,
+                      obscureText: false,
+                      validator: (value){
+                        if(value == null || value.isEmpty) {
+                          return "Không được bỏ trống";
+                        }
+                      },
+                      decoration: InputDecoration(
                           prefixIcon: Icon(
-                            Icons.lock,
-                            color: Colors.grey[400]!,
+                            Icons.person_pin,
+                            color: Colors.grey[400],
                             size: 23,
                           ),
-                          suffixIcon: showPassword
-                              ? IconButton(
-                            onPressed: () {
-                              setState(() {
-                                showPassword = false;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.visibility_off,
-                              color: Colors.grey[500]!,
-                              size: 23,
-                            ),
-                          )
-                              : IconButton(
-                            onPressed: () {
-                              setState(() {
-                                showPassword = true;
-                              });
-                            },
-                            icon: Icon(
-                              Icons.remove_red_eye,
-                              color: Colors.grey[500]!,
-                            ),
-                          ),
-                          labelText: 'Password',
+                          labelText: 'Tài khoản',
                           labelStyle: TextStyle(
                               fontSize: 15,
                               color: Colors.black
                           ),
-                          hintText: 'Password',
+                          alignLabelWithHint: true,
+                          hintText: 'Tài khoản',
                           hintStyle: TextStyle(
                               fontSize: 15,
                               color: Colors.grey[400]!
                           ),
                           errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red)
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide( width: 1 ,color: Colors.red[900]!)
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide( width: 1 ,color: Colors.red[900]!)
                           ),
                           focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.red[900]!)
+                              borderSide: BorderSide( width: 1 ,color: Colors.red[900]!)
                           ),
-                          enabledBorder:  OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.grey[400]!)
+                              borderSide: BorderSide(width: 1, color: Colors.grey[400]!)
+                          )
+                      ),
+                    ),
+                  ),
+                  //Password
+                  Padding(padding: const  EdgeInsets.symmetric( vertical: 10, horizontal: 20),
+                    child: TextFormField(
+                      controller: passwordController,
+                      validator: (value){
+                        if(value == null || value.isEmpty || value.length < 8)
+                          return "Mật khẩu phải có ít nhất 8 ký tự";
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Colors.grey[400]!,
+                          size: 23,
+                        ),
+                        suffixIcon: showPassword
+                            ? IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword = false;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.visibility_off,
+                            color: Colors.grey[500]!,
+                            size: 23,
+                          ),
+                        )
+                            : IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showPassword = true;
+                            });
+                          },
+                          icon: Icon(
+                            Icons.remove_red_eye,
+                            color: Colors.grey[500]!,
                           ),
                         ),
-                        obscureText: showPassword ? false : true,
+                        labelText: 'Mật khẩu',
+                        labelStyle: TextStyle(
+                            fontSize: 15,
+                            color: Colors.black
+                        ),
+                        hintText: 'Mật khẩu',
+                        alignLabelWithHint: false,
+                        hintStyle: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey[400]!
+                        ),
+                        errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red),
+                            borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.red),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.red[900]!)
+                        ),
+                        enabledBorder:  OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.grey[400]!)
+                        ),
                       ),
+                      obscureText: showPassword ? false : true,
                     ),
                   ),
                   Padding(
@@ -206,7 +212,7 @@ class _LoginState extends State<Login> {
                           }
                         },
                         child: Text(
-                          'Login',
+                          'Đăng nhập',
                         ),
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
