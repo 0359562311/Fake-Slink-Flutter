@@ -85,15 +85,14 @@ class _MyAppState extends State<MyApp> {
   Future<void> initOneSignal() async {
     await OneSignal.shared.setAppId(oneSignalAppId);
     final state = await OneSignal.shared.getDeviceState();
-    print("TanKiem: deviceState: ${state?.userId}");
+    if(state?.userId != null) {
+      GetIt.instance.registerSingleton<String>(state!.userId!);
+    }
     OneSignal.shared.setNotificationOpenedHandler((openedResult) {
       var data = openedResult.notification.additionalData;
-      print("TanKiem: $data");
-      // GetIt.instance<GlobalKey<NavigatorState>>().currentState?.pushNamed(AppRoute.notificationDetails,
-      //   arguments: {
-      //     "details": data?.values.first??"does have data"
-      //   }
-      // );
+      GetIt.instance<GlobalKey<NavigatorState>>().currentState?.pushNamed(AppRoute.notificationDetails,
+        arguments: data
+      );
     });
     OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
@@ -108,7 +107,6 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared.setSubscriptionObserver((OSSubscriptionStateChanges changes) {
       // Will be called whenever the subscription changes
       // (ie. user gets registered with OneSignal and gets a user ID)
-      var temp = "";
       print("TanKiem: setSubscriptionObserver from ${changes.from.pushToken} to ${changes.to.pushToken}");
     });
   }

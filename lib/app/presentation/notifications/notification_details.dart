@@ -5,10 +5,11 @@ class NotificationDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var details = (ModalRoute.of(context)?.settings.arguments as Map)['details'];
+    // var details = (ModalRoute.of(context)?.settings.arguments as Map)['details'];
+    var details = ModalRoute.of(context)?.settings.arguments;
     return Scaffold(
       body: Center(
-        child: Text(details),
+        child: Text(details.toString()),
       ),
     );
   }

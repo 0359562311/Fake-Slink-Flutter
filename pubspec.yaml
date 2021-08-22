@@ -31,7 +31,7 @@ dependencies:
 
   flutter_bloc: ^7.1.0
   get_it: ^7.2.0
-  device_info: ^2.0.2
+  device_info_plus: ^2.1.0
   intl: ^0.17.0
   dio: ^4.0.0
   connectivity_plus: ^1.0.6
