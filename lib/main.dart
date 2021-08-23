@@ -3,11 +3,16 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
+import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
+import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
+import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
+import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
+import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -27,6 +32,7 @@ void main() async {
 Future<void> init() async {
   GetIt getIt = GetIt.instance;
   getIt.registerSingleton(GlobalKey<NavigatorState>());
+  await DeviceInfo.init();
   await SharePreferencesUtils.init();
   if(SharePreferencesUtils.getString("refresh") != null) {
     getIt.registerSingleton(
@@ -37,7 +43,7 @@ Future<void> init() async {
     );
   }
   var options = BaseOptions(
-      baseUrl: 'http://192.168.0.100:8000',
+      baseUrl: 'http://192.168.0.101:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
       responseType: ResponseType.json
@@ -54,12 +60,15 @@ Future<void> init() async {
 
   /// repositories
   getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
+  getIt.registerLazySingleton(() => NotificationRemoteSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
+  getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
 }
 
 class MyApp extends StatefulWidget {
@@ -126,7 +135,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+      initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.login : AppRoute.login,
       navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
       routes: {
         AppRoute.login: (context) => Login(),

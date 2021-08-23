@@ -1,6 +1,6 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
-class PlatformInfo{
+class DeviceInfo{
   static String? deviceId;
   static String? deviceName;
 
