@@ -3,15 +3,16 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/session_model.dart';
 import 'package:fakeslink/app/domain/entities/session.dart';
+import 'package:fakeslink/core/const/api_path.dart';
 import 'package:get_it/get_it.dart';
 
 class AuthenticationInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     // TODO: implement onRequest
-    if (GetIt.instance.isRegistered<Session>()) {
+    if (GetIt.instance.isRegistered<Session>() && !options.path.contains(APIPath.logIn)) {
       options.headers['Authorization'] =
-      "Bearer ${GetIt.instance<Session>().access}";
+        "Bearer ${GetIt.instance<Session>().access}";
     }
     handler.next(options);
   }

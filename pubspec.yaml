@@ -37,6 +37,7 @@ dependencies:
   connectivity_plus: ^1.0.6
   shared_preferences: ^2.0.6
   onesignal_flutter: ^3.2.0
+  firebase_storage: ^10.0.2
 
 dev_dependencies:
   flutter_test:
