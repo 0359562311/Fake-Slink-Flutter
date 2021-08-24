@@ -11,9 +11,11 @@ import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
+import 'package:fakeslink/app/presentation/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'app/domain/entities/session.dart';
@@ -121,27 +123,38 @@ class _MyAppState extends State<MyApp> {
   }
 
   void dispose() {
-    super.dispose();
     subscription.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(
-    //     SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.login : AppRoute.login,
-      navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
-      routes: {
-        AppRoute.login: (context) => Login(),
-        AppRoute.main: (context) => Container(),
-        AppRoute.notificationDetails: (context) => NotificationDetails()
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(statusBarColor: Colors.red[900]));
+    return NotificationListener<OverscrollIndicatorNotification>(
+      onNotification: (overscroll) {
+        overscroll.disallowGlow();
+        return true;
       },
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+        navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
+        routes: {
+          AppRoute.login: (context) => Login(),
+          AppRoute.main: (context) => MainScreen(),
+          AppRoute.notificationDetails: (context) => NotificationDetails()
+        },
+      ),
     );
+  }
+}
+
+class MyBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return child;
   }
 }
