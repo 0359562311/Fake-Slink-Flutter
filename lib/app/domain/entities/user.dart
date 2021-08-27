@@ -29,24 +29,6 @@ class CustomUser {
       required this.createAt,
       required this.updateAt});
 
-  factory CustomUser.fromJson(Map<String, dynamic> json) {
-    return CustomUser(
-      studentId: json['studentId'],
-      administrativeClass : AdministrativeClass.fromJson(json['administrativeClass']),
-      id : json['id'],
-      name : json['name'],
-      dob : json['dob'],
-      address : json['address'],
-      avatar : json['avatar'],
-      cover : json['cover'],
-      gender : json['gender'],
-      role : json['role'],
-      phoneNumber : json['phoneNumber'],
-      createAt : json['createAt'],
-      updateAt : json['updateAt'],
-    );
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['studentId'] = this.studentId;
@@ -76,15 +58,6 @@ class AdministrativeClass {
 
   AdministrativeClass(
       {required this.id, required this.administrativeClassId, required this.profession, required this.lecturer});
-
-  factory AdministrativeClass.fromJson(Map<String, dynamic> json) {
-    return AdministrativeClass(
-      id : json['id'],
-      administrativeClassId : json['administrativeClassId'],
-      profession : json['profession'],
-      lecturer : json['lecturer'],
-    );
-  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

@@ -4,11 +4,16 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
+import 'package:fakeslink/app/data/repositories/user_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
+import 'package:fakeslink/app/data/sources/user_sources.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
+import 'package:fakeslink/app/domain/repositories/user_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
+import 'package:fakeslink/app/domain/use_cases/get_gpa_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen.dart';
@@ -62,15 +67,20 @@ Future<void> init() async {
 
   /// repositories
   getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt()));
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
+  getIt.registerLazySingleton(() => UserRemoteSouce());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetGPAUseCase(getIt()));
+  
 }
 
 class MyApp extends StatefulWidget {
