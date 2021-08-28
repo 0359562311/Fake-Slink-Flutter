@@ -1,16 +1,30 @@
 # fakeslink
 
-A fake Slink application written with Flutter
+A fake Slink application written with Flutter framework.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+![image](https://user-images.githubusercontent.com/58883494/131202305-ce1fcf09-0719-4805-82d3-0efbc7d3686a.png)
 
-A few resources to get you started if this is your first Flutter project:
+Remember to follow the dependency rule.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+App architecture includes 3 main components: domain - data - presentation.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Step by step:
+1. start with domain/entities 
+  - Determine the necessary entities use in screen such as (User in profile)
+  - The entity only carries the data and some get, set or toString() function.
+2. domain/repositories
+  - All repositories in this folder must be abstract (define needed function to use in that screen)
+3. domain/use-cases
+  - need to create a use case class for each function in each repository.
+4. Move to data/models
+  - Each model is a subclass of an entities
+  - just need to add some function such as from json here
+5. data/repositories
+  - Each repository is a subclass of a domain/repositoy
+  - in this repository we need data source (remote, local)
+  - implement function defined in domain/repository and decide what source we need data from (almost is just remote source), local source is for caching.
+6. data/sources
+  - make some request with remote source or query local database with local source then return model or collection of model
+7. presentation/ controller (bloc, provider,...) 
+8. presentation/ ui
