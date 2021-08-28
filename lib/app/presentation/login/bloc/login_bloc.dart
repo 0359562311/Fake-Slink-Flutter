@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/app/domain/entities/session.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
@@ -30,8 +31,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         GetIt.instance.registerSingleton(session);
         SharePreferencesUtils.setString("access", session.access);
         SharePreferencesUtils.setString("refresh", session.refresh);
-        if(DeviceInfo.deviceId != null)
-          _createNotificationDeviceUseCase.execute(DeviceInfo.deviceId!, GetIt.instance<String>());
+        if(DeviceInfo.deviceId != null && GetIt.instance.isRegistered<OneSignalId>())
+          _createNotificationDeviceUseCase.execute(DeviceInfo.deviceId!, GetIt.instance<OneSignalId>());
         yield LoginSuccessfulState();
       }
     } on DioError catch (e) {

@@ -8,6 +8,7 @@ import 'package:fakeslink/app/data/repositories/user_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/data/sources/user_sources.dart';
+import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
 import 'package:fakeslink/app/domain/repositories/user_repository.dart';
@@ -107,7 +108,7 @@ class _MyAppState extends State<MyApp> {
     await OneSignal.shared.setAppId(oneSignalAppId);
     final state = await OneSignal.shared.getDeviceState();
     if(state?.userId != null) {
-      GetIt.instance.registerSingleton<String>(state!.userId!);
+      GetIt.instance.registerSingleton<OneSignalId>(OneSignalId(state!.userId!));
     }
     OneSignal.shared.setNotificationOpenedHandler((openedResult) {
       var data = openedResult.notification.additionalData;
@@ -134,6 +135,7 @@ class _MyAppState extends State<MyApp> {
 
   void dispose() {
     subscription.cancel();
+    GetIt.instance<StreamController<String>>().close();
     super.dispose();
   }
 
@@ -158,13 +160,5 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
-  }
-}
-
-class MyBehavior extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome(
-      BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }

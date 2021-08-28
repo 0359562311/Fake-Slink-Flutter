@@ -22,7 +22,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     // TODO: implement onError
     // TODO: implement onError
     if (err.response?.statusCode == 408) {
-      GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối, hãy kiểm tra lại kết nối mạng");
+      GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
     }
     else if (err.response?.statusCode != null && err.response!.statusCode! >= 500) {
       GetIt.instance<StreamController<String>>().add("Máy chủ đang bảo trì.");
@@ -33,18 +33,17 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     else if (err.response?.statusCode == 401) {
       var dio = GetIt.instance<Dio>();
       dio.interceptors.requestLock.lock();
+      dio.interceptors.responseLock.lock();
+      dio.interceptors.errorLock.lock();
+
       RequestOptions options = err.requestOptions;
       await Dio()
           .post(options.baseUrl + "/auth/jwt/refresh/",
-          data: {"refresh": GetIt.instance<Session>().refresh},
-          options: Options(headers: {
-            'Authorization': "Bearer ${GetIt.instance<Session>().access}"
-          }))
+          data: {"refresh": GetIt.instance<Session>().refresh},)
       .then((value) async {
-            dio.interceptors.requestLock.unlock();
             if(GetIt.instance.isRegistered<Session>())
               GetIt.instance.unregister<Session>();
-            GetIt.instance.registerSingleton<Session>(SessionModel.fromResponse(value));
+            GetIt.instance.registerSingleton<Session>(SessionModel.fromJson(value.data['data']));
             var queryParams = options.queryParameters;
             var data = options.data;
             await Dio()
@@ -55,15 +54,26 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
                   'Authorization': "Bearer ${GetIt.instance<Session>().access}"
                 }, method: options.method))
                 .then((value) {
+                  dio.interceptors.responseLock.unlock();
+                  dio.interceptors.requestLock.unlock();
+                  dio.interceptors.errorLock.unlock();
                   print("value from interceptor $value");
                   handler.resolve(value..data = value.data['data']);
                 }).catchError((error) {
+                  dio.interceptors.responseLock.unlock();
+                  dio.interceptors.requestLock.unlock();
+                  dio.interceptors.errorLock.unlock();
                   handler.reject(error);
                 });
       }).catchError((error) {
-        print("Refresh token expired");
-        dio.clear();
-        GetIt.instance<StreamController<String>>().add("Phiên đăng nhập đã hết hạn.");
+        if(error is DioError && error.response?.statusCode == 401) {
+          dio.clear();
+          dio.interceptors.responseLock.unlock();
+          dio.interceptors.requestLock.unlock();
+          dio.interceptors.errorLock.unlock();
+          GetIt.instance<StreamController<String>>().add("Phiên đăng nhập đã hết hạn.");
+        }
+
       });
     }
     else

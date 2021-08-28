@@ -15,6 +15,6 @@ class AuthenticationRemoteSource extends AuthenticationSource {
       "username": username,
       "password": password
     });
-    return SessionModel.fromResponse(response);
+    return SessionModel.fromJson(response.data);
   }
 }
