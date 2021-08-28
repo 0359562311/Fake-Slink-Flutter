@@ -1,4 +1,4 @@
-class CustomUser {
+class Student {
   String studentId;
   AdministrativeClass administrativeClass;
   int id;
@@ -13,7 +13,7 @@ class CustomUser {
   String createAt;
   String updateAt;
 
-  CustomUser( 
+  Student( 
       {
         required this.studentId,
       required this.administrativeClass,

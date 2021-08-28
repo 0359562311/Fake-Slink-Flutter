@@ -11,7 +11,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
 
   int _index = 0;
-  late List<Widget> _screens = [HomeView(), Scaffold(), Scaffold(), Scaffold(), Scaffold()];
+  late List<Widget> _screens;
   List<_BottomItem> _itemBottom = [
     _BottomItem(Colors.blue, "Trang chủ", Icons.home),
     _BottomItem(Colors.teal, "Thông báo", Icons.notifications),
@@ -22,6 +22,11 @@ class _MainScreenState extends State<MainScreen> {
   final PageController _pageController = PageController(
     initialPage: 0,
   );
+
+  void initState() {
+    super.initState();
+    _screens = [HomeView(), Scaffold(), Scaffold(), Scaffold(), Scaffold()];
+  }
 
 
   @override

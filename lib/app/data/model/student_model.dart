@@ -1,7 +1,7 @@
-import 'package:fakeslink/app/domain/entities/user.dart';
+import 'package:fakeslink/app/domain/entities/student.dart';
 
-class CustomUserModel extends CustomUser {
-  CustomUserModel(
+class StudentModel extends Student {
+  StudentModel(
       {studentId,
       required AdministrativeClass administrativeClass,
       id,
@@ -31,8 +31,8 @@ class CustomUserModel extends CustomUser {
         updateAt: updateAt
       );
 
-  factory CustomUserModel.fromJson(Map<String, dynamic> json) {
-    return CustomUserModel(
+  factory StudentModel.fromJson(Map<String, dynamic> json) {
+    return StudentModel(
       studentId: json['studentId'],
       administrativeClass:
           AdministrativeClassModel.fromJson(json['administrativeClass']),

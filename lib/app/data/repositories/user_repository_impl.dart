@@ -1,5 +1,5 @@
 import 'package:fakeslink/app/data/sources/user_sources.dart';
-import 'package:fakeslink/app/domain/entities/user.dart';
+import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/entities/gpa.dart';
 import 'package:fakeslink/app/domain/repositories/user_repository.dart';
 
@@ -10,10 +10,10 @@ class UserRepositoryImpl extends UserRepository {
   Future<GPA> getGPA() => remoteSource.getGPA();
 
   @override
-  Future<CustomUser> getProfile() => remoteSource.getProfile();
+  Future<Student> getProfile() => remoteSource.getProfile();
 
   @override
-  Future<CustomUser> updateProfile(String avatar, String cover, String address, String phoneNumber) {
+  Future<Student> updateProfile(String avatar, String cover, String address, String phoneNumber) {
     // TODO: implement updateProfile
     throw UnimplementedError();
   }

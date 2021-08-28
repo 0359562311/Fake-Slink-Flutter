@@ -37,7 +37,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                   decoration: BoxDecoration(
                       color: AppColor.black,
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text(
+                  child: const Text(
                     "Hom nay",
                     style: TextStyle(
                         color: Colors.white,
@@ -51,7 +51,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text(
+                  child: const Text(
                     "Ngay mai",
                     style: TextStyle(
                         color: Colors.black54,
@@ -64,7 +64,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20)),
-                  child: Text(
+                  child: const Text(
                     "Ngay kia",
                     style: TextStyle(
                         color: Colors.black54,
@@ -98,7 +98,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Tiết ${_tempClasses[index].start} - ${_tempClasses[index].end}: lap trinh as bfjdn s",
-                                style: TextStyle(fontSize: 13),
+                                style: const TextStyle(fontSize: 13),
                               ),
                               SizedBox(height: 3,),
                               Row(
@@ -110,15 +110,15 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                   Column(
                                     children: [
                                       Text("${_tempClasses[index].startAt.format(context)} - ${_tempClasses[index].endAt.format(context)}",
-                                        style: TextStyle(fontSize: 13),
+                                        style: const TextStyle(fontSize: 13),
                                       ),
                                       SizedBox(height: 3,),
                                       Text("${dateFormat.format(_tempClasses[index].date)}",
-                                        style: TextStyle(fontSize: 13)
+                                        style: const TextStyle(fontSize: 13)
                                       )
                                     ],
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 40,
                                   ),
                                   Padding(
@@ -126,14 +126,14 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                     child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
                                   ),
                                   Text("Phòng: ${_tempClasses[index].classroom}",
-                                    style: TextStyle(fontSize: 13)
+                                    style: const TextStyle(fontSize: 13)
                                   )
                                 ],
                               )
                             ],
                           ),
                           Spacer(),
-                          Icon(Icons.arrow_forward_ios, size: 16,)
+                          const Icon(Icons.arrow_forward_ios, size: 16,)
                         ],
                       ),
                     ),

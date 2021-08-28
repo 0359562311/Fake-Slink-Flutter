@@ -1,9 +1,10 @@
-import 'package:fakeslink/app/presentation/home/bloc/home_header_bloc.dart';
+import 'package:fakeslink/app/presentation/home/bloc/home_header_provider.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_common_functions.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_schedule.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'home_header.dart';
 
@@ -16,23 +17,32 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
+  final HomeHeaderProvider _homeHeaderProvider = HomeHeaderProvider();
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
       body: CustomScrollView(
       slivers: [
-          BlocProvider.value(
-            value: HomeHeaderBloc()..add(HomeHeaderEvent.init),
+          ChangeNotifierProvider.value(
+            value: _homeHeaderProvider,
             child: SliverPersistentHeader(
               delegate: SliverHeaderChildDelegateImpl(),
               pinned: true,
+              floating: true,
             ),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-              child: Text(
+              child: const Text(
                 "Chức năng phổ biến:",
                 style: TextStyle(
                     color: Colors.black87,
@@ -41,7 +51,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          CommonFunction(),
+          const CommonFunction(),
           HomeSchedule(),
           SliverList(delegate: SliverChildBuilderDelegate(
             (context,index) => Text("$index")
