@@ -3,7 +3,6 @@ import 'package:fakeslink/app/presentation/home/ui/home_common_functions.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_schedule.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'home_header.dart';
@@ -36,7 +35,6 @@ class _HomeViewState extends State<HomeView> {
             child: SliverPersistentHeader(
               delegate: SliverHeaderChildDelegateImpl(),
               pinned: true,
-              floating: true,
             ),
           ),
           const SliverToBoxAdapter(

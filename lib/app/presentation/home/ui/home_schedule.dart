@@ -1,6 +1,9 @@
+import 'package:fakeslink/app/domain/entities/schedule.dart';
+import 'package:fakeslink/app/presentation/home/bloc/home_schedule_provider.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class HomeSchedule extends StatefulWidget {
   const HomeSchedule({Key? key}) : super(key: key);
@@ -10,152 +13,197 @@ class HomeSchedule extends StatefulWidget {
 }
 
 class _HomeScheduleState extends State<HomeSchedule> {
-  List<TempClass> _tempClasses = [
-    TempClass(7, 8, TimeOfDay(hour: 14, minute: 30),
-        TimeOfDay(hour: 16, minute: 20), DateTime.now(), "1109606"),
-    TempClass(9, 10, TimeOfDay(hour: 16, minute: 30),
-        TimeOfDay(hour: 18, minute: 20), DateTime.now(), "70239"),
-    TempClass(11, 12, TimeOfDay(hour: 19, minute: 30),
-        TimeOfDay(hour: 21, minute: 20), DateTime.now(), "1109606"),
-  ];
   final DateFormat dateFormat = DateFormat("dd/MM/yyyy");
+  int index = 0;
+
+  late HomeScheduleProvider _provider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _provider = HomeScheduleProvider();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(6)),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-                  decoration: BoxDecoration(
-                      color: AppColor.black,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Text(
-                    "Hom nay",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  margin: EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Text(
-                    "Ngay mai",
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Text(
-                    "Ngay kia",
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8,),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: List.generate(_tempClasses.length, (index){
-                return Column(
-                  children: [
-                    if (index!=0) 
-                      Padding(
-                        padding: const EdgeInsets.only(top:12.0),
-                        child: Container(
-                          color: Colors.black45,
-                          height: 0.5,
-                          width: double.infinity,
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.only(top:16.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Tiết ${_tempClasses[index].start} - ${_tempClasses[index].end}: lap trinh as bfjdn s",
-                                style: const TextStyle(fontSize: 13),
-                              ),
-                              SizedBox(height: 3,),
-                              Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(Icons.alarm, size: 12, color: AppColor.red,),
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text("${_tempClasses[index].startAt.format(context)} - ${_tempClasses[index].endAt.format(context)}",
-                                        style: const TextStyle(fontSize: 13),
-                                      ),
-                                      SizedBox(height: 3,),
-                                      Text("${dateFormat.format(_tempClasses[index].date)}",
-                                        style: const TextStyle(fontSize: 13)
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 40,
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
-                                  ),
-                                  Text("Phòng: ${_tempClasses[index].classroom}",
-                                    style: const TextStyle(fontSize: 13)
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          Spacer(),
-                          const Icon(Icons.arrow_forward_ios, size: 16,)
-                        ],
+    return ChangeNotifierProvider.value(
+      value: _provider,
+      builder: (context, child) {
+        var _provider = Provider.of<HomeScheduleProvider>(context);
+        return SliverToBoxAdapter(
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(6)),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: (){
+                      if(index != 0) setState(() {
+                         index = 0;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      decoration: BoxDecoration(
+                          color: index == 0? AppColor.black : Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "Hôm nay",
+                        style: TextStyle(
+                            color: index == 0 ? Colors.white: Colors.black54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
                       ),
                     ),
-                  ],
-                );
-              })
-            )
-          ],
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      if(index != 1) setState(() {
+                        index = 1;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      margin: EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                          color: index == 1? AppColor.black : Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "Ngày mai",
+                        style: TextStyle(
+                            color: index == 1 ? Colors.white: Colors.black54,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      if (index != 2)
+                        setState(() {
+                          index = 2;
+                        });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                      decoration: BoxDecoration(
+                          color: index == 2? AppColor.black : Colors.white,
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Text(
+                        "Ngày kia",
+                        style: TextStyle(
+                            color: (index == 2 ? Colors.white: Colors.black54),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8,),
+              (_provider.tempClasses.length == 0) ? Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: CircularProgressIndicator(),
+              ) : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: _provider.tempClasses[index].length == 0 
+                ? [Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Text("Không có lịch học", style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 14
+                  ),)
+                )]
+                :List.generate(_provider.tempClasses[index].length, (_index){
+                  return Column(
+                    children: [
+                      if (_index!=0) 
+                        Padding(
+                          padding: const EdgeInsets.only(top:12.0),
+                          child: Container(
+                            color: Colors.black45,
+                            height: 0.5,
+                            width: double.infinity,
+                          ),
+                        ),
+                      Padding(
+                        padding: const EdgeInsets.only(top:16.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Tiết ${_provider.tempClasses[index][_index].start} "
+                                "- ${_provider.tempClasses[index][_index].end}: "
+                                "${_provider.tempClasses[index][_index].subjectName}",
+                                  style: const TextStyle(fontSize: 13),
+                                ),
+                                SizedBox(height: 3,),
+                                Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Icon(Icons.alarm, size: 12, color: AppColor.red,),
+                                    ),
+                                    Column(
+                                      children: [
+                                        Text("${_provider.tempClasses[index][_index].startAt} - ${_provider.tempClasses[index][_index].endAt}",
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                        SizedBox(height: 3,),
+                                        Text("${dateFormat.format(_provider.tempClasses[index][_index].date)}",
+                                          style: const TextStyle(fontSize: 13)
+                                        )
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      width: 40,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
+                                    ),
+                                    Text("Phòng: ${_provider.tempClasses[index][_index].classroom}",
+                                      style: const TextStyle(fontSize: 13)
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                            Spacer(),
+                            const Icon(Icons.arrow_forward_ios, size: 16,)
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                })
+              )
+            ],
+          ),
         ),
-      ),
+      );
+      },
     );
   }
 }
 
 class TempClass {
+  final Schedule schedule;
   final int start;
   final int end;
-  final TimeOfDay startAt;
-  final TimeOfDay endAt;
+  final String startAt;
+  final String endAt;
   final DateTime date;
   final String classroom;
+  final String subjectName;
 
-  const TempClass(this.start, this.end, this.startAt, this.endAt, this.date,
-      this.classroom);
+  const TempClass(this.schedule, this.start, this.end, this.startAt, this.endAt, this.date,
+      this.classroom, this.subjectName);
 }

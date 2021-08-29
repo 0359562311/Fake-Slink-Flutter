@@ -4,16 +4,21 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
+import 'package:fakeslink/app/data/repositories/schedule_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/user_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
+import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/user_sources.dart';
 import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
+import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
+import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
 import 'package:fakeslink/app/domain/repositories/user_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_gpa_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
@@ -39,7 +44,13 @@ void main() async {
 
 Future<void> init() async {
   GetIt getIt = GetIt.instance;
-  getIt.registerSingleton(GlobalKey<NavigatorState>());
+  getIt.registerLazySingleton(() => Semester(
+    semesterId: "20211",
+    startAt: DateTime(2021, 08, 23), 
+    endAt: DateTime(2021,12,31), 
+    weeks: 20)
+  );
+  getIt.registerLazySingleton(()=>GlobalKey<NavigatorState>());
   await DeviceInfo.init();
   await SharePreferencesUtils.init();
   if(SharePreferencesUtils.getString("refresh") != null) {
@@ -70,17 +81,20 @@ Future<void> init() async {
   getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
   getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt()));
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
   getIt.registerLazySingleton(() => UserRemoteSouce());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
+  getIt.registerLazySingleton(() => ScheduleRemoteSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
   getIt.registerLazySingleton(() => GetGPAUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
   
 }
 
