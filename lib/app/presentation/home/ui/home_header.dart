@@ -1,7 +1,6 @@
 import 'package:fakeslink/app/presentation/home/bloc/home_header_provider.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {

@@ -3,5 +3,6 @@ abstract class APIPath {
   static const String notificationDevice = "/notification/device/";
   static const String gpa = "/gpa";
   static const String me = "/user/me";
-  static const String listSchedule = "/list-schedules";
+  static const String listSchedules = "/list-schedules";
+  static const String listNotifications = "/notification";
 }

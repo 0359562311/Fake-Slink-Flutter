@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/domain/entities/notification.dart';
 import 'package:flutter/material.dart';
 
 class NotificationDetails extends StatelessWidget {
@@ -6,10 +7,10 @@ class NotificationDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // var details = (ModalRoute.of(context)?.settings.arguments as Map)['details'];
-    var details = ModalRoute.of(context)?.settings.arguments;
+    Details details = ModalRoute.of(context)?.settings.arguments! as Details;
     return Scaffold(
       body: Center(
-        child: Text(details.toString()),
+        child: Text(details.details),
       ),
     );
   }

@@ -10,7 +10,7 @@ abstract class ScheduleSource {
 class ScheduleRemoteSource extends ScheduleSource{
   @override
   Future<List<ScheduleModel>> getListSchedule() async {
-    final res = await GetIt.instance<Dio>().get(APIPath.listSchedule);
+    final res = await GetIt.instance<Dio>().get(APIPath.listSchedules);
     return (res.data as List).map((e) => ScheduleModel.fromJson(e)).toList();
   }
 }

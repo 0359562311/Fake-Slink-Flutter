@@ -40,6 +40,8 @@ dependencies:
   onesignal_flutter: ^3.2.0
   firebase_storage: ^10.0.2
 
+  carousel_slider: ^4.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

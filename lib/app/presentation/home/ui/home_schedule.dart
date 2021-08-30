@@ -41,7 +41,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
             children: [
               Row(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: (){
                       if(index != 0) setState(() {
                          index = 0;
@@ -61,7 +61,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: (){
                       if(index != 1) setState(() {
                         index = 1;
@@ -82,7 +82,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                       ),
                     ),
                   ),
-                  GestureDetector(
+                  InkWell(
                     onTap: (){
                       if (index != 2)
                         setState(() {
@@ -120,6 +120,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                   ),)
                 )]
                 :List.generate(_provider.tempClasses[index].length, (_index){
+                  final _tempClass = _provider.tempClasses[index][_index];
                   return Column(
                     children: [
                       if (_index!=0) 
@@ -139,9 +140,9 @@ class _HomeScheduleState extends State<HomeSchedule> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Tiết ${_provider.tempClasses[index][_index].start} "
-                                "- ${_provider.tempClasses[index][_index].end}: "
-                                "${_provider.tempClasses[index][_index].subjectName}",
+                                Text("Tiết ${_tempClass.start} "
+                                "- ${_tempClass.end}: "
+                                "${_tempClass.subjectName}",
                                   style: const TextStyle(fontSize: 13),
                                 ),
                                 SizedBox(height: 3,),
@@ -153,11 +154,11 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                     ),
                                     Column(
                                       children: [
-                                        Text("${_provider.tempClasses[index][_index].startAt} - ${_provider.tempClasses[index][_index].endAt}",
+                                        Text("${_tempClass.startAt.substring(0,5)} - ${_tempClass.endAt.substring(0,5)}",
                                           style: const TextStyle(fontSize: 13),
                                         ),
                                         SizedBox(height: 3,),
-                                        Text("${dateFormat.format(_provider.tempClasses[index][_index].date)}",
+                                        Text("${dateFormat.format(_tempClass.date)}",
                                           style: const TextStyle(fontSize: 13)
                                         )
                                       ],
@@ -169,7 +170,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
                                       padding: const EdgeInsets.only(right: 8.0),
                                       child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
                                     ),
-                                    Text("Phòng: ${_provider.tempClasses[index][_index].classroom}",
+                                    Text("Phòng: ${_tempClass.classroom}",
                                       style: const TextStyle(fontSize: 13)
                                     )
                                   ],

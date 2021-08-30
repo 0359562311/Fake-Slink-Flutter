@@ -18,6 +18,7 @@ import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
 import 'package:fakeslink/app/domain/repositories/user_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_gpa_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
@@ -95,6 +96,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
   getIt.registerLazySingleton(() => GetGPAUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
   
 }
 
