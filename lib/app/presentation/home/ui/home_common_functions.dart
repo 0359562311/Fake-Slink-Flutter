@@ -5,6 +5,12 @@ class CommonFunction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<_FunctionItem> _items = [
+      _FunctionItem(Colors.blue[100]!.withOpacity(0.5), Colors.blue, Icons.schedule, "Thời khoá biểu", ""),
+      _FunctionItem(Colors.orange[100]!.withOpacity(0.5), Colors.orange, Icons.people_alt_rounded, "Lớp tín chỉ", ""),
+      _FunctionItem(Colors.purple[100]!.withOpacity(0.5), Colors.purple, Icons.pie_chart_rounded, "Kết quả học tập", ""),
+      _FunctionItem(Colors.red[100]!.withOpacity(0.5), Colors.red, Icons.person, "Lớp hành chính",""),
+    ];
     return SliverGrid.count(crossAxisCount: 2,
       childAspectRatio: 3,
       children: List.generate(4, (index){
@@ -21,15 +27,15 @@ class CommonFunction extends StatelessWidget {
               Container(
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                    color: Colors.blue[100],
+                    color: _items[index].light,
                     borderRadius: BorderRadius.circular(100)
                 ),
-                child: Icon(Icons.book,color: Colors.blue,size: 18,),
+                child: Icon(_items[index].iconData,color: _items[index].primary,size: 18,),
               ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(left:8.0),
-                  child: Text("Thoi khoa bieu  ss",maxLines: 2,),
+                  child: Text(_items[index].name,maxLines: 2,),
                 ),
               )
             ],
@@ -39,4 +45,14 @@ class CommonFunction extends StatelessWidget {
       mainAxisSpacing: 12,
     );
   }
+}
+
+class _FunctionItem {
+  final Color light;
+  final Color primary;
+  final IconData iconData;
+  final String name;
+  final String nextRoute;
+
+  const _FunctionItem(this.light, this.primary, this.iconData, this.name, this.nextRoute);
 }

@@ -21,6 +21,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
   void onError(DioError err, ErrorInterceptorHandler handler) async {
     // TODO: implement onError
     // TODO: implement onError
+    print("in interceptor  $err");
     if (err.response?.statusCode == 408) {
       GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
     }

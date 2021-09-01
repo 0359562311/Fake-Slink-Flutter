@@ -23,8 +23,9 @@ import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
-import 'package:fakeslink/app/presentation/main_screen.dart';
+import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
+import 'package:fakeslink/app/presentation/main_screen/bottom_bar.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -167,13 +168,14 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+        // initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
-        routes: {
-          AppRoute.login: (context) => Login(),
-          AppRoute.main: (context) => MainScreen(),
-          AppRoute.notificationDetails: (context) => NotificationDetails()
-        },
+        home: MainScreen(),
+        // routes: {
+        //   AppRoute.login: (context) => Login(),
+        //   AppRoute.main: (context) => MainScreen(),
+        //   AppRoute.notificationDetails: (context) => NotificationDetails(),
+        // },
       ),
     );
   }
