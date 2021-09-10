@@ -5,6 +5,6 @@ class GetProfileUseCase {
   final UserRepository repository;
   GetProfileUseCase(this.repository);
 
-  Future<Student> execute()
+  Future<Student?> execute()
     => repository.getProfile();
 }

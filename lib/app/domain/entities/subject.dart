@@ -1,9 +1,20 @@
-class Subject {
+import 'package:hive/hive.dart';
+
+part 'subject.g.dart';
+
+@HiveType(typeId: 3)
+class Subject extends HiveObject {
+  @HiveField(0)
   String subjectId;
+  @HiveField(1)
   String subjectName;
+  @HiveField(2)
   int tinchi;
+  @HiveField(3)
   int gPACoefficient;
+  @HiveField(4)
   bool isCPA;
+  @HiveField(5)
   List<int> coefficient;
 
   Subject(

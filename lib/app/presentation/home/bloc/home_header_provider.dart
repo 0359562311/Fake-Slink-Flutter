@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fakeslink/app/domain/entities/gpa.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/use_cases/get_gpa_use_case.dart';
@@ -15,7 +16,7 @@ class HomeHeaderProvider extends ChangeNotifier {
   Student? get user => _user;
   GPA? get gpa => _gpa;
 
-  HomeHeaderProvider(){
+  HomeHeaderProvider() {
     _getProfileUseCase = GetIt.instance<GetProfileUseCase>();
     _getGPAUseCase = GetIt.instance<GetGPAUseCase>();
     init();
@@ -25,10 +26,8 @@ class HomeHeaderProvider extends ChangeNotifier {
     try {
       _user = await _getProfileUseCase.execute();
       _gpa = await _getGPAUseCase.execute();
-    } on Exception catch (e) {
-
+    } on DioError catch (e) {
     }
     notifyListeners();
   }
 }
-

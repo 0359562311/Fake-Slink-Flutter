@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
@@ -21,12 +20,15 @@ class HomeScheduleProvider extends ChangeNotifier {
     init();
   }
 
-  Future<void> init() async{
-    try {
+  Future<void> init() async {
       initDate = DateTime.now();
-      int week = initDate.difference(GetIt.instance<Semester>().startAt).inDays~/7 + 1;
       _schedules = await _getListScheduleUseCase.execute();
-      for (int i = 0; i < 3; i++) {
+      createListSchedule();
+  }
+
+  void createListSchedule() {
+    int week = initDate.difference(GetIt.instance<Semester>().startAt).inDays~/7 + 1;
+    for (int i = 0; i < 3; i++) {
         final temp = _schedules.where((element) => 
           element.dayOfWeek == ((i + initDate.weekday) <=7 ? i + initDate.weekday : i + initDate.weekday - 7) 
           && element.weeks.contains(week)
@@ -46,12 +48,7 @@ class HomeScheduleProvider extends ChangeNotifier {
         )).toList());
       }
       notifyListeners();
-    } on DioError catch (e) {
-      // TODO
-    }
   }
-
-
 
   int _getStart(String startAt) {
     int hours = int.parse(startAt.substring(0,2));

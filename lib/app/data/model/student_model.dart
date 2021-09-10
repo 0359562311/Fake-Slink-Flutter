@@ -1,5 +1,7 @@
 import 'package:fakeslink/app/domain/entities/student.dart';
+import 'package:hive/hive.dart';
 
+@HiveType(typeId: 100)
 class StudentModel extends Student {
   StudentModel(
       {studentId,

@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/presentation/home/bloc/home_header_provider.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,7 +12,7 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
-    var _provider = Provider.of<HomeHeaderProvider>(context);
+    var _provider = Provider.of<HomeHeaderProvider>(context, listen: false);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: maxExtent - shrinkOffset < 80 ? 80 : maxExtent - shrinkOffset,
@@ -48,7 +49,7 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
                     padding: EdgeInsets.all(10),
                     child: CircleAvatar(
                         backgroundColor: Colors.white,
-                        backgroundImage: (_provider.user?.avatar != null ?
+                        backgroundImage: (_provider.user?.avatar != null && NetworkInfo.isConnecting ?
                         NetworkImage(_provider.user!.avatar!):
                         const AssetImage("assets/images/user.jpg")) as ImageProvider
                     ),

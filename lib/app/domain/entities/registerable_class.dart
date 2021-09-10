@@ -1,8 +1,14 @@
 import 'package:fakeslink/app/domain/entities/subject.dart';
+import 'package:hive/hive.dart';
+part 'registerable_class.g.dart';
 
-class RegisterableClass {
+@HiveType(typeId: 2)
+class RegisterableClass extends HiveObject {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   Subject subject;
+  @HiveField(2)
   String semester;
 
   RegisterableClass({required this.id, required this.subject, required this.semester});

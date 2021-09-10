@@ -28,6 +28,13 @@ class _HomeViewState extends State<HomeView> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    _homeHeaderProvider.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.background,
@@ -35,9 +42,10 @@ class _HomeViewState extends State<HomeView> {
         create: (context) => _homeHeaderProvider,
         builder: (context, child) {
           final provider = Provider.of<HomeHeaderProvider>(context);
-          if(provider.user == null) {
-            return Center(child: CircularProgressIndicator());
-          }
+          if (provider.user == null) 
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           return CustomScrollView(
           slivers: [
               SliverPersistentHeader(

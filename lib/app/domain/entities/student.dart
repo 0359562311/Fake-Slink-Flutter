@@ -1,16 +1,32 @@
-class Student {
+import 'package:hive/hive.dart';
+part 'student.g.dart';
+@HiveType(typeId: 0)
+class Student extends HiveObject {
+  @HiveField(0)
   String studentId;
+  @HiveField(1)
   AdministrativeClass administrativeClass;
+  @HiveField(2)
   int id;
+  @HiveField(3)
   String name;
+  @HiveField(4)
   String dob;
+  @HiveField(5)
   String? address;
+  @HiveField(6)
   String? avatar;
+  @HiveField(7)
   String? cover;
+  @HiveField(8)
   String gender;
+  @HiveField(9)
   String role;
+  @HiveField(10)
   String? phoneNumber;
+  @HiveField(11)
   String createAt;
+  @HiveField(12)
   String updateAt;
 
   Student( 
@@ -32,9 +48,7 @@ class Student {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['studentId'] = this.studentId;
-    if (this.administrativeClass != null) {
-      data['administrativeClass'] = this.administrativeClass.toJson();
-    }
+    data['administrativeClass'] = this.administrativeClass.toJson();
     data['id'] = this.id;
     data['name'] = this.name;
     data['dob'] = this.dob;
@@ -50,10 +64,15 @@ class Student {
   }
 }
 
-class AdministrativeClass {
+@HiveType(typeId: 10)
+class AdministrativeClass extends HiveObject {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String administrativeClassId;
+  @HiveField(2)
   String profession;
+  @HiveField(3)
   int lecturer;
 
   AdministrativeClass(

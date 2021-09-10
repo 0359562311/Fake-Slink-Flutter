@@ -1,5 +1,4 @@
 import 'package:fakeslink/app/data/model/registerable_class_model.dart';
-
 import 'registerable_class.dart';
 
 class Register {

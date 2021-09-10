@@ -24,9 +24,13 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
     print("in interceptor  $err");
     if (err.response?.statusCode == 408) {
       GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
+      if(err.requestOptions.path.contains(APIPath.me) || err.requestOptions.path.contains(APIPath.listSchedules))
+        handler.next(err);
     }
     else if (err.response?.statusCode != null && err.response!.statusCode! >= 500) {
       GetIt.instance<StreamController<String>>().add("Máy chủ đang bảo trì.");
+      if(err.requestOptions.path.contains(APIPath.me) || err.requestOptions.path.contains(APIPath.listSchedules))
+        handler.next(err);
     }
     else if (err.response?.requestOptions.path.startsWith("/auth") ?? true) {
       handler.next(err);
@@ -74,11 +78,10 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
           dio.interceptors.errorLock.unlock();
           GetIt.instance<StreamController<String>>().add("Phiên đăng nhập đã hết hạn.");
         }
-
       });
     }
     else
-      handler.reject(err);
+      handler.next(err);
   }
 
   @override

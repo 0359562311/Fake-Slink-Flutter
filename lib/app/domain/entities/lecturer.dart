@@ -1,16 +1,33 @@
-class Lecturer {
+import 'package:hive/hive.dart';
+
+part 'lecturer.g.dart';
+@HiveType(typeId: 20)
+class Lecturer extends HiveObject {
+  @HiveField(0)
   String lecturerId;
+  @HiveField(1)
   String educationLevel;
+  @HiveField(2)
   int id;
+  @HiveField(3)
   String name;
+  @HiveField(4)
   String? dob;
+  @HiveField(5)
   String? address;
+  @HiveField(6)
   String? avatar;
+  @HiveField(7)
   String? cover;
+  @HiveField(8)
   String gender;
+  @HiveField(9)
   String role;
+  @HiveField(10)
   String? phoneNumber;
+  @HiveField(11)
   String createAt;
+  @HiveField(12)
   String updateAt;
 
   Lecturer(

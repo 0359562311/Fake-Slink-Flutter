@@ -36,15 +36,20 @@ dependencies:
   intl: ^0.17.0
   dio: ^4.0.0
   connectivity_plus: ^1.0.6
-  shared_preferences: ^2.0.6
   onesignal_flutter: ^3.2.0
+
+  hive: ^2.0.4
+  path_provider: ^2.0.3
   firebase_storage: ^10.0.2
+  shared_preferences: ^2.0.6
 
   carousel_slider: ^4.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: 
+  hive_generator:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

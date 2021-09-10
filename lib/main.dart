@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
@@ -10,8 +11,13 @@ import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/user_sources.dart';
+import 'package:fakeslink/app/domain/entities/lecturer.dart';
 import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
+import 'package:fakeslink/app/domain/entities/registerable_class.dart';
+import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
+import 'package:fakeslink/app/domain/entities/student.dart';
+import 'package:fakeslink/app/domain/entities/subject.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
 import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
@@ -25,12 +31,13 @@ import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
-import 'package:fakeslink/app/presentation/main_screen/bottom_bar.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:hive/hive.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 import 'app/domain/entities/session.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
@@ -40,6 +47,15 @@ import 'core/utils/share_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
+  Directory? appDocDir = await getExternalStorageDirectory();
+  String appDocPath = appDocDir?.path??"";
+  Hive..init(appDocPath)
+  ..registerAdapter(StudentAdapter())
+  ..registerAdapter(ScheduleAdapter())
+  ..registerAdapter(RegisterableClassAdapter())
+  ..registerAdapter(SubjectAdapter())
+  ..registerAdapter(AdministrativeClassAdapter())
+  ..registerAdapter(LecturerAdapter());
   await init();
   runApp(MyApp());
 }
@@ -81,15 +97,17 @@ Future<void> init() async {
 
   /// repositories
   getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt(),getIt()));
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
   getIt.registerLazySingleton(() => UserRemoteSouce());
+  getIt.registerLazySingleton(() => UserLocalSource());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
   getIt.registerLazySingleton(() => ScheduleRemoteSource());
+  getIt.registerLazySingleton(() => ScheduleLocalSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
@@ -168,14 +186,13 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
-        // initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
-        home: MainScreen(),
-        // routes: {
-        //   AppRoute.login: (context) => Login(),
-        //   AppRoute.main: (context) => MainScreen(),
-        //   AppRoute.notificationDetails: (context) => NotificationDetails(),
-        // },
+        routes: {
+          AppRoute.login: (context) => Login(),
+          AppRoute.main: (context) => MainScreen(),
+          AppRoute.notificationDetails: (context) => NotificationDetails(),
+        },
       ),
     );
   }
