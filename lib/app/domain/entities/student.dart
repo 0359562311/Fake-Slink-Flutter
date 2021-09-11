@@ -1,3 +1,4 @@
+
 import 'package:hive/hive.dart';
 part 'student.g.dart';
 @HiveType(typeId: 0)
@@ -28,6 +29,9 @@ class Student extends HiveObject {
   String createAt;
   @HiveField(12)
   String updateAt;
+  @HiveField(13)
+  double gpa;
+
 
   Student( 
       {
@@ -43,6 +47,7 @@ class Student extends HiveObject {
       required this.role,
       this.phoneNumber,
       required this.createAt,
+      required this.gpa,
       required this.updateAt});
 
   Map<String, dynamic> toJson() {
@@ -60,6 +65,7 @@ class Student extends HiveObject {
     data['phoneNumber'] = this.phoneNumber;
     data['createAt'] = this.createAt;
     data['updateAt'] = this.updateAt;
+    data['gpa'] = this.gpa;
     return data;
   }
 }

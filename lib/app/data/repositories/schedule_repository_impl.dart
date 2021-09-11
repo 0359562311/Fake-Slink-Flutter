@@ -15,7 +15,7 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
       final schedules = await remoteSource.getListSchedule();
       localSource.cacheSchedules(schedules);
       return schedules;
-    } on DioError catch (e) {
+    } on DioError {
       return localSource.getListSchedule();
     }
   }

@@ -36,7 +36,7 @@ class HomeNotificationsBloc extends Bloc<HomeNotificationsEvent,HomeNotification
           await _getListNotificationsUseCase.execute(0, "General")
         );
       }
-    } on DioError catch (e) {
+    } on DioError {
       yield HomeNotificationsSuccessfulState([]);
     }
   }

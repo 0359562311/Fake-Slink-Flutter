@@ -9,7 +9,6 @@ import 'package:get_it/get_it.dart';
 class AuthenticationInterceptor extends InterceptorsWrapper {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    // TODO: implement onRequest
     if (GetIt.instance.isRegistered<Session>() && !options.path.contains(APIPath.logIn)) {
       options.headers['Authorization'] =
         "Bearer ${GetIt.instance<Session>().access}";
@@ -19,16 +18,10 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    // TODO: implement onError
-    // TODO: implement onError
-    print("in interceptor  $err");
-    if (err.response?.statusCode == 408) {
+    print("in interceptor  ${err.response}");
+    if (err.type == DioErrorType.connectTimeout || err.type == DioErrorType.receiveTimeout
+          || err.type == DioErrorType.sendTimeout) {
       GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
-      if(err.requestOptions.path.contains(APIPath.me) || err.requestOptions.path.contains(APIPath.listSchedules))
-        handler.next(err);
-    }
-    else if (err.response?.statusCode != null && err.response!.statusCode! >= 500) {
-      GetIt.instance<StreamController<String>>().add("Máy chủ đang bảo trì.");
       if(err.requestOptions.path.contains(APIPath.me) || err.requestOptions.path.contains(APIPath.listSchedules))
         handler.next(err);
     }
@@ -86,7 +79,6 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    // TODO: implement onResponse
     handler.next(response..data = response.data['data']);
   }
 }

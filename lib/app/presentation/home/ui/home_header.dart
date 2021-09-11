@@ -7,12 +7,12 @@ import 'package:provider/provider.dart';
 class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
   final double _maxExtent = 150;
   final double _minExtent = 80;
-  const SliverHeaderChildDelegateImpl();
 
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     var _provider = Provider.of<HomeHeaderProvider>(context, listen: false);
+    print("rebuild Home Header");
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: maxExtent - shrinkOffset < 80 ? 80 : maxExtent - shrinkOffset,
@@ -72,7 +72,7 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            "Ma sinh vien: ${_provider.user?.studentId??""}",
+                            "Mã sinh viên: ${_provider.user?.studentId??""}",
                             style: TextStyle(
                               fontSize: 12,
                             ),
@@ -89,7 +89,7 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
                       children: [
                         RichText(text: TextSpan(
                             children: [
-                              TextSpan(text: (_provider.gpa?.gpa.toStringAsFixed(2)??"N/A").toString(),
+                              TextSpan(text: (_provider.user?.gpa.toStringAsFixed(2)??"N/A").toString(),
                                   style: TextStyle(
                                       color: AppColor.red,
                                       fontSize: 18,

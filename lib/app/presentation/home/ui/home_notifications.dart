@@ -19,7 +19,6 @@ class _HomeNotificationsState extends State<HomeNotifications> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc = HomeNotificationsBloc()..add(HomeNotificationsEvent.init);
   }

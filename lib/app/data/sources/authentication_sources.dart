@@ -10,7 +10,6 @@ abstract class AuthenticationSource {
 class AuthenticationRemoteSource extends AuthenticationSource {
   @override
   Future<SessionModel> logIn(String username, String password) async {
-    // TODO: implement logIn
     final response = await GetIt.instance<Dio>().post(APIPath.logIn, data: {
       "username": username,
       "password": password

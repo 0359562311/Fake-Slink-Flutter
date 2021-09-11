@@ -1,8 +1,8 @@
 import 'package:fakeslink/app/domain/entities/student.dart';
-import 'package:fakeslink/app/domain/repositories/user_repository.dart';
+import 'package:fakeslink/app/domain/repositories/student_repository.dart';
 
 class GetProfileUseCase {
-  final UserRepository repository;
+  final StudentRepository repository;
   GetProfileUseCase(this.repository);
 
   Future<Student?> execute()

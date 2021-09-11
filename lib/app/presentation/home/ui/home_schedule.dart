@@ -20,13 +20,13 @@ class _HomeScheduleState extends State<HomeSchedule> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _provider = HomeScheduleProvider();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("rebuild home schdedule");
     return ChangeNotifierProvider.value(
       value: _provider,
       builder: (context, child) {

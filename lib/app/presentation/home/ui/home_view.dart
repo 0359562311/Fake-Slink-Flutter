@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fakeslink/app/presentation/home/bloc/home_header_provider.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_common_functions.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_notifications.dart';
@@ -19,19 +18,26 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
 
-  final HomeHeaderProvider _homeHeaderProvider = HomeHeaderProvider();
+  late HomeHeaderProvider _homeHeaderProvider;
   
   @override
   void initState() {
-    // TODO: implement initState
+    _homeHeaderProvider = HomeHeaderProvider();
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _homeHeaderProvider.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("didchangedependencies home");
+
   }
 
   @override

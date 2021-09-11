@@ -5,12 +5,14 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
+import 'package:fakeslink/app/data/repositories/register_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/schedule_repository_impl.dart';
-import 'package:fakeslink/app/data/repositories/user_repository_impl.dart';
+import 'package:fakeslink/app/data/repositories/student_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
+import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
-import 'package:fakeslink/app/data/sources/user_sources.dart';
+import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/lecturer.dart';
 import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
@@ -20,18 +22,21 @@ import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/entities/subject.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
+import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
-import 'package:fakeslink/app/domain/repositories/user_repository.dart';
+import 'package:fakeslink/app/domain/repositories/student_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
-import 'package:fakeslink/app/domain/use_cases/get_gpa_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/get_list_register_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
+import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
+import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -41,7 +46,6 @@ import 'package:path_provider/path_provider.dart';
 import 'app/domain/entities/session.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
-import 'core/utils/network_info.dart';
 import 'core/utils/share_preferences.dart';
 
 void main() async {
@@ -70,6 +74,7 @@ Future<void> init() async {
   );
   getIt.registerLazySingleton(()=>GlobalKey<NavigatorState>());
   await DeviceInfo.init();
+  await NetworkInfo.init();
   await SharePreferencesUtils.init();
   if(SharePreferencesUtils.getString("refresh") != null) {
     getIt.registerSingleton(
@@ -79,6 +84,7 @@ Future<void> init() async {
         )
     );
   }
+  
   var options = BaseOptions(
       baseUrl: 'http://192.168.0.101:8000',
       connectTimeout: 15000,
@@ -97,25 +103,28 @@ Future<void> init() async {
 
   /// repositories
   getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(getIt(),getIt()));
+  getIt.registerLazySingleton<StudentRepository>(() => StudentRepositoryImpl(getIt(),getIt()));
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
   getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(getIt(), getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
-  getIt.registerLazySingleton(() => UserRemoteSouce());
-  getIt.registerLazySingleton(() => UserLocalSource());
+  getIt.registerLazySingleton(() => StudentRemoteSouce());
+  getIt.registerLazySingleton(() => StudentLocalSource());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
   getIt.registerLazySingleton(() => ScheduleRemoteSource());
   getIt.registerLazySingleton(() => ScheduleLocalSource());
+  getIt.registerLazySingleton(() => RegisterLocalSource());
+  getIt.registerLazySingleton(() => RegisterRemoteSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetGPAUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
   
 }
 
@@ -127,15 +136,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   static const oneSignalAppId = "1537dc7c-b315-4c3a-a355-9ca677c33fef";
-  late final subscription;
   void initState() {
     super.initState();
-    subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      // Got a new connectivity status!
-      NetworkInfo.isConnecting = result != ConnectivityResult.none;
-    });
     initOneSignal();
   }
 
@@ -169,7 +171,6 @@ class _MyAppState extends State<MyApp> {
   }
 
   void dispose() {
-    subscription.cancel();
     GetIt.instance<StreamController<String>>().close();
     super.dispose();
   }
@@ -184,7 +185,11 @@ class _MyAppState extends State<MyApp> {
         return true;
       },
       child: MaterialApp(
-        title: 'Flutter Demo',
+        theme: ThemeData(
+          appBarTheme: AppBarTheme(
+            brightness: Brightness.dark,
+          ),
+        ),
         debugShowCheckedModeBanner: false,
         initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
@@ -192,6 +197,7 @@ class _MyAppState extends State<MyApp> {
           AppRoute.login: (context) => Login(),
           AppRoute.main: (context) => MainScreen(),
           AppRoute.notificationDetails: (context) => NotificationDetails(),
+          AppRoute.result: (context) => ResultScreen(),
         },
       ),
     );

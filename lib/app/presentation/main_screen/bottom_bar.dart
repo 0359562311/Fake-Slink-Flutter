@@ -32,9 +32,8 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _edgeController = AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _edgeController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     // final Animation<double>
     _edgeCurve = CurvedAnimation(parent: _edgeController, curve: Curves.elasticOut);
     _edgeTween = Tween<double>(begin: 1.0, end: index.toDouble());
@@ -44,7 +43,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
       });
     });
 
-    _iconController = AnimationController(vsync: this, duration: Duration(milliseconds: 300));
+    _iconController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     // final Animation<double>
     _iconCurve = CurvedAnimation(parent: _iconController, curve: Curves.decelerate);
     _iconTween = Tween<double>(begin: -70.0, end: 70.0);
@@ -53,7 +52,6 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
   
   @override
   void dispose() {
-    // TODO: implement dispose
     _edgeController.dispose();
     _iconController.dispose();
     super.dispose();
@@ -74,7 +72,6 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    print("rebuild");
     return Stack(
       children: [
         Positioned(
@@ -103,16 +100,16 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                   width: size.width,
                   height: 60,
                   child: Row(
-                      children: List.generate(items.length, (i) => Container(
-                        padding: EdgeInsets.symmetric(horizontal: 2),
-                        width: size.width/5,
-                        height: 60,
-                        child: GestureDetector(
-                          onTap: (){
-                            if(index != i) {
-                              animateTo(i);
-                            }
-                          },
+                      children: List.generate(items.length, (i) => InkWell(
+                        onTap: (){
+                          if(index != i) {
+                            animateTo(i);
+                          }
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 2),
+                          width: size.width/5,
+                          height: 60,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -195,7 +192,6 @@ class _MyCustomPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return false;
   }
 }

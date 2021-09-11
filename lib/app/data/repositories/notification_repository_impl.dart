@@ -21,7 +21,6 @@ class NotificationRepositoryImpl extends NotificationRepository {
 
   @override
   Future<Notification> markeAsRead(int offset) {
-    // TODO: implement markeAsRead
     throw UnimplementedError();
   }
 

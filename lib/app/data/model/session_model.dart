@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:fakeslink/app/domain/entities/session.dart';
 
 class SessionModel extends Session {

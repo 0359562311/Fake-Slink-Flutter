@@ -19,7 +19,6 @@ class ScheduleLocalSource {
     for(var i in _box.get("data",defaultValue: <Schedule>[])) {
         res.add(i);
     }
-    _box.close();
     return res;
   }
 

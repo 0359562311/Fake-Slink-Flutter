@@ -10,7 +10,7 @@ class DeviceInfo{
       final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       deviceId = androidInfo.androidId;
       deviceName = androidInfo.device;
-    } on Exception catch (e) {
+    } on Exception {
     }
   }
 }

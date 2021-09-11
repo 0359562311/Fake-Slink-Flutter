@@ -5,4 +5,5 @@ abstract class APIPath {
   static const String me = "/user/me";
   static const String listSchedules = "/list-schedules";
   static const String listNotifications = "/notification";
+  static const String listRegister = "//list-registers";
 }

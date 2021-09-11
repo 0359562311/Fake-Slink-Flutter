@@ -1,11 +1,16 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_bloc.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_event.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_state.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
+import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -20,29 +25,49 @@ class _LoginState extends State<Login> {
   late TextEditingController passwordController ;
   final _formKey = GlobalKey<FormState>();
   late LoginBloc _bloc;
+  late final _subscription;
 
   @override
   void initState() {
-    // TODO: implement initState
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     showPassword = false;
     _bloc = LoginBloc();
+    _checkConnectivity();
+    _subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      // Got a new connectivity status!
+      NetworkInfo.isConnecting = result != ConnectivityResult.none;
+      if (!NetworkInfo.isConnecting) {
+        showMyAlertDialog(context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
+      }
+    });
+    GetIt.instance<StreamController<String>>().stream.listen((event) { 
+      showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
+    });
     super.initState();
+  }
+
+  Future _checkConnectivity() async {
+    await Future.delayed(Duration(seconds: 2));
+    if (!NetworkInfo.isConnecting) {
+        showMyAlertDialog(context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
+      }
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     usernameController.dispose();
     passwordController.dispose();
     _bloc.close();
+    _subscription.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return  SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
