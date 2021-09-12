@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
@@ -15,6 +14,7 @@ import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/lecturer.dart';
 import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
+import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
@@ -59,6 +59,7 @@ void main() async {
   ..registerAdapter(RegisterableClassAdapter())
   ..registerAdapter(SubjectAdapter())
   ..registerAdapter(AdministrativeClassAdapter())
+  ..registerAdapter(RegisterAdapter())
   ..registerAdapter(LecturerAdapter());
   await init();
   runApp(MyApp());

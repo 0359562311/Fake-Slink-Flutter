@@ -34,10 +34,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     print("didchangedependencies home");
-
   }
 
   @override
