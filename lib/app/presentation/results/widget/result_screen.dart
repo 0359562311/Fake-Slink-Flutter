@@ -2,7 +2,7 @@ import 'package:fakeslink/app/presentation/results/bloc/result_bloc.dart';
 import 'package:fakeslink/app/presentation/results/bloc/result_event.dart';
 import 'package:fakeslink/app/presentation/results/bloc/result_state.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_chart.dart';
-import 'package:fakeslink/app/presentation/results/widget/result_detail.dart';
+import 'package:fakeslink/app/presentation/results/widget/list_result_detail.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   late TabController _tabController;
   late PageController _pageController;
   late ResultBloc _bloc;
-  final _items = [ResultChart(), ResultDetail()];
+  final _items = [ResultChart(), ListResultDetail()];
 
   @override
   void initState() {

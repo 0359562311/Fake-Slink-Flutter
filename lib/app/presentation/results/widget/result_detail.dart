@@ -1,156 +1,159 @@
-import 'package:fakeslink/app/domain/entities/semester.dart';
-import 'package:fakeslink/app/domain/entities/student.dart';
-import 'package:fakeslink/app/presentation/results/bloc/result_bloc.dart';
-import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
-class ResultDetail extends StatefulWidget {
-  const ResultDetail({ Key? key }) : super(key: key);
+import 'package:fakeslink/app/domain/entities/register.dart';
+import 'package:fakeslink/core/const/app_colors.dart';
 
-  @override
-  _ResultDetailState createState() => _ResultDetailState();
-}
-
-class _ResultDetailState extends State<ResultDetail> {
-
-  List<String> semesters = [];
-  late String current;
-
-  @override
-  void initState() {
-    super.initState();
-    final user = GetIt.instance<Student>();
-    String to = current = GetIt.instance<Semester>().semesterId;
-    String from = "20${user.studentId.substring(1,3)}1";
-    for(int i = int.parse(user.studentId.substring(1,3)); i <= int.parse(to.substring(2,4)); i++) {
-      for(int j = 1; j<=3;j++) {
-        semesters.add("20$i$j");
-        if (i == int.parse(to.substring(2,4)) && j == int.parse(to.substring(4)))
-          break;
-      }
-    }
-    semesters = semesters.reversed.toList();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    print("TanKiem: didChangeDependencies in result_detail");
-  }
+class ResultDetail extends StatelessWidget {
+  final Register register;
+  const ResultDetail({
+    Key? key,
+    required this.register,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _bloc = BlocProvider.of<ResultBloc>(context);
     return Scaffold(
-      backgroundColor: AppColor.background,
-      body: SingleChildScrollView(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20,),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
+        title: Text("Chi tiết điểm",
+          style: TextStyle(color: Colors.white)
+        ),
+        centerTitle: true,
+        backgroundColor: AppColor.red,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
-            Align(child: _dropdownButton(), alignment: Alignment.center,),
-            _listResults(_bloc),
-            SizedBox(height: 32,)
+            Padding(
+              padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+              child: Text(register.registerableClass.subject.subjectName,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold
+                ),
+              ),
+            ),
+            _detail(),
+            Divider(thickness: 1,),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Text("Tổng kết số:",
+                    style: TextStyle(
+                      color: AppColor.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                    ),
+                  ),
+                  Spacer(),
+                  Text(register.total.toString(),
+                    style: TextStyle(
+                      color: AppColor.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                children: [
+                  Text("Tổng kết chữ:",
+                    style: TextStyle(
+                      color: AppColor.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                    ),
+                  ),
+                  Spacer(),
+                  Text(_getTongKetChu(),
+                    style: TextStyle(
+                      color: AppColor.red,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18
+                    ),
+                  )
+                ],
+              ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _dropdownButton() {
-    return Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            margin: EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(100),
-              boxShadow: [
-                BoxShadow(blurRadius: 0.3, color: Colors.black87, offset: Offset(0,0.3))
-              ],
-              color: Colors.white
-            ),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                items: semesters.map((str) => DropdownMenuItem(
-                  value: str,
-                  child: Text(
-                    "Học kỳ ${str.substring(4)} - năm ${str.substring(0,4)}",
-                    style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18
-                    ),
-                  ),
-                )).toList(),
-                hint: Text("Học kỳ ${current.substring(4)} - năm ${current.substring(0,4)}"),
-                onChanged: (val){
-                  setState(() {
-                    current = val.toString();
-                  });
-                },
-              ),
-            )
-          );
+  String _getTongKetChu() {
+    double d = register.total!;
+    if(register.registerableClass.subject.isCPA) {
+      if(d < 4) return "F";
+      else if (d < 5) return "D";
+      else if (d < 5.5) return "D+";
+      else if (d < 6.5) return "C";
+      else if (d < 7) return "C+";
+      else if (d < 8) return "B";
+      else if (d < 8.5) return "B+";
+      else if (d < 9) return "A";
+      else return "A+";
+    } else {
+      if(d<4) return "KĐ";
+      else return "Đ";
+    }
   }
 
-  Widget _listResults(ResultBloc bloc) {
-    int index = 0;
+  Widget _detail() {
+    if(register.points?.length == 4 && !register.registerableClass.subject.subjectName.contains("Tiếng Anh")) {
+      register.points?.add(0);
+      register.registerableClass.subject.coefficient.add(register.registerableClass.subject.coefficient.last);
+    }
+    int index = -1;
+    var titles = [];
+    if(!register.registerableClass.subject.subjectName.contains("Tiếng Anh")) 
+      titles = ["Điểm chuyên cần ", "Kiểm tra thường xuyên ", "Điểm bài tập ", "Điểm thi lần 1 ", "Điểm thi lần 2 "];
+    else
+      titles = ["Điểm nghe ","Điểm nói ", "Điểm đọc ", "Điểm viết "];
     return Column(
-      children: bloc.register.where((r) => r.registerableClass.semester == current).map((e) {
+      children: register.registerableClass.subject.coefficient.map((e) {
         index++;
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: Card(
-            elevation: 0,
-            color: Colors.white,
-            child: Row(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  margin: EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.red
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          child: Row(
+            children: [
+              RichText(
+                text: TextSpan(
+                  text: titles[index],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold
                   ),
-                  alignment: Alignment.center,
-                  child: Text("$index",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    const SizedBox(height: 8,),
-                    Text(e.registerableClass.subject.subjectName,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14
-                      ),
-                    ),
-                    const SizedBox(height: 8,),
-                    Text("Mã môn học: ${e.registerableClass.subject.subjectId}",
+                    TextSpan(
+                      text: "($e%)",
                       style: TextStyle(
-                        color: AppColor.black,
-                        fontSize: 12
-                      ),
-                    ),
-                    const SizedBox(height: 8,),
-                    Text(
-                      e.total == null ? "Chưa có điểm": "Đã có điểm",
-                      style: TextStyle(
-                        color: e.total == null ? AppColor.red : Colors.green,
-                        fontSize: 12
-                      ),
-                    ),
-                    const SizedBox(height: 8,),
-                  ],
-                )
-              ],
-            ),
+                        fontWeight: FontWeight.normal
+                      )
+                    )
+                  ]
+                ),
+              ),
+              const Spacer(),
+              Text(
+                register.points![index].toString(),
+                style: TextStyle(
+                  color: AppColor.red,
+                  fontWeight: FontWeight.bold
+                ),
+              )
+            ],
           ),
         );
       }
