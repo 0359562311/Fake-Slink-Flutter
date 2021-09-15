@@ -12,7 +12,6 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     var _provider = Provider.of<HomeHeaderProvider>(context, listen: false);
-    print("rebuild Home Header");
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: maxExtent - shrinkOffset < 80 ? 80 : maxExtent - shrinkOffset,

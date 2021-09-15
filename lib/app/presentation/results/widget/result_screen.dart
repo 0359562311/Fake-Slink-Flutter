@@ -1,12 +1,13 @@
 import 'package:fakeslink/app/presentation/results/bloc/result_bloc.dart';
 import 'package:fakeslink/app/presentation/results/bloc/result_event.dart';
 import 'package:fakeslink/app/presentation/results/bloc/result_state.dart';
-import 'package:fakeslink/app/presentation/results/widget/result_chart.dart';
-import 'package:fakeslink/app/presentation/results/widget/list_result_detail.dart';
+import 'package:fakeslink/app/presentation/results/widget/first_tab/result_first_tab.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'second_tab/list_result_detail.dart';
 
 class ResultScreen extends StatefulWidget {
   const ResultScreen({ Key? key }) : super(key: key);
@@ -18,15 +19,13 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
 
   late TabController _tabController;
-  late PageController _pageController;
   late ResultBloc _bloc;
-  final _items = [ResultChart(), ListResultDetail()];
+  final _items = [const ResultFirstTab(), ListResultDetail()];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _pageController = PageController();
     _bloc = ResultBloc()..add(ResultInitEvent());
   }
 
@@ -34,7 +33,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   void dispose() {
     super.dispose();
     _tabController.dispose();
-    _pageController.dispose();
     _bloc.close();
   }
 
@@ -56,9 +54,6 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,
-          onTap: (index) {
-            _pageController.animateToPage(index, duration: Duration(microseconds: 500), curve: Curves.linear);
-          },
           tabs: [
             Tab(text: "Môn học",),
             Tab(text: "Điểm thi",),
@@ -78,12 +73,9 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
               return Center(
                 child: CircularProgressIndicator(),
               );
-            return PageView(
-              controller: _pageController,
+            return TabBarView(
+              controller: _tabController,
               children: _items,
-              onPageChanged: (index) {
-                _tabController.animateTo(index);
-              },
             );
           },
         ),
