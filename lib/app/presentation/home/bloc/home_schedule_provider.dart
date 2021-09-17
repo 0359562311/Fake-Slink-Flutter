@@ -1,4 +1,5 @@
 import 'package:fakeslink/app/domain/entities/schedule.dart';
+import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_schedule.dart';
@@ -11,9 +12,9 @@ class HomeScheduleProvider extends ChangeNotifier {
   late List<Schedule> _schedules;
   late DateTime initDate;
 
-  List<List<TempClass>> _tempClasses = [];
+  List<List<ScheduleItem>> _scheduleItems = [];
 
-  List<List<TempClass>> get tempClasses => _tempClasses;
+  List<List<ScheduleItem>> get scheduleItems => _scheduleItems;
 
   HomeScheduleProvider(){
     _getListScheduleUseCase = GetIt.instance<GetListScheduleUseCase>();
@@ -36,7 +37,7 @@ class HomeScheduleProvider extends ChangeNotifier {
         temp.sort((a,b){
           return a.startAt.compareTo(b.startAt);
         });
-        _tempClasses.add(temp.map((e) => TempClass(
+        _scheduleItems.add(temp.map((e) => ScheduleItem(
           e, 
           _getStart(e.startAt), 
           _getEnd(e.endAt), 

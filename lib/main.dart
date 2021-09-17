@@ -31,6 +31,7 @@ import 'package:fakeslink/app/domain/use_cases/get_list_register_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
+import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
@@ -41,6 +42,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'app/domain/entities/session.dart';
@@ -62,7 +64,7 @@ void main() async {
   ..registerAdapter(RegisterAdapter())
   ..registerAdapter(LecturerAdapter());
   await init();
-  runApp(MyApp());
+  initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
 Future<void> init() async {
@@ -199,6 +201,7 @@ class _MyAppState extends State<MyApp> {
           AppRoute.main: (context) => MainScreen(),
           AppRoute.notificationDetails: (context) => NotificationDetails(),
           AppRoute.result: (context) => ResultScreen(),
+          AppRoute.listSchedules: (context) => ListSchedule(),
         },
       ),
     );

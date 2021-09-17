@@ -105,12 +105,12 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 ],
               ),
               SizedBox(height: 8,),
-              (_provider.tempClasses.length == 0) ? Padding(
+              (_provider.scheduleItems.length == 0) ? Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: CircularProgressIndicator(),
               ) : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: _provider.tempClasses[index].length == 0 
+                children: _provider.scheduleItems[index].length == 0 
                 ? [Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Text("Không có lịch học", style: TextStyle(
@@ -118,8 +118,8 @@ class _HomeScheduleState extends State<HomeSchedule> {
                     fontSize: 14
                   ),)
                 )]
-                :List.generate(_provider.tempClasses[index].length, (_index){
-                  final _tempClass = _provider.tempClasses[index][_index];
+                :List.generate(_provider.scheduleItems[index].length, (_index){
+                  final _tempClass = _provider.scheduleItems[index][_index];
                   return Column(
                     children: [
                       if (_index!=0) 
@@ -192,18 +192,4 @@ class _HomeScheduleState extends State<HomeSchedule> {
       },
     );
   }
-}
-
-class TempClass {
-  final Schedule schedule;
-  final int start;
-  final int end;
-  final String startAt;
-  final String endAt;
-  final DateTime date;
-  final String classroom;
-  final String subjectName;
-
-  const TempClass(this.schedule, this.start, this.end, this.startAt, this.endAt, this.date,
-      this.classroom, this.subjectName);
 }
