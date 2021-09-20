@@ -25,6 +25,7 @@ class _ResultChartState extends State<ResultChart> with AutomaticKeepAliveClient
     final _bloc = BlocProvider.of<ResultBloc>(context);
     final data = _filter(_bloc);
     print("TanKiem: rebuild chart");
+    super.build(context);
     return Column(
       children: [
         Padding(

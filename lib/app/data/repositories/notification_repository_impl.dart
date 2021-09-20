@@ -20,8 +20,8 @@ class NotificationRepositoryImpl extends NotificationRepository {
   }
 
   @override
-  Future<Notification> markeAsRead(int offset) {
-    throw UnimplementedError();
+  Future<void> markeAsRead(NotificationDetails details) {
+    return remoteSource.markAsRead(details);
   }
 
 }

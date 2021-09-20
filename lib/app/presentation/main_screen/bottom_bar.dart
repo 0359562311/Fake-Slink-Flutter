@@ -33,9 +33,9 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
-    _edgeController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _edgeController = AnimationController(vsync: this, duration: Duration(milliseconds: 350));
     // final Animation<double>
-    _edgeCurve = CurvedAnimation(parent: _edgeController, curve: Curves.elasticInOut);
+    _edgeCurve = CurvedAnimation(parent: _edgeController, curve: Curves.ease);
     _edgeTween = Tween<double>(begin: 1.0, end: index.toDouble());
     _edgeAnimation = _edgeTween.animate(_edgeCurve)..addListener(() {
       setState(() {
@@ -43,9 +43,8 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
       });
     });
 
-    _iconController = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
-    // final Animation<double>
-    _iconCurve = CurvedAnimation(parent: _iconController, curve: Curves.elasticInOut);
+    _iconController = AnimationController(vsync: this, duration: Duration(milliseconds: 350));
+    _iconCurve = CurvedAnimation(parent: _iconController, curve: Curves.ease);
     _iconTween = Tween<double>(begin: -70.0, end: 70.0);
     _iconAnimation = _iconTween.animate(_iconCurve);
   }

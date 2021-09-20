@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/notification_model.dart';
+import 'package:fakeslink/app/domain/entities/notification.dart';
 import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:get_it/get_it.dart';
@@ -8,6 +9,7 @@ abstract class NotificationSource {
   Future<void> createNotificationDevice(String deviceId, OneSignalId oneSignalId);
   Future<void> deleteNotificationDevice(String deviceId);
   Future<List<NotificationModel>> getListNotifications(int offset, String type);
+  Future<void> markAsRead(NotificationDetails details);
 }
 
 class NotificationRemoteSource extends NotificationSource {
@@ -34,5 +36,10 @@ class NotificationRemoteSource extends NotificationSource {
       "offset": offset
     });
     return (response.data['results'] as List).map((e) => NotificationModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<void> markAsRead(NotificationDetails details) async {
+    GetIt.instance<Dio>().put("/notification/mark-as-read/${details.id}/");
   }
 }

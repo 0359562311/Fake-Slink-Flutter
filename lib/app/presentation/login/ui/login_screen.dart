@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_bloc.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_event.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_state.dart';
@@ -10,7 +9,6 @@ import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -29,24 +27,13 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
+    
+    super.initState();
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     showPassword = false;
     _bloc = LoginBloc();
     _checkConnectivity();
-    _subscription = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      // Got a new connectivity status!
-      NetworkInfo.isConnecting = result != ConnectivityResult.none;
-      if (!NetworkInfo.isConnecting) {
-        showMyAlertDialog(context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
-      }
-    });
-    GetIt.instance<StreamController<String>>().stream.listen((event) { 
-      showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
-    });
-    super.initState();
   }
 
   Future _checkConnectivity() async {

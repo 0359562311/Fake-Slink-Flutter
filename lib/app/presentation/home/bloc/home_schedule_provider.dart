@@ -2,7 +2,6 @@ import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
-import 'package:fakeslink/app/presentation/home/ui/home_schedule.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 

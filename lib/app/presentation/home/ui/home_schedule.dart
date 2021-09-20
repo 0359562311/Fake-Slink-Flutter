@@ -1,4 +1,3 @@
-import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/presentation/home/bloc/home_schedule_provider.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';

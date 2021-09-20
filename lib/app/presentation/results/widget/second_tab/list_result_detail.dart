@@ -26,7 +26,6 @@ class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepA
     if (GetIt.instance.isRegistered<Student>()) {
       final user = GetIt.instance<Student>();
       String to = current;
-      String from = "20${user.studentId.substring(1, 3)}1";
       for (int i = int.parse(user.studentId.substring(1, 3));
           i <= int.parse(to.substring(2, 4));
           i++) {
@@ -38,6 +37,7 @@ class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepA
       }
       semesters = semesters.reversed.toList();
     }
+    print("TanKiem: ${GetIt.instance.isRegistered<Student>()}");
   }
 
   @override
@@ -49,6 +49,7 @@ class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepA
   @override
   Widget build(BuildContext context) {
     final _bloc = BlocProvider.of<ResultBloc>(context);
+    super.build(context);
     return Scaffold(
       backgroundColor: AppColor.background,
       body: SingleChildScrollView(

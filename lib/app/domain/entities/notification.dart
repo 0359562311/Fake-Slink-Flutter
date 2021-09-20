@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
+final DateFormat _dateFormat = new DateFormat("dd-MM-yyyy");
 class Notification {
   final int id;
-  final Details details;
-  final bool seen;
+  final NotificationDetails details;
+  bool seen;
   final int receiver;
 
   Notification(
@@ -22,7 +25,7 @@ class Notification {
   }
 }
 
-class Details {
+class NotificationDetails {
   int id;
   Sender sender;
   String title;
@@ -30,31 +33,8 @@ class Details {
   String createAt;
   String type;
 
-  Details(
+  NotificationDetails(
       this.id, this.sender, this.title, this.details, this.createAt, this.type);
-
-  // Details.fromJson(Map<String, dynamic> json) {
-  //   id = json['id'];
-  //   sender =
-  //   json['sender'] != null ? new Sender.fromJson(json['sender']) : null;
-  //   title = json['title'];
-  //   details = json['details'];
-  //   createAt = json['createAt'];
-  //   type = json['type'];
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['id'] = this.id;
-  //   if (this.sender != null) {
-  //     data['sender'] = this.sender.toJson();
-  //   }
-  //   data['title'] = this.title;
-  //   data['details'] = this.details;
-  //   data['createAt'] = this.createAt;
-  //   data['type'] = this.type;
-  //   return data;
-  // }
 
   Map<String, dynamic> toMap() {
     return {
@@ -62,18 +42,18 @@ class Details {
       'sender': sender.toMap(),
       'title': title,
       'details': details,
-      'createAt': createAt,
+      'createAt': _dateFormat.format(DateTime.parse(createAt)),
       'type': type,
     };
   }
 
-  factory Details.fromJson(Map<String, dynamic> map) {
-    return Details(
+  factory NotificationDetails.fromJson(Map<String, dynamic> map) {
+    return NotificationDetails(
       map['id'],
       Sender.fromJson(map['sender']),
       map['title'],
       map['details'],
-      map['createAt'],
+      _dateFormat.format(DateTime.parse(map['createAt'])),
       map['type'],
     );
   }

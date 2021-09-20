@@ -28,7 +28,6 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
 
   Stream<ListScheduleState> _getMapScheduleItems(DateTime d) async* {
     int month = d.month;
-    DateTime startMonth = DateTime(d.year, d.month, 1);
     DateTime startSemester = GetIt.instance<Semester>().startAt;
     Map<String,List<ScheduleItem>> res = {};
     _schedules.forEach((schedule) { 

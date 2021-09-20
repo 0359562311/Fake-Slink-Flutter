@@ -34,7 +34,7 @@ import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
-import 'package:fakeslink/app/presentation/notifications/notification_details.dart';
+import 'package:fakeslink/app/presentation/notifications/ui/notification_details.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
@@ -46,6 +46,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'app/domain/entities/session.dart';
+import 'app/domain/use_cases/mark_notification_as_read_use_case.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
 import 'core/utils/share_preferences.dart';
@@ -127,6 +128,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
+  getIt.registerLazySingleton(() => MarkNotificationAsReadUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
   
 }
@@ -147,6 +149,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> initOneSignal() async {
     await OneSignal.shared.setAppId(oneSignalAppId);
     final state = await OneSignal.shared.getDeviceState();
+    print("TanKiem: ${state?.userId}");
     if(state?.userId != null) {
       GetIt.instance.registerSingleton<OneSignalId>(OneSignalId(state!.userId!));
     }
@@ -199,7 +202,7 @@ class _MyAppState extends State<MyApp> {
         routes: {
           AppRoute.login: (context) => Login(),
           AppRoute.main: (context) => MainScreen(),
-          AppRoute.notificationDetails: (context) => NotificationDetails(),
+          AppRoute.notificationDetails: (context) => NotificationDetailsScreen(),
           AppRoute.result: (context) => ResultScreen(),
           AppRoute.listSchedules: (context) => ListSchedule(),
         },

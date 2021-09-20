@@ -24,7 +24,6 @@ class _ResultTableAndDetailState extends State<ResultTableAndDetail> {
     if (GetIt.instance.isRegistered<Student>()) {
       final user = GetIt.instance<Student>();
       String to = current;
-      String from = "20${user.studentId.substring(1, 3)}1";
       for (int i = int.parse(user.studentId.substring(1, 3));
           i <= int.parse(to.substring(2, 4));
           i++) {
