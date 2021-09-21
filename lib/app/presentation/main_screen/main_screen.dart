@@ -4,6 +4,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_view.dart';
 import 'package:fakeslink/app/presentation/main_screen/bottom_bar.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/list_notification.dart';
+import 'package:fakeslink/app/presentation/study_corner/study_corner.dart';
+import 'package:fakeslink/app/presentation/utilities/utilities.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +36,14 @@ class _MainScreenState extends State<MainScreen> {
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       } else {
         setState(() {
-          _screens = [HomeView(), ListNotification(), Scaffold(), Scaffold(), Scaffold()];
+          _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), Scaffold()];
         });
       }
     });
     GetIt.instance<StreamController<String>>().stream.listen((event) {
       showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
     });
-    _screens = [HomeView(), ListNotification(), Scaffold(), Scaffold(), Scaffold()];
+    _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), Scaffold()];
   }
 
   Future<void> _checkConnectivity() async {
