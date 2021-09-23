@@ -34,9 +34,9 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
       for(int i = 0; ; i++) {
         DateTime current = startSemester.add(Duration(days: schedule.dayOfWeek-1 + i));
         if(current.month < month) continue;
-        else if(current.month > month) break;
-        Duration d = current.difference(startSemester.add(Duration(days: schedule.dayOfWeek-1)));
-        if(d.inDays%7 == 0 && schedule.weeks.contains(d.inDays~/7)) {
+        else if((current.month > month && current.year == d.year) || current.year > d.year) break;
+        Duration dif = current.difference(startSemester.add(Duration(days: schedule.dayOfWeek-1)));
+        if(dif.inDays%7 == 0 && schedule.weeks.contains(dif.inDays~/7)) {
           String key = _formatter.format(current);
           if(!res.containsKey(key))
             res[key] = [];

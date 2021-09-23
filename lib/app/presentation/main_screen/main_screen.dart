@@ -34,10 +34,6 @@ class _MainScreenState extends State<MainScreen> {
       if (!NetworkInfo.isConnecting) {
         showMyAlertDialog(
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
-      } else {
-        setState(() {
-          _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), Scaffold()];
-        });
       }
     });
     GetIt.instance<StreamController<String>>().stream.listen((event) {

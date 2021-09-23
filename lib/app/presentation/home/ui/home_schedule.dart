@@ -106,7 +106,10 @@ class _HomeScheduleState extends State<HomeSchedule> {
               SizedBox(height: 8,),
               (_provider.scheduleItems.length == 0) ? Padding(
                 padding: const EdgeInsets.only(top: 16.0),
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: AppColor.black,
+                  strokeWidth: 5,
+                ),
               ) : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: _provider.scheduleItems[index].length == 0 

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fakeslink/app/domain/entities/notification.dart' as n;
 import 'package:fakeslink/app/presentation/home/bloc/home_notifications_bloc.dart';
+import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -33,7 +34,10 @@ class _HomeNotificationsState extends State<HomeNotifications> {
       bloc: _bloc,
       builder: (context, state){
         if(state is HomeNotificationsLoadingState)
-          return Center(child: CircularProgressIndicator(),);
+          return Center(child: CircularProgressIndicator(
+            strokeWidth: 5,
+            color: AppColor.black,
+          ),);
         final notifications = (state as HomeNotificationsSuccessfulState).notifications;
         return CarouselSlider(
             items: notifications.length == 0 ? [Center(child: Text("Không có thông báo mới"))] 

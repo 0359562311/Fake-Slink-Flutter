@@ -118,6 +118,7 @@ class _ListScheduleState extends State<ListSchedule> {
           _bloc.add(ListScheduleMonthChangeEvent(date));
         }
       },
+      pageAnimationCurve: Curves.easeIn,
       headerStyle: HeaderStyle(formatButtonVisible: false),
       selectedDayPredicate: (date) {
         return isSameDay(_selectedDate, date);

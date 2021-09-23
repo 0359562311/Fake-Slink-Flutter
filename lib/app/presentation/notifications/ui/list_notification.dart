@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ListNotification extends StatefulWidget {
-  const ListNotification({ Key? key }) : super(key: key);
+  ListNotification({ Key? key }) : super(key: key);
 
   @override
   _ListNotificationState createState() => _ListNotificationState();
@@ -27,6 +27,12 @@ class _ListNotificationState extends State<ListNotification> with SingleTickerPr
       NotificationTab(type: 'Administrative'),
       NotificationTab(type: 'Registerable'),
     ];
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
