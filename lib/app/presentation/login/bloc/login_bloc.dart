@@ -1,25 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/app/domain/entities/session.dart';
-import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_event.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_state.dart';
 import 'package:fakeslink/core/const/api_path.dart';
-import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:fakeslink/core/utils/share_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  late LogInUseCase _loginUseCase;
-  late CreateNotificationDeviceUseCase _createNotificationDeviceUseCase;
+  late final LogInUseCase _loginUseCase;
 
   LoginBloc() : super(LoginInitState()) {
     _loginUseCase = GetIt.instance<LogInUseCase>();
-    _createNotificationDeviceUseCase =
-        GetIt.instance<CreateNotificationDeviceUseCase>();
   }
 
   @override
@@ -35,10 +29,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           GetIt.instance.registerSingleton(session);
           SharePreferencesUtils.setString("access", session.access);
           SharePreferencesUtils.setString("refresh", session.refresh);
-          if (DeviceInfo.deviceId != null &&
-              GetIt.instance.isRegistered<OneSignalId>())
-            _createNotificationDeviceUseCase.execute(
-                DeviceInfo.deviceId!, GetIt.instance<OneSignalId>());
           yield LoginSuccessfulState();
         }
       } on DioError catch (e) {

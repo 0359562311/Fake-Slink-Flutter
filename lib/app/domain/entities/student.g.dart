@@ -92,7 +92,7 @@ class AdministrativeClassAdapter extends TypeAdapter<AdministrativeClass> {
     return AdministrativeClass(
       id: fields[0] as int,
       administrativeClassId: fields[1] as String,
-      profession: fields[2] as String,
+      faculty: fields[4] as String,
       lecturer: fields[3] as int,
     );
   }
@@ -105,8 +105,8 @@ class AdministrativeClassAdapter extends TypeAdapter<AdministrativeClass> {
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.administrativeClassId)
-      ..writeByte(2)
-      ..write(obj.profession)
+      ..writeByte(4)
+      ..write(obj.faculty)
       ..writeByte(3)
       ..write(obj.lecturer);
   }

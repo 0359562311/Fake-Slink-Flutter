@@ -24,22 +24,42 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
   Map<String, List<Notification>> get notification => _notifications;
 
+  Map<String, bool> _isLoading = {};
+
   @override
   Stream<NotificationState> mapEventToState(NotificationEvent event) async* {
     if (NetworkInfo.isConnecting) {
-      if (event is NotificationInitEvent) {
-        yield NotificationLoadingState(event.type);
-        final res = await _listNotificationsUseCase.execute(0, event.type);
-        _notifications[event.type] = res;
-        yield NotificationSuccessfulState(event.type);
+      if (event is NotificationInitEvent || event is NotificationRefreshEvent) {
+
+        if (!(_isLoading[event.type] ?? false)) {
+          if (event is NotificationInitEvent)
+            yield NotificationLoadingState(event.type);
+          final res = await _listNotificationsUseCase
+              .execute(0, event.type)
+              .whenComplete(() {
+            _isLoading[event.type] = false;
+          });
+          _notifications[event.type] = res;
+          yield NotificationSuccessfulState(event.type);
+        }
+
       } else if (event is NotificationMarkAsSeenEvent) {
+
         _markNotificationAsReadUseCase.execute(event.details);
         _notifications[event.type]![event.index].seen = true;
+
       } else if (event is NotificationLoadMoreEvent) {
-        final res = await _listNotificationsUseCase.execute(
-            _notifications[event.type]!.length, event.type);
-        _notifications[event.type]?.addAll(res);
-        yield NotificationSuccessfulState(event.type);
+
+        if (!(_isLoading[event.type] ?? false)) {
+          final res = await _listNotificationsUseCase
+              .execute(_notifications[event.type]!.length, event.type)
+              .whenComplete(() {
+            _isLoading[event.type] = false;
+          });
+          _notifications[event.type]?.addAll(res);
+          yield NotificationSuccessfulState(event.type);
+        }
+        
       }
     }
   }

@@ -9,6 +9,10 @@ class NotificationInitEvent extends NotificationEvent{
   NotificationInitEvent(String type): super(type);
 }
 
+class NotificationRefreshEvent extends NotificationEvent{
+  NotificationRefreshEvent(String type): super(type);
+}
+
 class NotificationLoadMoreEvent extends NotificationEvent {
   NotificationLoadMoreEvent(String type): super(type);
 }

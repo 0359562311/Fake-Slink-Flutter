@@ -2,35 +2,39 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/data/repositories/administrative_class_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/register_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/schedule_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/student_repository_impl.dart';
+import 'package:fakeslink/app/data/sources/administrative_class_sources.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/lecturer.dart';
-import 'package:fakeslink/app/domain/entities/one_signal_id.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/entities/subject.dart';
+import 'package:fakeslink/app/domain/repositories/administrative_class_repository.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
 import 'package:fakeslink/app/domain/repositories/student_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecase.dart';
+import 'package:fakeslink/app/domain/use_cases/get_administrative_class_details.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_register_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
+import 'package:fakeslink/app/presentation/administrative_class/administrative_screen.dart';
 import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
@@ -111,6 +115,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
   getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<AdministrativeClassRepository>(() => AdministrativeClassReporitoryImpl(getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
@@ -121,6 +126,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => ScheduleLocalSource());
   getIt.registerLazySingleton(() => RegisterLocalSource());
   getIt.registerLazySingleton(() => RegisterRemoteSource());
+  getIt.registerLazySingleton(() => AdministrativeClassRemoteSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
@@ -130,6 +136,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
   getIt.registerLazySingleton(() => MarkNotificationAsReadUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetAdministrativeClassDetails(getIt()));
   
 }
 
@@ -148,11 +155,6 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initOneSignal() async {
     await OneSignal.shared.setAppId(oneSignalAppId);
-    final state = await OneSignal.shared.getDeviceState();
-    print("TanKiem: ${state?.userId}");
-    if(state?.userId != null) {
-      GetIt.instance.registerSingleton<OneSignalId>(OneSignalId(state!.userId!));
-    }
     OneSignal.shared.setNotificationOpenedHandler((openedResult) {
       var data = openedResult.notification.additionalData;
       GetIt.instance<GlobalKey<NavigatorState>>().currentState?.pushNamed(AppRoute.notificationDetails,
@@ -205,6 +207,7 @@ class _MyAppState extends State<MyApp> {
           AppRoute.notificationDetails: (context) => NotificationDetailsScreen(),
           AppRoute.result: (context) => ResultScreen(),
           AppRoute.listSchedules: (context) => ListSchedule(),
+          AppRoute.administrativeClass: (context) => AdministrativeClassScreen(),
         },
       ),
     );

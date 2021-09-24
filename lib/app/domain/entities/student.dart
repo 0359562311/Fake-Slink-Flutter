@@ -76,19 +76,19 @@ class AdministrativeClass extends HiveObject {
   int id;
   @HiveField(1)
   String administrativeClassId;
-  @HiveField(2)
-  String profession;
+  @HiveField(4)
+  String faculty;
   @HiveField(3)
   int lecturer;
 
   AdministrativeClass(
-      {required this.id, required this.administrativeClassId, required this.profession, required this.lecturer});
+      {required this.id, required this.administrativeClassId, required this.faculty, required this.lecturer});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['administrativeClassId'] = this.administrativeClassId;
-    data['profession'] = this.profession;
+    data['faculty'] = this.faculty;
     data['lecturer'] = this.lecturer;
     return data;
   }

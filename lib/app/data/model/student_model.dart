@@ -57,18 +57,18 @@ class StudentModel extends Student {
 }
 
 class AdministrativeClassModel extends AdministrativeClass {
-  AdministrativeClassModel({id, administrativeClassId, profession, lecturer})
+  AdministrativeClassModel({id, administrativeClassId, faculty, lecturer})
       : super(
             id: id,
             administrativeClassId: administrativeClassId,
-            profession: profession,
+            faculty: faculty,
             lecturer: lecturer);
 
   factory AdministrativeClassModel.fromJson(Map<String, dynamic> json) {
     return AdministrativeClassModel(
       id: json['id'],
       administrativeClassId: json['administrativeClassId'],
-      profession: json['profession'],
+      faculty: json['faculty'],
       lecturer: json['lecturer'],
     );
   }

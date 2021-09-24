@@ -59,7 +59,7 @@ class _NotificationTabState extends State<NotificationTab>
             return RefreshIndicator(
               onRefresh: () async {
                 if(NetworkInfo.isConnecting)
-                  _bloc.add(NotificationInitEvent(widget.type));
+                  _bloc.add(NotificationRefreshEvent(widget.type));
               },
               child: ListView.builder(
                 itemCount: _bloc.notification[widget.type]!.length + 1,

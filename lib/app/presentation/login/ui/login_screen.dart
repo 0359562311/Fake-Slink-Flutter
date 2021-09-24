@@ -63,7 +63,7 @@ class _LoginState extends State<Login> {
             if(state is LoginFailState) {
               showMyAlertDialog(context, "Lỗi đăng nhập", state.message);
             } else if (state is LoginSuccessfulState) {
-              Navigator.of(context).pushNamed(AppRoute.main);
+              Navigator.of(context).pushReplacementNamed(AppRoute.main);
             }
           },
           listenWhen: (old, notOlder) {

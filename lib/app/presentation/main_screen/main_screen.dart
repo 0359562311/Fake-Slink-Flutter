@@ -36,7 +36,7 @@ class _MainScreenState extends State<MainScreen> {
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       }
     });
-    GetIt.instance<StreamController<String>>().stream.listen((event) {
+    GetIt.instance<StreamController<String>>().stream.asBroadcastStream().listen((event) {
       showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
     });
     _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), Scaffold()];
