@@ -26,7 +26,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               await _loginUseCase.execute(event.username, event.password);
           if (GetIt.instance.isRegistered<Session>())
             await GetIt.instance.unregister<Session>();
-          GetIt.instance.registerSingleton(session);
+          GetIt.instance.registerSingleton<Session>(session);
           SharePreferencesUtils.setString("access", session.access);
           SharePreferencesUtils.setString("refresh", session.refresh);
           yield LoginSuccessfulState();

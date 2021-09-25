@@ -38,6 +38,7 @@ class HomeNotificationsBloc extends Bloc<HomeNotificationsEvent,HomeNotification
       if (event == HomeNotificationsEvent.init) {
         if (DeviceInfo.deviceId != null)
             OneSignal.shared.getDeviceState().then((value){
+              print("TanKiem: $value");
               if(value != null)
                 _createNotificationDeviceUseCase.execute(
                   DeviceInfo.deviceId!, value.userId!);

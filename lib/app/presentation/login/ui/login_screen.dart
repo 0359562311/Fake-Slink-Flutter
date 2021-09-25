@@ -23,7 +23,6 @@ class _LoginState extends State<Login> {
   late TextEditingController passwordController ;
   final _formKey = GlobalKey<FormState>();
   late LoginBloc _bloc;
-  late final _subscription;
 
   @override
   void initState() {
@@ -48,7 +47,6 @@ class _LoginState extends State<Login> {
     usernameController.dispose();
     passwordController.dispose();
     _bloc.close();
-    _subscription.cancel();
     super.dispose();
   }
 

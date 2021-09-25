@@ -1,4 +1,4 @@
-import 'package:fakeslink/app/domain/entities/administrative_detail.dart';
+import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
 
 abstract class AdministrativeClassDetailsState {
   const AdministrativeClassDetailsState();

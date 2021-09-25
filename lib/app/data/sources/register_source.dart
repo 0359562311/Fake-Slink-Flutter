@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/register_model.dart';
+import 'package:fakeslink/app/data/model/registerable_class_details_model.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +10,11 @@ class RegisterRemoteSource {
   Future<List<RegisterModel>> getListRegister() async {
     final response = await GetIt.instance<Dio>().get(APIPath.listRegister);
     return (response.data as List).map((e) => RegisterModel.fromJson(e)).toList();
+  }
+
+  Future<RegisterableClassDetailsModel> getDetails(int id) async {
+    final response = await GetIt.instance<Dio>().get("/registerable-class/$id");
+    return RegisterableClassDetailsModel.fromJson(response.data);
   }
 }
 

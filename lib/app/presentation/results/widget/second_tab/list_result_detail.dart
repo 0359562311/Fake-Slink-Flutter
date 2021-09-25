@@ -37,7 +37,6 @@ class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepA
       }
       semesters = semesters.reversed.toList();
     }
-    print("TanKiem: ${GetIt.instance.isRegistered<Student>()}");
   }
 
   @override

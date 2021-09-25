@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
+import 'package:fakeslink/app/domain/entities/registerable_class_details.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 
@@ -18,5 +19,10 @@ class RegisterRepositoryImpl extends RegisterRepository{
     } else {
       return _localSource.getListRegister();
     }
+  }
+
+  @override
+  Future<RegisterableClassDetails> getDetails(int registerableClassId) {
+    return _remoteSource.getDetails(registerableClassId);
   }
 }

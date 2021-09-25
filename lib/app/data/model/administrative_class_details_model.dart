@@ -1,5 +1,5 @@
 import 'package:fakeslink/app/data/model/student_model.dart';
-import 'package:fakeslink/app/domain/entities/administrative_detail.dart';
+import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 
 import 'lecturer_model.dart';

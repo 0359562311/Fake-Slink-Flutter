@@ -33,6 +33,7 @@ import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.d
 import 'package:fakeslink/app/domain/use_cases/get_list_register_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
+import 'package:fakeslink/app/domain/use_cases/get_registerable_class_details_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/presentation/administrative_class/administrative_screen.dart';
 import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
@@ -136,6 +137,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
   getIt.registerLazySingleton(() => MarkNotificationAsReadUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
+  getIt.registerLazySingleton(() => GetRegisterableClassDetailsUseCase(getIt()));
   getIt.registerLazySingleton(() => GetAdministrativeClassDetails(getIt()));
   
 }
@@ -199,7 +201,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.login : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
         routes: {
           AppRoute.login: (context) => Login(),
