@@ -201,7 +201,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.login : AppRoute.login,
+        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
         routes: {
           AppRoute.login: (context) => Login(),

@@ -2,9 +2,12 @@ import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
+import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
+
+import 'list_schedule_event.dart';
 
 class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
   late final GetListScheduleUseCase _getListScheduleUseCase;
@@ -19,8 +22,14 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
   Stream<ListScheduleState> mapEventToState(ListScheduleEvent event) async* {
     if (event is ListScheduleInitEvent) {
       yield ListScheduleLoadingState();
-      _schedules = await _getListScheduleUseCase.execute();
-      yield* _getMapScheduleItems(event.dateTime);
+      final res = await _getListScheduleUseCase.execute();
+      if(res.error != null) {
+        yield ListScheduleErrorState(res.error!);
+      }
+      if(res.result != null) {
+        _schedules = res.result!;
+        yield* _getMapScheduleItems(event.dateTime);
+      }
     } else if (event is ListScheduleMonthChangeEvent) {
       yield* _getMapScheduleItems(event.dateTime);
     }
@@ -82,34 +91,5 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
   }
 }
 
-abstract class ListScheduleEvent{
-  const ListScheduleEvent();
-}
 
-class ListScheduleInitEvent extends ListScheduleEvent {
-  final DateTime dateTime;
-  const ListScheduleInitEvent(this.dateTime);
-}
 
-class ListScheduleMonthChangeEvent extends  ListScheduleEvent {
-  final DateTime dateTime;
-  const ListScheduleMonthChangeEvent(this.dateTime);
-}
-
-abstract class ListScheduleState{
-  const ListScheduleState();
-}
-
-class ListScheduleLoadingState extends ListScheduleState {
-  const ListScheduleLoadingState();
-}
-
-class ListScheduleSuccessfulState extends ListScheduleState {
-  final Map<String,List<ScheduleItem>> items;
-  const ListScheduleSuccessfulState(this.items);
-}
-
-class ListScheduleErrorState extends ListScheduleState {
-  final String message;
-  const ListScheduleErrorState(this.message);
-}

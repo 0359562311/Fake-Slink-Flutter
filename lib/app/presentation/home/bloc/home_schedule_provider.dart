@@ -22,7 +22,8 @@ class HomeScheduleProvider extends ChangeNotifier {
 
   Future<void> init() async {
       initDate = DateTime.now();
-      _schedules = await _getListScheduleUseCase.execute();
+      final res = await _getListScheduleUseCase.execute();
+      _schedules = res.result!;
       createListSchedule();
   }
 

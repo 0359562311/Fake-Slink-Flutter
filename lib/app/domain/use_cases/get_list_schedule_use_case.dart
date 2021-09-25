@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
 
@@ -6,5 +7,5 @@ class GetListScheduleUseCase{
 
   GetListScheduleUseCase(this.repository);
 
-  Future<List<Schedule>> execute() => repository.getListSchedule();
+  Future<Pair<String,List<Schedule>>> execute() => repository.getListSchedule();
 }

@@ -1,6 +1,7 @@
+import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 
 abstract class ScheduleRepository{
   const ScheduleRepository();
-  Future<List<Schedule>> getListSchedule();
+  Future<Pair<String,List<Schedule>>> getListSchedule();
 }

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
+import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/repositories/schedule_repository.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
@@ -11,17 +12,17 @@ class ScheduleRepositoryImpl extends ScheduleRepository {
   const ScheduleRepositoryImpl(this._remoteSource, this._localSource);
 
   @override
-  Future<List<Schedule>> getListSchedule() async {
+  Future<Pair<String,List<Schedule>>> getListSchedule() async {
     if (NetworkInfo.isConnecting) {
       try {
         final schedules = await _remoteSource.getListSchedule();
         _localSource.cacheSchedules(schedules);
-        return schedules;
-      } on DioError {
-        return _localSource.getListSchedule();
+        return Pair(result: schedules);
+      } on DioError catch(e) {
+        return Pair(result: await _localSource.getListSchedule(), error: e.response?.data['detail']??"Đã có lỗi xảy ra");
       }
     } else {
-      return _localSource.getListSchedule();
+      return Pair(result: await _localSource.getListSchedule());
     }
   }
 }
