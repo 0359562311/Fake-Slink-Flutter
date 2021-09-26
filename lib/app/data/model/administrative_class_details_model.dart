@@ -3,7 +3,6 @@ import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 
 import 'lecturer_model.dart';
-
 class AdministrativeClassDetailsModel extends AdministrativeClassDetails {
   AdministrativeClassDetailsModel({lecturer, faculty, administrativeClassId, students}) : super(
     lecturer: lecturer,

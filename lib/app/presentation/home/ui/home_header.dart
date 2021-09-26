@@ -18,26 +18,27 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
       child: Stack(
         alignment: AlignmentDirectional.topStart,
         children: [
-          SizedBox(
+          Positioned(
+            width: MediaQuery.of(context).size.width,
+            height: maxExtent - 40 < 0
+                  ? 0
+                  : maxExtent - 40,
+            top: -shrinkOffset,
             child: Container(color: AppColor.red,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20),
                   Text("Fake S-Link",
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold
                     ),
                   ),
-                  SizedBox(height: 20,)
                 ],
               ),
               alignment: Alignment.center,
             ),
-            width: MediaQuery.of(context).size.width,
-            height: maxExtent - 40 - shrinkOffset < 0
-                ? 0
-                : maxExtent - 40 - shrinkOffset,
           ),
           Positioned(
             bottom: 0,

@@ -3,7 +3,7 @@ import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 
 class GetListRegisterUseCase {
-  final RegisterRepository repository;
-  const GetListRegisterUseCase(this.repository);
-  Future<Pair<String,List<Register>>> execute() => repository.getListRegister();
+  final RegisterRepository _repository;
+  const GetListRegisterUseCase(this._repository);
+  Future<Pair<String,List<Register>>> execute() => _repository.getListRegister();
 }

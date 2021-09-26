@@ -5,4 +5,5 @@ abstract class AppRoute {
   static const String result = "/result";
   static const String listSchedules = "/list-schedules";
   static const String administrativeClass = "/administrativeClass";
+  static const String listRegisterableClass = "/listRegisterableClass";
 }

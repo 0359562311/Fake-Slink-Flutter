@@ -1,7 +1,13 @@
+import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
+import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_bloc.dart';
+import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_event.dart';
+import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class ListRegisterableClassScreen extends StatefulWidget {
@@ -15,10 +21,12 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
 
   List<String> semesters = [];
   late String current;
+  late final ListRegisterableClassBloc _bloc;
 
   @override
   void initState() {
     super.initState();
+    _bloc = GetIt.instance()..add(ListRegisterableClassInitEvent());
     current = GetIt.instance<Semester>().semesterId;
     if (GetIt.instance.isRegistered<Student>()) {
       final user = GetIt.instance<Student>();
@@ -37,6 +45,12 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
   }
 
   @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -48,31 +62,68 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _dropdownButton(),
-              _listRegisterableClass()
-            ],
-          ),
+        child: BlocConsumer<ListRegisterableClassBloc, ListRegisterableClassState>(
+          bloc: _bloc,
+          listener: (context, state) {
+            if(state is ListRegisterableClassErrorState)
+              showMyAlertDialog(context, "Lỗi", state.message);
+          },
+          listenWhen: (pre, next) => (next is ListRegisterableClassErrorState) && next != pre,
+          builder:(context, state) {
+            if(state is ListRegisterableClassLoadingState)
+              return Center(
+                child: CircularProgressIndicator(color: AppColor.black, strokeWidth: 5,),
+              );
+            return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(child: _dropdownButton(), alignment: Alignment.center,),
+                _listRegisterableClass((state as ListRegisterableClassSuccessfulState).registers)
+              ],
+            ),
+          );
+          },
         ),
       ),
     );
   }
 
-  Widget _listRegisterableClass() {
+  Widget _listRegisterableClass(List<Register> registers) {
     return Column(
-      children: [
-        Container(
+      children: registers.where((element) => element.registerableClass.semester == current).map((e){
+        return Container(
           margin: const EdgeInsets.only(bottom: 16),
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(8)
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(width: 0.5, color: AppColor.black)
           ),
-        )
-      ],
+          child: Row(
+            children: [
+              Icon(Icons.class__rounded, color: AppColor.red,),
+              SizedBox(width: 32,),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Lớp: ${e.registerableClass.subject.subjectName}",
+                      style: TextStyle(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                    SizedBox(height: 12,),
+                    Text("Mã lớp: ${e.registerableClass.subject.subjectId}",
+                      style: TextStyle(color: AppColor.black),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      }).toList()
     );
   }
 

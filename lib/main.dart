@@ -40,6 +40,8 @@ import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/notification_details.dart';
+import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_bloc.dart';
+import 'package:fakeslink/app/presentation/registerable_class/ui/list_registerable_class_screen.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
@@ -139,6 +141,9 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
   getIt.registerLazySingleton(() => GetRegisterableClassDetailsUseCase(getIt()));
   getIt.registerLazySingleton(() => GetAdministrativeClassDetails(getIt()));
+
+  /// bloc
+  getIt.registerFactory(() => ListRegisterableClassBloc(getIt()));
   
 }
 
@@ -210,6 +215,7 @@ class _MyAppState extends State<MyApp> {
           AppRoute.result: (context) => ResultScreen(),
           AppRoute.listSchedules: (context) => ListSchedule(),
           AppRoute.administrativeClass: (context) => AdministrativeClassScreen(),
+          AppRoute.listRegisterableClass: (context) => ListRegisterableClassScreen(),
         },
       ),
     );
