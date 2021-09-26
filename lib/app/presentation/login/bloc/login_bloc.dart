@@ -10,11 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  late final LogInUseCase _loginUseCase;
+  final LogInUseCase _loginUseCase;
 
-  LoginBloc() : super(LoginInitState()) {
-    _loginUseCase = GetIt.instance<LogInUseCase>();
-  }
+  LoginBloc(this._loginUseCase) : super(LoginInitState());
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {

@@ -4,7 +4,6 @@ import 'package:fakeslink/app/domain/use_cases/create_notification_device_usecas
 import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 enum HomeNotificationsEvent{
@@ -27,10 +26,7 @@ class HomeNotificationsSuccessfulState extends HomeNotificationsState{
 class HomeNotificationsBloc extends Bloc<HomeNotificationsEvent,HomeNotificationsState>{
   late final GetListNotificationsUseCase _getListNotificationsUseCase;
   late final CreateNotificationDeviceUseCase _createNotificationDeviceUseCase;
-  HomeNotificationsBloc() : super(HomeNotificationsLoadingState()){
-    _getListNotificationsUseCase = GetIt.instance();
-    _createNotificationDeviceUseCase = GetIt.instance();
-  }
+  HomeNotificationsBloc(this._getListNotificationsUseCase, this._createNotificationDeviceUseCase) : super(HomeNotificationsLoadingState());
 
   @override
   Stream<HomeNotificationsState> mapEventToState(HomeNotificationsEvent event) async* {

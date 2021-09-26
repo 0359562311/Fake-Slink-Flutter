@@ -12,7 +12,6 @@ class ListRegisterableClassBloc extends Bloc<ListRegisterableClassEvent, ListReg
   Stream<ListRegisterableClassState> mapEventToState(ListRegisterableClassEvent event) async* {
     if (event is ListRegisterableClassInitEvent) {
       final res = await _getListRegisterUseCase.execute();
-      print("TanKiem: ${res.result} ------------");
       if(res.error!=null) {
         yield ListRegisterableClassErrorState(res.error!);
       }

@@ -4,6 +4,7 @@ import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedules_bl
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -26,7 +27,7 @@ class _ListScheduleState extends State<ListSchedule> {
   void initState() {
     super.initState();
     _focusedDate = _selectedDate = DateTime.now();
-    _bloc = ListScheduleBloc()..add(ListScheduleInitEvent(_selectedDate));
+    _bloc = GetIt.instance()..add(ListScheduleInitEvent(_selectedDate));
     _month = _selectedDate.month;
   }
 

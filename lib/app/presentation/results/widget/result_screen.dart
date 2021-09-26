@@ -6,6 +6,7 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 import 'second_tab/list_result_detail.dart';
 
@@ -26,7 +27,7 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _bloc = ResultBloc()..add(ResultInitEvent());
+    _bloc = GetIt.instance()..add(ResultInitEvent());
   }
 
   @override

@@ -5,16 +5,11 @@ import 'package:fakeslink/app/presentation/notifications/bloc/notification_event
 import 'package:fakeslink/app/presentation/notifications/bloc/notification_state.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
-  late final GetListNotificationsUseCase _listNotificationsUseCase;
-  late final MarkNotificationAsReadUseCase _markNotificationAsReadUseCase;
-  NotificationBloc() : super(NotificationLoadingState('General')) {
-    _listNotificationsUseCase = GetIt.instance<GetListNotificationsUseCase>();
-    _markNotificationAsReadUseCase =
-        GetIt.instance<MarkNotificationAsReadUseCase>();
-  }
+  final GetListNotificationsUseCase _listNotificationsUseCase;
+  final MarkNotificationAsReadUseCase _markNotificationAsReadUseCase;
+  NotificationBloc(this._listNotificationsUseCase, this._markNotificationAsReadUseCase) : super(NotificationLoadingState('General'));
 
   Map<String, List<Notification>> _notifications = {
     'General': [],

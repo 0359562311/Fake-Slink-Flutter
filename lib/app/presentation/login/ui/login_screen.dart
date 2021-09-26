@@ -9,6 +9,7 @@ import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _LoginState extends State<Login> {
     usernameController = TextEditingController();
     passwordController = TextEditingController();
     showPassword = false;
-    _bloc = LoginBloc();
+    _bloc = GetIt.I();
     _checkConnectivity();
   }
 

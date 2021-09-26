@@ -6,6 +6,7 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class AdministrativeClassScreen extends StatefulWidget {
   const AdministrativeClassScreen({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _AdministrativeClassScreenState extends State<AdministrativeClassScreen> {
   @override
   void initState() {
     super.initState();
-    _bloc = AdministrativeClassDetailsBloc()
+    _bloc = GetIt.instance()
       ..add(AdministrativeClassDetailsInitEvent());
   }
 

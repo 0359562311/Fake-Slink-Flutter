@@ -54,7 +54,7 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thông báo",
+        title: Text("Danh sách lớp",
           style: TextStyle(color: Colors.white)
         ),
         centerTitle: true,

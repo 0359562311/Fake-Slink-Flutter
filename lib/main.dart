@@ -54,6 +54,12 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'app/domain/entities/session.dart';
 import 'app/domain/use_cases/mark_notification_as_read_use_case.dart';
+import 'app/presentation/administrative_class/bloc/administrative_class_details_bloc.dart';
+import 'app/presentation/home/bloc/home_notifications_bloc.dart';
+import 'app/presentation/list_schedules/bloc/list_schedules_bloc.dart';
+import 'app/presentation/login/bloc/login_bloc.dart';
+import 'app/presentation/notifications/bloc/notification_bloc.dart';
+import 'app/presentation/results/bloc/result_bloc.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
 import 'core/utils/share_preferences.dart';
@@ -144,6 +150,12 @@ Future<void> init() async {
 
   /// bloc
   getIt.registerFactory(() => ListRegisterableClassBloc(getIt()));
+  getIt.registerFactory(() => AdministrativeClassDetailsBloc(getIt()));
+  getIt.registerFactory(() => HomeNotificationsBloc(getIt(), getIt()));
+  getIt.registerFactory(() => ListScheduleBloc(getIt()));
+  getIt.registerFactory(() => LoginBloc(getIt()));
+  getIt.registerFactory(() => NotificationBloc(getIt(), getIt()));
+  getIt.registerFactory(() => ResultBloc(getIt()));
   
 }
 

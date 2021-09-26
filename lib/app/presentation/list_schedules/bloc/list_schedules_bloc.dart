@@ -11,9 +11,7 @@ import 'list_schedule_event.dart';
 
 class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState>{
   late final GetListScheduleUseCase _getListScheduleUseCase;
-  ListScheduleBloc() : super(ListScheduleLoadingState()) {
-    _getListScheduleUseCase = GetIt.instance<GetListScheduleUseCase>();
-  }
+  ListScheduleBloc(this._getListScheduleUseCase) : super(ListScheduleLoadingState());
   final DateFormat _formatter = DateFormat('yyyy-MM-dd');
 
   List<Schedule> _schedules = [];

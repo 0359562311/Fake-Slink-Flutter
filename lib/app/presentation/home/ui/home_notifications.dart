@@ -6,6 +6,7 @@ import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class HomeNotifications extends StatefulWidget {
   const HomeNotifications({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class _HomeNotificationsState extends State<HomeNotifications> {
   @override
   void initState() {
     super.initState();
-    _bloc = HomeNotificationsBloc()..add(HomeNotificationsEvent.init);
+    _bloc = GetIt.instance()..add(HomeNotificationsEvent.init);
   }
   
   void navigateToDetail(context, n.Notification notification){

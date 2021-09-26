@@ -3,6 +3,7 @@ import 'package:fakeslink/app/presentation/notifications/ui/notification_tab.dar
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
 
 class ListNotification extends StatefulWidget {
   ListNotification({ Key? key }) : super(key: key);
@@ -21,7 +22,7 @@ class _ListNotificationState extends State<ListNotification> with SingleTickerPr
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    _bloc = NotificationBloc();
+    _bloc = GetIt.instance();
     _items = [
       NotificationTab(type: 'General'),
       NotificationTab(type: 'Administrative'),
