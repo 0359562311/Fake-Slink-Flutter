@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/register_model.dart';
-import 'package:fakeslink/app/data/model/registerable_class_details_model.dart';
+import 'package:fakeslink/app/data/model/registerable_class_model.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
+import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -12,14 +13,14 @@ class RegisterRemoteSource {
     return (response.data as List).map((e) => RegisterModel.fromJson(e)).toList();
   }
 
-  Future<RegisterableClassDetailsModel> getDetails(int id) async {
+  Future<RegisterableClassModel> getDetails(int id) async {
     final response = await GetIt.instance<Dio>().get("/registerable-class/$id");
-    return RegisterableClassDetailsModel.fromJson(response.data);
+    return RegisterableClassModel.fromJson(response.data);
   }
 }
 
 class RegisterLocalSource {
-  Future<void> cache(List<Register> registers) async {
+  Future<void> cacheListRegisters(List<Register> registers) async {
     final _box =  await Hive.openBox("register");
     _box.put("data", registers);
   }
@@ -31,5 +32,15 @@ class RegisterLocalSource {
         res.add(i);
     }
     return res;
+  }
+
+  Future<RegisterableClass?> getDetails(int id) async {
+    final _box =  await Hive.openBox("registerableClassDetails");
+    return _box.get(id,defaultValue: null);
+  }
+
+  Future<void> cacheRegisterableClassDetails(RegisterableClass registerableClass) async {
+    final _box =  await Hive.openBox("register");
+    _box.put(registerableClass.id, registerableClass);
   }
 }

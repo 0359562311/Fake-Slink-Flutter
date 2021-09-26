@@ -14,6 +14,7 @@ import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
+import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
 import 'package:fakeslink/app/domain/entities/lecturer.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
@@ -40,8 +41,6 @@ import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/notification_details.dart';
-import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_bloc.dart';
-import 'package:fakeslink/app/presentation/registerable_class/ui/list_registerable_class_screen.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
@@ -56,9 +55,13 @@ import 'app/domain/entities/session.dart';
 import 'app/domain/use_cases/mark_notification_as_read_use_case.dart';
 import 'app/presentation/administrative_class/bloc/administrative_class_details_bloc.dart';
 import 'app/presentation/home/bloc/home_notifications_bloc.dart';
+import 'app/presentation/list_registerable_class/bloc/list_registerable_class_bloc.dart';
+import 'app/presentation/list_registerable_class/ui/list_registerable_class_screen.dart';
 import 'app/presentation/list_schedules/bloc/list_schedules_bloc.dart';
 import 'app/presentation/login/bloc/login_bloc.dart';
 import 'app/presentation/notifications/bloc/notification_bloc.dart';
+import 'app/presentation/registerable_class_details/bloc/registerable_class_details_bloc.dart';
+import 'app/presentation/registerable_class_details/ui/registerable_class_details_screen.dart';
 import 'app/presentation/results/bloc/result_bloc.dart';
 import 'core/const/app_routes.dart';
 import 'core/utils/interceptor.dart';
@@ -75,6 +78,7 @@ void main() async {
   ..registerAdapter(RegisterableClassAdapter())
   ..registerAdapter(SubjectAdapter())
   ..registerAdapter(AdministrativeClassAdapter())
+  ..registerAdapter(AdministrativeClassDetailsAdapter())
   ..registerAdapter(RegisterAdapter())
   ..registerAdapter(LecturerAdapter());
   await init();
@@ -124,7 +128,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
   getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(getIt(), getIt()));
-  getIt.registerLazySingleton<AdministrativeClassRepository>(() => AdministrativeClassReporitoryImpl(getIt()));
+  getIt.registerLazySingleton<AdministrativeClassRepository>(() => AdministrativeClassReporitoryImpl(getIt(),getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
@@ -136,6 +140,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => RegisterLocalSource());
   getIt.registerLazySingleton(() => RegisterRemoteSource());
   getIt.registerLazySingleton(() => AdministrativeClassRemoteSource());
+  getIt.registerLazySingleton(() => AdministrativeClassLocalSource());
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
@@ -156,6 +161,7 @@ Future<void> init() async {
   getIt.registerFactory(() => LoginBloc(getIt()));
   getIt.registerFactory(() => NotificationBloc(getIt(), getIt()));
   getIt.registerFactory(() => ResultBloc(getIt()));
+  getIt.registerFactory(() => RegisterableClassDetailsBloc(getIt()));
   
 }
 
@@ -228,6 +234,11 @@ class _MyAppState extends State<MyApp> {
           AppRoute.listSchedules: (context) => ListSchedule(),
           AppRoute.administrativeClass: (context) => AdministrativeClassScreen(),
           AppRoute.listRegisterableClass: (context) => ListRegisterableClassScreen(),
+        },
+        onGenerateRoute: (settings) {
+          if(settings.name == AppRoute.registerableClassDetails) {
+            return MaterialPageRoute(builder: (context) => RegisterableClassDetailsScreen(id: settings.arguments as int,));
+          }
         },
       ),
     );

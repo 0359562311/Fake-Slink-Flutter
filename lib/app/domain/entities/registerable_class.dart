@@ -1,5 +1,10 @@
-import 'package:fakeslink/app/domain/entities/subject.dart';
 import 'package:hive/hive.dart';
+
+import 'package:fakeslink/app/domain/entities/subject.dart';
+
+import 'lecturer.dart';
+import 'student.dart';
+
 part 'registerable_class.g.dart';
 
 @HiveType(typeId: 2)
@@ -10,14 +15,16 @@ class RegisterableClass extends HiveObject {
   Subject subject;
   @HiveField(2)
   String semester;
+  @HiveField(3)
+  List<Student> students;
+  @HiveField(4)
+  List<Lecturer> lecturers;
 
-  RegisterableClass({required this.id, required this.subject, required this.semester});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['subject'] = this.subject.toJson();
-    data['semester'] = this.semester;
-    return data;
-  }
+  RegisterableClass({
+    required this.id,
+    required this.subject,
+    required this.semester,
+    required this.students,
+    required this.lecturers,
+  });
 }

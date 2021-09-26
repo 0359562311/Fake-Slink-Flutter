@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/presentation/home/bloc/home_schedule_provider.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -122,68 +123,73 @@ class _HomeScheduleState extends State<HomeSchedule> {
                 )]
                 :List.generate(_provider.scheduleItems[index].length, (_index){
                   final _tempClass = _provider.scheduleItems[index][_index];
-                  return Column(
-                    children: [
-                      if (_index!=0) 
+                  return InkWell(
+                    onTap:() {
+                      Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: _tempClass.schedule.registerableClass.id);
+                    },
+                    child: Column(
+                      children: [
+                        if (_index!=0) 
+                          Padding(
+                            padding: const EdgeInsets.only(top:12.0),
+                            child: Container(
+                              color: Colors.black45,
+                              height: 0.5,
+                              width: double.infinity,
+                            ),
+                          ),
                         Padding(
-                          padding: const EdgeInsets.only(top:12.0),
-                          child: Container(
-                            color: Colors.black45,
-                            height: 0.5,
-                            width: double.infinity,
+                          padding: const EdgeInsets.only(top:16.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Tiết ${_tempClass.start} "
+                                  "- ${_tempClass.end}: "
+                                  "${_tempClass.subjectName}",
+                                    style: const TextStyle(fontSize: 13),
+                                  ),
+                                  SizedBox(height: 3,),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: Icon(Icons.alarm, size: 12, color: AppColor.red,),
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text("${_tempClass.startAt.substring(0,5)} - ${_tempClass.endAt.substring(0,5)}",
+                                            style: const TextStyle(fontSize: 13),
+                                          ),
+                                          SizedBox(height: 3,),
+                                          Text("${dateFormat.format(_tempClass.date)}",
+                                            style: const TextStyle(fontSize: 13)
+                                          )
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 40,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 8.0),
+                                        child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
+                                      ),
+                                      Text("Phòng: ${_tempClass.classroom}",
+                                        style: const TextStyle(fontSize: 13)
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                              Spacer(),
+                              const Icon(Icons.arrow_forward_ios, size: 16,)
+                            ],
                           ),
                         ),
-                      Padding(
-                        padding: const EdgeInsets.only(top:16.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Tiết ${_tempClass.start} "
-                                "- ${_tempClass.end}: "
-                                "${_tempClass.subjectName}",
-                                  style: const TextStyle(fontSize: 13),
-                                ),
-                                SizedBox(height: 3,),
-                                Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.alarm, size: 12, color: AppColor.red,),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text("${_tempClass.startAt.substring(0,5)} - ${_tempClass.endAt.substring(0,5)}",
-                                          style: const TextStyle(fontSize: 13),
-                                        ),
-                                        SizedBox(height: 3,),
-                                        Text("${dateFormat.format(_tempClass.date)}",
-                                          style: const TextStyle(fontSize: 13)
-                                        )
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 40,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
-                                      child: Icon(Icons.location_on_rounded, size: 12, color: Colors.blue[800],),
-                                    ),
-                                    Text("Phòng: ${_tempClass.classroom}",
-                                      style: const TextStyle(fontSize: 13)
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                            Spacer(),
-                            const Icon(Icons.arrow_forward_ios, size: 16,)
-                          ],
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 })
               )

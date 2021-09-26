@@ -1,44 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'registerable_class.dart';
+part of 'administrative_class_detail.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RegisterableClassAdapter extends TypeAdapter<RegisterableClass> {
+class AdministrativeClassDetailsAdapter
+    extends TypeAdapter<AdministrativeClassDetails> {
   @override
-  final int typeId = 2;
+  final int typeId = 31;
 
   @override
-  RegisterableClass read(BinaryReader reader) {
+  AdministrativeClassDetails read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RegisterableClass(
-      id: fields[0] as int,
-      subject: fields[1] as Subject,
-      semester: fields[2] as String,
+    return AdministrativeClassDetails(
+      lecturer: fields[0] as Lecturer,
+      faculty: fields[1] as String,
+      administrativeClassId: fields[2] as String,
       students: (fields[3] as List).cast<Student>(),
-      lecturers: (fields[4] as List).cast<Lecturer>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, RegisterableClass obj) {
+  void write(BinaryWriter writer, AdministrativeClassDetails obj) {
     writer
-      ..writeByte(5)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.subject)
-      ..writeByte(2)
-      ..write(obj.semester)
-      ..writeByte(3)
-      ..write(obj.students)
       ..writeByte(4)
-      ..write(obj.lecturers);
+      ..writeByte(0)
+      ..write(obj.lecturer)
+      ..writeByte(1)
+      ..write(obj.faculty)
+      ..writeByte(2)
+      ..write(obj.administrativeClassId)
+      ..writeByte(3)
+      ..write(obj.students);
   }
 
   @override
@@ -47,7 +45,7 @@ class RegisterableClassAdapter extends TypeAdapter<RegisterableClass> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RegisterableClassAdapter &&
+      other is AdministrativeClassDetailsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,10 +1,11 @@
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
-import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_bloc.dart';
-import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_event.dart';
-import 'package:fakeslink/app/presentation/registerable_class/bloc/list_registerable_class_state.dart';
+import 'package:fakeslink/app/presentation/list_registerable_class/bloc/list_registerable_class_bloc.dart';
+import 'package:fakeslink/app/presentation/list_registerable_class/bloc/list_registerable_class_event.dart';
+import 'package:fakeslink/app/presentation/list_registerable_class/bloc/list_registerable_class_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,35 +93,40 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
   Widget _listRegisterableClass(List<Register> registers) {
     return Column(
       children: registers.where((element) => element.registerableClass.semester == current).map((e){
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(width: 0.5, color: AppColor.black)
-          ),
-          child: Row(
-            children: [
-              Icon(Icons.class__rounded, color: AppColor.red,),
-              SizedBox(width: 32,),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Lớp: ${e.registerableClass.subject.subjectName}",
-                      style: TextStyle(fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                    SizedBox(height: 12,),
-                    Text("Mã lớp: ${e.registerableClass.subject.subjectId}",
-                      style: TextStyle(color: AppColor.black),
-                    ),
-                  ],
-                ),
-              )
-            ],
+        return InkWell(
+          onTap: () {
+            Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: e.id);
+          },
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(width: 0.5, color: AppColor.black)
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.class__rounded, color: AppColor.red,),
+                SizedBox(width: 32,),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Lớp: ${e.registerableClass.subject.subjectName}",
+                        style: TextStyle(fontSize: 16),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                      SizedBox(height: 12,),
+                      Text("Mã lớp: ${e.registerableClass.subject.subjectId}",
+                        style: TextStyle(color: AppColor.black),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         );
       }).toList()

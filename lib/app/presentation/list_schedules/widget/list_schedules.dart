@@ -2,6 +2,7 @@ import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_eve
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_state.dart';
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedules_bloc.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -143,83 +144,88 @@ class _ListScheduleState extends State<ListSchedule> {
     return List.generate(
         (state.items[_formatter.format(_selectedDate)] ?? []).length, (index) {
       final _item = state.items[_formatter.format(_selectedDate)]![index];
-      return Column(
-        children: [
-          if (index != 0)
+      return InkWell(
+        onTap: (){
+          Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: _item.schedule.registerableClass.id);
+        },
+        child: Column(
+          children: [
+            if (index != 0)
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: Container(
+                  color: Colors.black45,
+                  height: 0.5,
+                  width: double.infinity,
+                ),
+              ),
             Padding(
-              padding: const EdgeInsets.only(top: 12.0),
-              child: Container(
-                color: Colors.black45,
-                height: 0.5,
-                width: double.infinity,
+              padding: const EdgeInsets.only(top: 16.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Tiết ${_item.start} "
+                        "- ${_item.end}: "
+                        "${_item.subjectName}",
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.alarm,
+                              size: 12,
+                              color: AppColor.red,
+                            ),
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "${_item.startAt.substring(0, 5)} - ${_item.endAt.substring(0, 5)}",
+                                style: const TextStyle(fontSize: 13),
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Text("${_formatter.format(_item.date)}",
+                                  style: const TextStyle(fontSize: 13))
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 40,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Icon(
+                              Icons.location_on_rounded,
+                              size: 12,
+                              color: Colors.blue[800],
+                            ),
+                          ),
+                          Text("Phòng: ${_item.classroom}",
+                              style: const TextStyle(fontSize: 13))
+                        ],
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  const Icon(
+                    Icons.arrow_forward_ios,
+                    size: 16,
+                  )
+                ],
               ),
             ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Tiết ${_item.start} "
-                      "- ${_item.end}: "
-                      "${_item.subjectName}",
-                      style: const TextStyle(fontSize: 13),
-                    ),
-                    SizedBox(
-                      height: 3,
-                    ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(
-                            Icons.alarm,
-                            size: 12,
-                            color: AppColor.red,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              "${_item.startAt.substring(0, 5)} - ${_item.endAt.substring(0, 5)}",
-                              style: const TextStyle(fontSize: 13),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text("${_formatter.format(_item.date)}",
-                                style: const TextStyle(fontSize: 13))
-                          ],
-                        ),
-                        const SizedBox(
-                          width: 40,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Icon(
-                            Icons.location_on_rounded,
-                            size: 12,
-                            color: Colors.blue[800],
-                          ),
-                        ),
-                        Text("Phòng: ${_item.classroom}",
-                            style: const TextStyle(fontSize: 13))
-                      ],
-                    )
-                  ],
-                ),
-                Spacer(),
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                )
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }

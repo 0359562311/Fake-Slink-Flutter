@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
-import 'package:fakeslink/app/domain/entities/registerable_class_details.dart';
+import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 
@@ -17,7 +17,7 @@ class RegisterRepositoryImpl extends RegisterRepository {
     if (NetworkInfo.isConnecting) {
       try {
         final res = await _remoteSource.getListRegister();
-        _localSource.cache(res);
+        _localSource.cacheListRegisters(res);
         return Pair(result: res);
       } on DioError catch (e) {
         return Pair(
@@ -30,7 +30,17 @@ class RegisterRepositoryImpl extends RegisterRepository {
   }
 
   @override
-  Future<RegisterableClassDetails> getDetails(int registerableClassId) {
-    return _remoteSource.getDetails(registerableClassId);
+  Future<Pair<String,RegisterableClass>> getDetails(int registerableClassId) async {
+    if(NetworkInfo.isConnecting) {
+      try {
+        final res = await _remoteSource.getDetails(registerableClassId);
+        _localSource.cacheRegisterableClassDetails(res);
+        return Pair(result: res);
+      } on DioError catch (e) {
+        return Pair(error: e.response?.data['detail']??"Đã có lỗi xảy ra");
+      }
+    } else {
+      return Pair(result: await _localSource.getDetails(registerableClassId));
+    }
   }
 }

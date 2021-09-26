@@ -32,18 +32,5 @@ class Schedule extends HiveObject {
         required this.startAt,
         required this.endAt,
         required this.weeks});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['lecturer'] = this.lecturer.toJson();
-    data['registerableClass'] = this.registerableClass.toJson();
-    data['dayOfWeek'] = this.dayOfWeek;
-    data['classroom'] = this.classroom;
-    data['startAt'] = this.startAt;
-    data['endAt'] = this.endAt;
-    data['weeks'] = this.weeks;
-    return data;
-  }
 }
 
