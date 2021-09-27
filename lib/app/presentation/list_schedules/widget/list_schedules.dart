@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_event.dart';
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_state.dart';
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedules_bloc.dart';
@@ -144,89 +145,138 @@ class _ListScheduleState extends State<ListSchedule> {
     return List.generate(
         (state.items[_formatter.format(_selectedDate)] ?? []).length, (index) {
       final _item = state.items[_formatter.format(_selectedDate)]![index];
-      return InkWell(
-        onTap: (){
-          Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: _item.schedule.registerableClass.id);
-        },
-        child: Column(
-          children: [
-            if (index != 0)
-              Padding(
-                padding: const EdgeInsets.only(top: 12.0),
-                child: Container(
-                  color: Colors.black45,
-                  height: 0.5,
-                  width: double.infinity,
-                ),
-              ),
+      return _BodyItem(tempClass: _item, index: index, callback: (){
+        Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: _item.schedule.registerableClass.id);
+      });
+    });
+  }
+}
+class _BodyItem extends StatefulWidget {
+  final ScheduleItem tempClass;
+  final int index;
+  final Function() callback;
+  const _BodyItem(
+      {Key? key,
+      required this.tempClass,
+      required this.index,
+      required this.callback})
+      : super(key: key);
+
+  @override
+  _BodyItemState createState() => _BodyItemState();
+}
+
+class _BodyItemState extends State<_BodyItem> {
+  final DateFormat _dateFormat = DateFormat("dd/MM/yyyy");
+  double _opacity = 1;
+
+  Color _getColor(Color color) {
+    if (_opacity == 1) return color;
+    return color.withOpacity(_opacity);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () async {
+        setState(() {
+          _opacity = 0.5;
+        });
+        Future.delayed(Duration(milliseconds: 200)).whenComplete(() {
+          widget.callback();
+          setState(() {
+            _opacity = 1;
+          });
+        });
+      },
+      child: Column(
+        children: [
+          if (widget.index != 0)
             Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Tiết ${_item.start} "
-                        "- ${_item.end}: "
-                        "${_item.subjectName}",
-                        style: const TextStyle(fontSize: 13),
-                      ),
-                      SizedBox(
-                        height: 3,
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.alarm,
-                              size: 12,
-                              color: AppColor.red,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                "${_item.startAt.substring(0, 5)} - ${_item.endAt.substring(0, 5)}",
-                                style: const TextStyle(fontSize: 13),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              Text("${_formatter.format(_item.date)}",
-                                  style: const TextStyle(fontSize: 13))
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.location_on_rounded,
-                              size: 12,
-                              color: Colors.blue[800],
-                            ),
-                          ),
-                          Text("Phòng: ${_item.classroom}",
-                              style: const TextStyle(fontSize: 13))
-                        ],
-                      )
-                    ],
-                  ),
-                  Spacer(),
-                  const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 16,
-                  )
-                ],
+              padding: const EdgeInsets.only(top: 12.0),
+              child: Container(
+                color: _getColor(Colors.black45),
+                height: 0.5,
+                width: double.infinity,
               ),
             ),
-          ],
-        ),
-      );
-    });
+          Padding(
+            padding: const EdgeInsets.only(top: 16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Tiết ${widget.tempClass.start} "
+                      "- ${widget.tempClass.end}: "
+                      "${widget.tempClass.subjectName}",
+                      style: TextStyle(
+                          fontSize: 13, color: _getColor(Colors.black87)),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Icon(
+                            Icons.alarm,
+                            size: 12,
+                            color: _getColor(AppColor.red),
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "${widget.tempClass.startAt.substring(0, 5)} - ${widget.tempClass.endAt.substring(0, 5)}",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: _getColor(Colors.black87)),
+                            ),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              "${_dateFormat.format(widget.tempClass.date)}",
+                              style: TextStyle(
+                                  fontSize: 13,
+                                  color: _getColor(Colors.black87)),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 40,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Icon(
+                            Icons.location_on_rounded,
+                            size: 12,
+                            color: Colors.blue[800],
+                          ),
+                        ),
+                        Text(
+                          "Phòng: ${widget.tempClass.classroom}",
+                          style: TextStyle(
+                              fontSize: 13, color: _getColor(Colors.black87)),
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                Spacer(),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

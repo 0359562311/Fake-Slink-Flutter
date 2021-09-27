@@ -12,14 +12,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 class ListRegisterableClassScreen extends StatefulWidget {
-  const ListRegisterableClassScreen({ Key? key }) : super(key: key);
+  const ListRegisterableClassScreen({Key? key}) : super(key: key);
 
   @override
-  _ListRegisterableClassScreenState createState() => _ListRegisterableClassScreenState();
+  _ListRegisterableClassScreenState createState() =>
+      _ListRegisterableClassScreenState();
 }
 
-class _ListRegisterableClassScreenState extends State<ListRegisterableClassScreen> {
-
+class _ListRegisterableClassScreenState
+    extends State<ListRegisterableClassScreen> {
   List<String> semesters = [];
   late String current;
   late final ListRegisterableClassBloc _bloc;
@@ -55,35 +56,42 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Danh sách lớp",
-          style: TextStyle(color: Colors.white)
-        ),
+        title: Text("Danh sách lớp", style: TextStyle(color: Colors.white)),
         centerTitle: true,
         backgroundColor: AppColor.red,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12),
-        child: BlocConsumer<ListRegisterableClassBloc, ListRegisterableClassState>(
+        child:
+            BlocConsumer<ListRegisterableClassBloc, ListRegisterableClassState>(
           bloc: _bloc,
           listener: (context, state) {
-            if(state is ListRegisterableClassErrorState)
+            if (state is ListRegisterableClassErrorState)
               showMyAlertDialog(context, "Lỗi", state.message);
           },
-          listenWhen: (pre, next) => (next is ListRegisterableClassErrorState) && next != pre,
-          builder:(context, state) {
-            if(state is ListRegisterableClassLoadingState)
+          listenWhen: (pre, next) =>
+              (next is ListRegisterableClassErrorState) && next != pre,
+          builder: (context, state) {
+            if (state is ListRegisterableClassLoadingState)
               return Center(
-                child: CircularProgressIndicator(color: AppColor.black, strokeWidth: 5,),
+                child: CircularProgressIndicator(
+                  color: AppColor.black,
+                  strokeWidth: 5,
+                ),
               );
             return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(child: _dropdownButton(), alignment: Alignment.center,),
-                _listRegisterableClass((state as ListRegisterableClassSuccessfulState).registers)
-              ],
-            ),
-          );
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Align(
+                    child: _dropdownButton(),
+                    alignment: Alignment.center,
+                  ),
+                  _listRegisterableClass(
+                      (state as ListRegisterableClassSuccessfulState).registers)
+                ],
+              ),
+            );
           },
         ),
       ),
@@ -92,45 +100,17 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
 
   Widget _listRegisterableClass(List<Register> registers) {
     return Column(
-      children: registers.where((element) => element.registerableClass.semester == current).map((e){
-        return InkWell(
-          onTap: () {
-            Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: e.id);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(width: 0.5, color: AppColor.black)
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.class__rounded, color: AppColor.red,),
-                SizedBox(width: 32,),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Lớp: ${e.registerableClass.subject.subjectName}",
-                        style: TextStyle(fontSize: 16),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                      SizedBox(height: 12,),
-                      Text("Mã lớp: ${e.registerableClass.subject.subjectId}",
-                        style: TextStyle(color: AppColor.black),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
-      }).toList()
-    );
+        children: registers
+            .where((element) => element.registerableClass.semester == current)
+            .map((e) {
+      return _RegisterableClassItem(
+        callback: (){
+          Navigator.pushNamed(context, AppRoute.registerableClassDetails,
+              arguments: e.registerableClass.id);
+        },
+        register: e,
+      );
+    }).toList());
   }
 
   Widget _dropdownButton() {
@@ -166,5 +146,84 @@ class _ListRegisterableClassScreenState extends State<ListRegisterableClassScree
             },
           ),
         ));
+  }
+}
+
+class _RegisterableClassItem extends StatefulWidget {
+  final Function() callback;
+  final Register register;
+  const _RegisterableClassItem(
+      {Key? key, required this.callback, required this.register})
+      : super(key: key);
+
+  @override
+  _RegisterableClassItemState createState() => _RegisterableClassItemState();
+}
+
+class _RegisterableClassItemState extends State<_RegisterableClassItem> {
+  double _opacity = 1;
+
+  Color _getColor(Color color) {
+    if (_opacity == 1) return color;
+    return color.withOpacity(_opacity);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _opacity = 0.5;
+        });
+        Future.delayed(Duration(milliseconds: 200)).whenComplete(() {
+          widget.callback();
+          setState(() {
+            _opacity = 1;
+          });
+        });
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: _getColor(Colors.white),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(width: 0.5, color: _getColor(AppColor.black))),
+        child: Row(
+          children: [
+            Icon(
+              Icons.class__rounded,
+              color: _getColor(AppColor.red),
+            ),
+            SizedBox(
+              width: 32,
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Lớp: ${widget.register.registerableClass.subject.subjectName}",
+                    style: TextStyle(fontSize: 16,
+                      color: _getColor(Colors.black)
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    "Mã lớp: ${widget.register.registerableClass.subject.subjectId}",
+                    style: TextStyle(color: _getColor(Colors.black54)),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

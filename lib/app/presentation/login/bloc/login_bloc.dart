@@ -5,7 +5,6 @@ import 'package:fakeslink/app/presentation/login/bloc/login_event.dart';
 import 'package:fakeslink/app/presentation/login/bloc/login_state.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
-import 'package:fakeslink/core/utils/share_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -25,8 +24,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           if (GetIt.instance.isRegistered<Session>())
             await GetIt.instance.unregister<Session>();
           GetIt.instance.registerSingleton<Session>(session);
-          SharePreferencesUtils.setString("access", session.access);
-          SharePreferencesUtils.setString("refresh", session.refresh);
           yield LoginSuccessfulState();
         }
       } on DioError catch (e) {

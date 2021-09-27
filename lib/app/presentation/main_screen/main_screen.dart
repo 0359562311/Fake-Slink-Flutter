@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fakeslink/app/presentation/home/ui/home_view.dart';
 import 'package:fakeslink/app/presentation/main_screen/bottom_bar.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/list_notification.dart';
+import 'package:fakeslink/app/presentation/profile/profile_screen.dart';
 import 'package:fakeslink/app/presentation/study_corner/study_corner.dart';
 import 'package:fakeslink/app/presentation/utilities/utilities.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
@@ -39,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
     GetIt.instance<StreamController<String>>().stream.asBroadcastStream().listen((event) {
       showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
     });
-    _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), Scaffold()];
+    _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), ProfileScreen()];
   }
 
   Future<void> _checkConnectivity() async {

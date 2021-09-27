@@ -123,7 +123,7 @@ Future<void> init() async {
     ));
 
   /// repositories
-  getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<StudentRepository>(() => StudentRepositoryImpl(getIt(),getIt()));
   getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
   getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
@@ -132,6 +132,7 @@ Future<void> init() async {
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
+  getIt.registerLazySingleton(() => AuthenticationLocalSource());
   getIt.registerLazySingleton(() => StudentRemoteSouce());
   getIt.registerLazySingleton(() => StudentLocalSource());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
@@ -219,6 +220,8 @@ class _MyAppState extends State<MyApp> {
       },
       child: MaterialApp(
         theme: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           appBarTheme: AppBarTheme(
             brightness: Brightness.dark,
           ),
