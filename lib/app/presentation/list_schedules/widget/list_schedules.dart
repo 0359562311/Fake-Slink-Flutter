@@ -107,7 +107,7 @@ class _ListScheduleState extends State<ListSchedule> {
         isTodayHighlighted: true,
         selectedDecoration:
             BoxDecoration(color: AppColor.black, shape: BoxShape.circle),
-        selectedTextStyle: TextStyle(color: Colors.white),
+        selectedTextStyle: const TextStyle(color: Colors.white),
         todayDecoration:
             BoxDecoration(color: AppColor.red, shape: BoxShape.circle),
         canMarkersOverflow: true,
@@ -124,7 +124,7 @@ class _ListScheduleState extends State<ListSchedule> {
         }
       },
       pageAnimationCurve: Curves.easeIn,
-      headerStyle: HeaderStyle(formatButtonVisible: false),
+      headerStyle: const HeaderStyle(formatButtonVisible: false),
       selectedDayPredicate: (date) {
         return isSameDay(_selectedDate, date);
       },
@@ -145,12 +145,17 @@ class _ListScheduleState extends State<ListSchedule> {
     return List.generate(
         (state.items[_formatter.format(_selectedDate)] ?? []).length, (index) {
       final _item = state.items[_formatter.format(_selectedDate)]![index];
-      return _BodyItem(tempClass: _item, index: index, callback: (){
-        Navigator.pushNamed(context, AppRoute.registerableClassDetails, arguments: _item.schedule.registerableClass.id);
-      });
+      return _BodyItem(
+          tempClass: _item,
+          index: index,
+          callback: () {
+            Navigator.pushNamed(context, AppRoute.registerableClassDetails,
+                arguments: _item.schedule.registerableClass.id);
+          });
     });
   }
 }
+
 class _BodyItem extends StatefulWidget {
   final ScheduleItem tempClass;
   final int index;
@@ -267,7 +272,7 @@ class _BodyItemState extends State<_BodyItem> {
                     )
                   ],
                 ),
-                Spacer(),
+                const Spacer(),
                 const Icon(
                   Icons.arrow_forward_ios,
                   size: 16,

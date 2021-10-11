@@ -22,12 +22,13 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _index = 0;
   late List<Widget> _screens;
-  late final subscription;
+  late final StreamSubscription _networkSubscription;
+  late final StreamSubscription _errorSubscription;
+  String? _lastEvent;
 
   void initState() {
     super.initState();
-    _checkConnectivity();
-    subscription = Connectivity()
+    _networkSubscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       // Got a new connectivity status!
@@ -37,22 +38,40 @@ class _MainScreenState extends State<MainScreen> {
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       }
     });
-    GetIt.instance<StreamController<String>>().stream.asBroadcastStream().listen((event) {
-      showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
+    _errorSubscription = GetIt.instance<StreamController<String>>()
+        .stream
+        .asBroadcastStream()
+        .listen((event) {
+      if (event != _lastEvent) {
+        _lastEvent = event;
+        showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
+      }
     });
-    _screens = [HomeView(), ListNotification(), StudyCorner(), Utilities(), ProfileScreen()];
+    _screens = [
+      HomeView(),
+      ListNotification(),
+      StudyCorner(),
+      Utilities(),
+      ProfileScreen()
+    ];
+  }
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _checkConnectivity();
   }
 
   Future<void> _checkConnectivity() async {
-    await Future.delayed(Duration(seconds: 2));
     if (!NetworkInfo.isConnecting) {
-        showMyAlertDialog(context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
-      }
+      showMyAlertDialog(
+          context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
+    }
   }
 
   @override
   void dispose() {
-    subscription.cancel();
+    _networkSubscription.cancel();
+    _errorSubscription.cancel();
     super.dispose();
   }
 

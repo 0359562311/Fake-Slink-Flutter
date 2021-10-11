@@ -1,3 +1,4 @@
+import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/presentation/results/bloc/result_bloc.dart';
@@ -15,7 +16,8 @@ class ListResultDetail extends StatefulWidget {
   _ListResultDetailState createState() => _ListResultDetailState();
 }
 
-class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepAliveClientMixin<ListResultDetail> {
+class _ListResultDetailState extends State<ListResultDetail>
+    with AutomaticKeepAliveClientMixin<ListResultDetail> {
   List<String> semesters = [];
   late String current;
 
@@ -110,82 +112,99 @@ class _ListResultDetailState extends State<ListResultDetail> with AutomaticKeepA
           .where((r) => r.registerableClass.semester == current)
           .map((e) {
         index++;
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: InkWell(
-            onTap: () {
-              if (e.total != null)
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ResultDetail(
-                              register: e,
-                            )));
-            },
-            child: Card(
-              elevation: 0,
-              color: Colors.white,
-              child: Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    margin: EdgeInsets.symmetric(horizontal: 12),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: AppColor.red),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "$index",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        e.registerableClass.subject.subjectName,
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Mã môn học: ${e.registerableClass.subject.subjectId}",
-                        style: TextStyle(color: AppColor.black, fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        e.total == null ? "Chưa có điểm" : "Đã có điểm",
-                        style: TextStyle(
-                            color:
-                                e.total == null ? AppColor.red : Colors.green,
-                            fontSize: 12),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
+        return _ResultItem(context: context, index: index, e: e);
       }).toList(),
     );
   }
 
   @override
   bool get wantKeepAlive => true;
+}
+
+class _ResultItem extends StatelessWidget {
+  const _ResultItem({
+    Key? key,
+    required this.context,
+    required this.index,
+    required this.e,
+  }) : super(key: key);
+
+  final BuildContext context;
+  final int index;
+  final Register e;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      child: InkWell(
+        onTap: () {
+          if (e.total != null)
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ResultDetail(
+                          register: e,
+                        )));
+        },
+        child: Card(
+          elevation: 0,
+          color: Colors.white,
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.symmetric(horizontal: 12),
+                decoration:
+                    BoxDecoration(shape: BoxShape.circle, color: AppColor.red),
+                alignment: Alignment.center,
+                child: Text(
+                  "$index",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    e.registerableClass.subject.subjectName,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Mã môn học: ${e.registerableClass.subject.subjectId}",
+                    style: TextStyle(color: AppColor.black, fontSize: 12),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    e.total == null ? "Chưa có điểm" : "Đã có điểm",
+                    style: TextStyle(
+                        color: e.total == null ? AppColor.red : Colors.green,
+                        fontSize: 12),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

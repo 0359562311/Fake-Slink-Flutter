@@ -71,16 +71,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await Firebase.initializeApp();
   Directory? appDocDir = await getExternalStorageDirectory();
-  String appDocPath = appDocDir?.path??"";
-  Hive..init(appDocPath)
-  ..registerAdapter(StudentAdapter())
-  ..registerAdapter(ScheduleAdapter())
-  ..registerAdapter(RegisterableClassAdapter())
-  ..registerAdapter(SubjectAdapter())
-  ..registerAdapter(AdministrativeClassAdapter())
-  ..registerAdapter(AdministrativeClassDetailsAdapter())
-  ..registerAdapter(RegisterAdapter())
-  ..registerAdapter(LecturerAdapter());
+  String appDocPath = appDocDir?.path ?? "";
+  Hive
+    ..init(appDocPath)
+    ..registerAdapter(StudentAdapter())
+    ..registerAdapter(ScheduleAdapter())
+    ..registerAdapter(RegisterableClassAdapter())
+    ..registerAdapter(SubjectAdapter())
+    ..registerAdapter(AdministrativeClassAdapter())
+    ..registerAdapter(AdministrativeClassDetailsAdapter())
+    ..registerAdapter(RegisterAdapter())
+    ..registerAdapter(LecturerAdapter());
   await init();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
@@ -88,47 +89,51 @@ void main() async {
 Future<void> init() async {
   GetIt getIt = GetIt.instance;
   getIt.registerLazySingleton(() => Semester(
-    semesterId: "20211",
-    startAt: DateTime(2021, 08, 23), 
-    endAt: DateTime(2021,12,31), 
-    weeks: 20)
-  );
-  getIt.registerLazySingleton(()=>GlobalKey<NavigatorState>());
+      semesterId: "20211",
+      startAt: DateTime(2021, 08, 23),
+      endAt: DateTime(2021, 12, 31),
+      weeks: 20));
+  getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
   await DeviceInfo.init();
   await NetworkInfo.init();
   await SharePreferencesUtils.init();
-  if(SharePreferencesUtils.getString("refresh") != null) {
-    getIt.registerSingleton(
-        Session(
-            access: SharePreferencesUtils.getString("access")!,
-            refresh: SharePreferencesUtils.getString("refresh")!
-        )
-    );
+  if (SharePreferencesUtils.getString("refresh") != null) {
+    getIt.registerSingleton(Session(
+        access: SharePreferencesUtils.getString("access")!,
+        refresh: SharePreferencesUtils.getString("refresh")!));
   }
-  
+
   var options = BaseOptions(
-      baseUrl: 'http://192.168.0.101:8000',
+      baseUrl: 'http://192.168.0.100:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
-      responseType: ResponseType.json
-  );
+      responseType: ResponseType.json);
   getIt.registerSingleton<StreamController<String>>(StreamController<String>());
   getIt.registerSingleton(Dio(options)
-    ..interceptors.addAll(
-        [AuthenticationInterceptor(),
-          LogInterceptor(
-              requestBody: true, requestHeader: false, responseBody: true,
-              request: false, responseHeader: false,error: true
-          ),]
-    ));
+    ..interceptors.addAll([
+      AuthenticationInterceptor(),
+      LogInterceptor(
+          requestBody: true,
+          requestHeader: false,
+          responseBody: true,
+          request: false,
+          responseHeader: false,
+          error: true),
+    ]));
 
   /// repositories
-  getIt.registerLazySingleton<AuthenticationRepository>(() => AuthenticationRepositoryImpl(getIt(), getIt()));
-  getIt.registerLazySingleton<StudentRepository>(() => StudentRepositoryImpl(getIt(),getIt()));
-  getIt.registerLazySingleton<NotificationRepository>(() => NotificationRepositoryImpl(getIt()));
-  getIt.registerLazySingleton<ScheduleRepository>(() => ScheduleRepositoryImpl(getIt(), getIt()));
-  getIt.registerLazySingleton<RegisterRepository>(() => RegisterRepositoryImpl(getIt(), getIt()));
-  getIt.registerLazySingleton<AdministrativeClassRepository>(() => AdministrativeClassReporitoryImpl(getIt(),getIt()));
+  getIt.registerLazySingleton<AuthenticationRepository>(
+      () => AuthenticationRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<StudentRepository>(
+      () => StudentRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<NotificationRepository>(
+      () => NotificationRepositoryImpl(getIt()));
+  getIt.registerLazySingleton<ScheduleRepository>(
+      () => ScheduleRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<RegisterRepository>(
+      () => RegisterRepositoryImpl(getIt(), getIt()));
+  getIt.registerLazySingleton<AdministrativeClassRepository>(
+      () => AdministrativeClassReporitoryImpl(getIt(), getIt()));
 
   /// sources
   getIt.registerLazySingleton(() => AuthenticationRemoteSource());
@@ -151,7 +156,8 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
   getIt.registerLazySingleton(() => MarkNotificationAsReadUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetRegisterableClassDetailsUseCase(getIt()));
+  getIt
+      .registerLazySingleton(() => GetRegisterableClassDetailsUseCase(getIt()));
   getIt.registerLazySingleton(() => GetAdministrativeClassDetails(getIt()));
 
   /// bloc
@@ -163,7 +169,6 @@ Future<void> init() async {
   getIt.registerFactory(() => NotificationBloc(getIt(), getIt()));
   getIt.registerFactory(() => ResultBloc(getIt()));
   getIt.registerFactory(() => RegisterableClassDetailsBloc(getIt()));
-  
 }
 
 class MyApp extends StatefulWidget {
@@ -183,11 +188,12 @@ class _MyAppState extends State<MyApp> {
     await OneSignal.shared.setAppId(oneSignalAppId);
     OneSignal.shared.setNotificationOpenedHandler((openedResult) {
       var data = openedResult.notification.additionalData;
-      GetIt.instance<GlobalKey<NavigatorState>>().currentState?.pushNamed(AppRoute.notificationDetails,
-        arguments: data
-      );
+      GetIt.instance<GlobalKey<NavigatorState>>()
+          .currentState
+          ?.pushNamed(AppRoute.notificationDetails, arguments: data);
     });
-    OneSignal.shared.setNotificationWillShowInForegroundHandler((OSNotificationReceivedEvent event) {
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
       // Will be called whenever a notification is received in foreground
       // Display Notification, pass null param for not displaying the notification
       event.complete(event.notification);
@@ -195,12 +201,15 @@ class _MyAppState extends State<MyApp> {
     OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
       // Will be called whenever the permission changes
       // (ie. user taps Allow on the permission prompt in iOS)
-      print("TanKiem: setPermissionObserver from ${changes.from.status} to ${changes.to.status}");
+      print(
+          "TanKiem: setPermissionObserver from ${changes.from.status} to ${changes.to.status}");
     });
-    OneSignal.shared.setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+    OneSignal.shared
+        .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
       // Will be called whenever the subscription changes
       // (ie. user gets registered with OneSignal and gets a user ID)
-      print("TanKiem: setSubscriptionObserver from ${changes.from.pushToken} to ${changes.to.pushToken}");
+      print(
+          "TanKiem: setSubscriptionObserver from ${changes.from.pushToken} to ${changes.to.pushToken}");
     });
   }
 
@@ -223,24 +232,32 @@ class _MyAppState extends State<MyApp> {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           appBarTheme: AppBarTheme(
-            brightness: Brightness.dark,
+            systemOverlayStyle: SystemUiOverlayStyle.dark,
           ),
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: GetIt.instance.isRegistered<Session>() ? AppRoute.main : AppRoute.login,
+        initialRoute: GetIt.instance.isRegistered<Session>()
+            ? AppRoute.main
+            : AppRoute.login,
         navigatorKey: GetIt.instance<GlobalKey<NavigatorState>>(),
         routes: {
           AppRoute.login: (context) => Login(),
           AppRoute.main: (context) => MainScreen(),
-          AppRoute.notificationDetails: (context) => NotificationDetailsScreen(),
+          AppRoute.notificationDetails: (context) =>
+              NotificationDetailsScreen(),
           AppRoute.result: (context) => ResultScreen(),
           AppRoute.listSchedules: (context) => ListSchedule(),
-          AppRoute.administrativeClass: (context) => AdministrativeClassScreen(),
-          AppRoute.listRegisterableClass: (context) => ListRegisterableClassScreen(),
+          AppRoute.administrativeClass: (context) =>
+              AdministrativeClassScreen(),
+          AppRoute.listRegisterableClass: (context) =>
+              ListRegisterableClassScreen(),
         },
         onGenerateRoute: (settings) {
-          if(settings.name == AppRoute.registerableClassDetails) {
-            return MaterialPageRoute(builder: (context) => RegisterableClassDetailsScreen(id: settings.arguments as int,));
+          if (settings.name == AppRoute.registerableClassDetails) {
+            return MaterialPageRoute(
+                builder: (context) => RegisterableClassDetailsScreen(
+                      id: settings.arguments as int,
+                    ));
           }
         },
       ),
