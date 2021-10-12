@@ -28,6 +28,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void initState() {
     super.initState();
+    _checkConnectivity();
     _networkSubscription = Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -56,12 +57,8 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _checkConnectivity();
-  }
-
   Future<void> _checkConnectivity() async {
+    await Future.delayed(Duration(seconds: 2));
     if (!NetworkInfo.isConnecting) {
       showMyAlertDialog(
           context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");

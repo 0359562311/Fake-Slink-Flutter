@@ -1,12 +1,20 @@
 import 'dart:convert';
 
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+part 'notification.g.dart';
 
 final DateFormat _dateFormat = new DateFormat("dd-MM-yyyy");
+
+@HiveType(typeId: 4)
 class Notification {
+  @HiveField(0)
   final int id;
+  @HiveField(1)
   final NotificationDetails details;
+  @HiveField(2)
   bool seen;
+  @HiveField(3)
   final int receiver;
 
   Notification(
@@ -25,12 +33,19 @@ class Notification {
   }
 }
 
-class NotificationDetails {
+@HiveType(typeId: 5)
+class NotificationDetails extends HiveObject {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   Sender sender;
+  @HiveField(2)
   String title;
+  @HiveField(3)
   String details;
+  @HiveField(4)
   String createAt;
+  @HiveField(5)
   String type;
 
   NotificationDetails(
@@ -61,17 +76,29 @@ class NotificationDetails {
   String toJson() => json.encode(toMap());
 }
 
-class Sender {
+@HiveType(typeId: 6)
+class Sender extends HiveObject {
+  @HiveField(0)
   int id;
+  @HiveField(1)
   String name;
+  @HiveField(2)
   String dob;
+  @HiveField(3)
   String? address;
+  @HiveField(4)
   String? avatar;
+  @HiveField(5)
   String? cover;
+  @HiveField(6)
   String gender;
+  @HiveField(7)
   String role;
+  @HiveField(8)
   String? phoneNumber;
+  @HiveField(9)
   String createAt;
+  @HiveField(10)
   String updateAt;
 
   Sender(this.id, this.name, this.dob, this.address, this.avatar, this.cover,

@@ -16,6 +16,7 @@ import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
 import 'package:fakeslink/app/domain/entities/lecturer.dart';
+import 'package:fakeslink/app/domain/entities/notification.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
@@ -81,6 +82,9 @@ void main() async {
     ..registerAdapter(AdministrativeClassAdapter())
     ..registerAdapter(AdministrativeClassDetailsAdapter())
     ..registerAdapter(RegisterAdapter())
+    ..registerAdapter(NotificationAdapter())
+    ..registerAdapter(NotificationDetailsAdapter())
+    ..registerAdapter(SenderAdapter())
     ..registerAdapter(LecturerAdapter());
   await init();
   initializeDateFormatting().then((_) => runApp(MyApp()));
@@ -127,7 +131,7 @@ Future<void> init() async {
   getIt.registerLazySingleton<StudentRepository>(
       () => StudentRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<NotificationRepository>(
-      () => NotificationRepositoryImpl(getIt()));
+      () => NotificationRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<ScheduleRepository>(
       () => ScheduleRepositoryImpl(getIt(), getIt()));
   getIt.registerLazySingleton<RegisterRepository>(
@@ -141,6 +145,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => StudentRemoteSouce());
   getIt.registerLazySingleton(() => StudentLocalSource());
   getIt.registerLazySingleton(() => NotificationRemoteSource());
+  getIt.registerLazySingleton(() => NotificationLocalSource());
   getIt.registerLazySingleton(() => ScheduleRemoteSource());
   getIt.registerLazySingleton(() => ScheduleLocalSource());
   getIt.registerLazySingleton(() => RegisterLocalSource());

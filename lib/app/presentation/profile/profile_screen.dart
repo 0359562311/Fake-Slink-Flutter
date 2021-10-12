@@ -29,6 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SharePreferencesUtils.clearSession();
                 Hive.deleteBoxFromDisk("user");
                 Hive.deleteBoxFromDisk("schedules");
+                Hive.deleteBoxFromDisk("notifications");
                 Hive.deleteBoxFromDisk("register");
                 Hive.deleteBoxFromDisk("administrativeClassDetails");
                 Navigator.of(context)
