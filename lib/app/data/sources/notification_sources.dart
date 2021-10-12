@@ -38,7 +38,8 @@ class NotificationLocalSource {
     final _box = await Hive.openBox("notifications");
     final res = <Notification>[];
     for (var i
-        in _box.get(type + "offset", defaultValue: <Notification>[]) ?? []) {
+        in _box.get(type + offset.toString(), defaultValue: <Notification>[]) ??
+            []) {
       res.add(i);
     }
     return res;
@@ -46,6 +47,6 @@ class NotificationLocalSource {
 
   Future cache(List<Notification> notis, int offset, String type) async {
     Box notiBox = await Hive.openBox("notifications");
-    notiBox.put(type + "offset", notis);
+    notiBox.put(type + offset.toString(), notis);
   }
 }
