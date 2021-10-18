@@ -1,12 +1,11 @@
-
 import 'package:hive/hive.dart';
-part 'student.g.dart';
-@HiveType(typeId: 0)
-class Student extends HiveObject {
+
+import 'administrative_class.dart';
+
+abstract class Student extends HiveObject {
   @HiveField(0)
   String studentId;
-  @HiveField(1)
-  AdministrativeClass administrativeClass;
+  AdministrativeClass get administrativeClass;
   @HiveField(2)
   int id;
   @HiveField(3)
@@ -32,11 +31,8 @@ class Student extends HiveObject {
   @HiveField(13)
   double gpa;
 
-
-  Student( 
-      {
-        required this.studentId,
-      required this.administrativeClass,
+  Student(
+      {required this.studentId,
       required this.id,
       required this.name,
       required this.dob,
@@ -48,48 +44,6 @@ class Student extends HiveObject {
       this.phoneNumber,
       required this.createAt,
       required this.gpa,
-      required this.updateAt});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['studentId'] = this.studentId;
-    data['administrativeClass'] = this.administrativeClass.toJson();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['dob'] = this.dob;
-    data['address'] = this.address;
-    data['avatar'] = this.avatar;
-    data['cover'] = this.cover;
-    data['gender'] = this.gender;
-    data['role'] = this.role;
-    data['phoneNumber'] = this.phoneNumber;
-    data['createAt'] = this.createAt;
-    data['updateAt'] = this.updateAt;
-    data['gpa'] = this.gpa;
-    return data;
-  }
-}
-
-@HiveType(typeId: 10)
-class AdministrativeClass extends HiveObject {
-  @HiveField(0)
-  int id;
-  @HiveField(1)
-  String administrativeClassId;
-  @HiveField(4)
-  String faculty;
-  @HiveField(3)
-  int lecturer;
-
-  AdministrativeClass(
-      {required this.id, required this.administrativeClassId, required this.faculty, required this.lecturer});
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['administrativeClassId'] = this.administrativeClassId;
-    data['faculty'] = this.faculty;
-    data['lecturer'] = this.lecturer;
-    return data;
-  }
+      required this.updateAt,
+      administrativeClass});
 }

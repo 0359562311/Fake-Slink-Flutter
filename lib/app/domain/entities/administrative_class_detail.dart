@@ -2,9 +2,7 @@ import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:hive/hive.dart';
 
 import 'lecturer.dart';
-part 'administrative_class_detail.g.dart';
 
-@HiveType(typeId: 31)
 class AdministrativeClassDetails extends HiveObject {
   @HiveField(0)
   Lecturer lecturer;

@@ -1,44 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'register.dart';
+part of 'subject_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RegisterAdapter extends TypeAdapter<Register> {
+class SubjectModelAdapter extends TypeAdapter<SubjectModel> {
   @override
-  final int typeId = 30;
+  final int typeId = 3;
 
   @override
-  Register read(BinaryReader reader) {
+  SubjectModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Register(
-      id: fields[0] as int,
-      registerableClass: fields[1] as RegisterableClass,
-      points: (fields[2] as List?)?.cast<double>(),
-      total: fields[3] as double?,
-      student: fields[4] as int,
+    return SubjectModel(
+      subjectId: fields[0] as dynamic,
+      subjectName: fields[1] as dynamic,
+      tinchi: fields[2] as dynamic,
+      gPACoefficient: fields[3] as dynamic,
+      isCPA: fields[4] as dynamic,
+      coefficient: fields[5] as dynamic,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Register obj) {
+  void write(BinaryWriter writer, SubjectModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.id)
+      ..write(obj.subjectId)
       ..writeByte(1)
-      ..write(obj.registerableClass)
+      ..write(obj.subjectName)
       ..writeByte(2)
-      ..write(obj.points)
+      ..write(obj.tinchi)
       ..writeByte(3)
-      ..write(obj.total)
+      ..write(obj.gPACoefficient)
       ..writeByte(4)
-      ..write(obj.student);
+      ..write(obj.isCPA)
+      ..writeByte(5)
+      ..write(obj.coefficient);
   }
 
   @override
@@ -47,7 +50,7 @@ class RegisterAdapter extends TypeAdapter<Register> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RegisterAdapter &&
+      other is SubjectModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

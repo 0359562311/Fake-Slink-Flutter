@@ -1,9 +1,7 @@
 import 'package:hive/hive.dart';
 import 'registerable_class.dart';
-part 'register.g.dart';
 
-@HiveType(typeId: 30)
-class Register extends HiveObject{
+class Register extends HiveObject {
   @HiveField(0)
   int id;
   @HiveField(1)

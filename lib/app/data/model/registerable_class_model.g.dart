@@ -1,44 +1,45 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'registerable_class.dart';
+part of 'registerable_class_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RegisterableClassAdapter extends TypeAdapter<RegisterableClass> {
+class RegisterableClassModelAdapter
+    extends TypeAdapter<RegisterableClassModel> {
   @override
   final int typeId = 2;
 
   @override
-  RegisterableClass read(BinaryReader reader) {
+  RegisterableClassModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RegisterableClass(
-      id: fields[0] as int,
-      subject: fields[1] as Subject,
-      semester: fields[2] as String,
-      students: (fields[3] as List).cast<Student>(),
-      lecturers: (fields[4] as List).cast<Lecturer>(),
+    return RegisterableClassModel(
+      id: fields[0] as dynamic,
+      subject: fields[1] as dynamic,
+      semester: fields[2] as dynamic,
+      students: (fields[4] as List).cast<StudentModel>(),
+      lecturers: (fields[3] as List).cast<LecturerModel>(),
     );
   }
 
   @override
-  void write(BinaryWriter writer, RegisterableClass obj) {
+  void write(BinaryWriter writer, RegisterableClassModel obj) {
     writer
       ..writeByte(5)
+      ..writeByte(3)
+      ..write(obj.lecturers)
+      ..writeByte(4)
+      ..write(obj.students)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.subject)
       ..writeByte(2)
-      ..write(obj.semester)
-      ..writeByte(3)
-      ..write(obj.students)
-      ..writeByte(4)
-      ..write(obj.lecturers);
+      ..write(obj.semester);
   }
 
   @override
@@ -47,7 +48,7 @@ class RegisterableClassAdapter extends TypeAdapter<RegisterableClass> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RegisterableClassAdapter &&
+      other is RegisterableClassModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

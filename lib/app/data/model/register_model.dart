@@ -1,6 +1,10 @@
 import 'package:fakeslink/app/data/model/registerable_class_model.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
+import 'package:hive/hive.dart';
 
+part 'register_model.g.dart';
+
+@HiveType(typeId: 30)
 class RegisterModel extends Register {
   RegisterModel(
       {required registerableClass,
@@ -9,12 +13,11 @@ class RegisterModel extends Register {
       required total,
       required student})
       : super(
-    id: id,
-    registerableClass: registerableClass,
-    points: points,
-    total: total,
-    student: student
-  );
+            id: id,
+            registerableClass: registerableClass,
+            points: points,
+            total: total,
+            student: student);
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) => RegisterModel(
         id: json['id'],

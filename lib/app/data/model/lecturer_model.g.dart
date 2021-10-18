@@ -1,40 +1,40 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'lecturer.dart';
+part of 'lecturer_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class LecturerAdapter extends TypeAdapter<Lecturer> {
+class LecturerModelAdapter extends TypeAdapter<LecturerModel> {
   @override
   final int typeId = 20;
 
   @override
-  Lecturer read(BinaryReader reader) {
+  LecturerModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Lecturer(
-      lecturerId: fields[0] as String,
-      educationLevel: fields[1] as String,
-      id: fields[2] as int,
-      name: fields[3] as String,
-      dob: fields[4] as String?,
-      address: fields[5] as String?,
-      avatar: fields[6] as String?,
-      cover: fields[7] as String?,
-      gender: fields[8] as String,
-      role: fields[9] as String,
-      phoneNumber: fields[10] as String?,
-      createAt: fields[11] as String,
-      updateAt: fields[12] as String,
+    return LecturerModel(
+      lecturerId: fields[0] as dynamic,
+      educationLevel: fields[1] as dynamic,
+      id: fields[2] as dynamic,
+      name: fields[3] as dynamic,
+      dob: fields[4] as dynamic,
+      address: fields[5] as dynamic,
+      avatar: fields[6] as dynamic,
+      cover: fields[7] as dynamic,
+      gender: fields[8] as dynamic,
+      role: fields[9] as dynamic,
+      phoneNumber: fields[10] as dynamic,
+      createAt: fields[11] as dynamic,
+      updateAt: fields[12] as dynamic,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Lecturer obj) {
+  void write(BinaryWriter writer, LecturerModel obj) {
     writer
       ..writeByte(13)
       ..writeByte(0)
@@ -71,7 +71,7 @@ class LecturerAdapter extends TypeAdapter<Lecturer> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is LecturerAdapter &&
+      other is LecturerModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -1,8 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'subject.g.dart';
-
-@HiveType(typeId: 3)
 class Subject extends HiveObject {
   @HiveField(0)
   String subjectId;
@@ -19,11 +16,11 @@ class Subject extends HiveObject {
 
   Subject(
       {required this.subjectId,
-        required this.subjectName,
-        required this.tinchi,
-        required this.gPACoefficient,
-        required this.isCPA,
-        required this.coefficient});
+      required this.subjectName,
+      required this.tinchi,
+      required this.gPACoefficient,
+      required this.isCPA,
+      required this.coefficient});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

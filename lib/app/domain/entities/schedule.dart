@@ -2,16 +2,12 @@ import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:hive/hive.dart';
 import 'lecturer.dart';
 
-part 'schedule.g.dart';
-
-@HiveType(typeId: 1)
-class Schedule extends HiveObject {
+abstract class Schedule extends HiveObject {
   @HiveField(0)
   int id;
   @HiveField(1)
   Lecturer lecturer;
-  @HiveField(2)
-  RegisterableClass registerableClass;
+  RegisterableClass get registerableClass;
   @HiveField(3)
   int dayOfWeek;
   @HiveField(4)
@@ -25,12 +21,10 @@ class Schedule extends HiveObject {
 
   Schedule(
       {required this.id,
-        required this.lecturer,
-        required this.registerableClass,
-        required this.dayOfWeek,
-        required this.classroom,
-        required this.startAt,
-        required this.endAt,
-        required this.weeks});
+      required this.lecturer,
+      required this.dayOfWeek,
+      required this.classroom,
+      required this.startAt,
+      required this.endAt,
+      required this.weeks});
 }
-

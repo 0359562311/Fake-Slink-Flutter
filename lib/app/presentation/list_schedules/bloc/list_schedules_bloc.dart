@@ -3,7 +3,6 @@ import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
 import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/presentation/list_schedules/bloc/list_schedule_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';

@@ -1,7 +1,5 @@
 import 'package:hive/hive.dart';
 
-part 'lecturer.g.dart';
-@HiveType(typeId: 20)
 class Lecturer extends HiveObject {
   @HiveField(0)
   String lecturerId;
@@ -32,18 +30,18 @@ class Lecturer extends HiveObject {
 
   Lecturer(
       {required this.lecturerId,
-        required this.educationLevel,
-        required this.id,
-        required this.name,
-        required this.dob,
-        this.address,
-        this.avatar,
-        this.cover,
-        required this.gender,
-        required this.role,
-        this.phoneNumber,
-        required this.createAt,
-        required this.updateAt});
+      required this.educationLevel,
+      required this.id,
+      required this.name,
+      required this.dob,
+      this.address,
+      this.avatar,
+      this.cover,
+      required this.gender,
+      required this.role,
+      this.phoneNumber,
+      required this.createAt,
+      required this.updateAt});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

@@ -1,43 +1,43 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'schedule.dart';
+part of 'schedule_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class ScheduleAdapter extends TypeAdapter<Schedule> {
+class ScheduleModelAdapter extends TypeAdapter<ScheduleModel> {
   @override
   final int typeId = 1;
 
   @override
-  Schedule read(BinaryReader reader) {
+  ScheduleModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Schedule(
-      id: fields[0] as int,
-      lecturer: fields[1] as Lecturer,
-      registerableClass: fields[2] as RegisterableClass,
-      dayOfWeek: fields[3] as int,
-      classroom: fields[4] as String,
-      startAt: fields[5] as String,
-      endAt: fields[6] as String,
-      weeks: (fields[7] as List).cast<int>(),
+    return ScheduleModel(
+      id: fields[0] as dynamic,
+      lecturer: fields[1] as dynamic,
+      registerableClass: fields[2] as RegisterableClassModel,
+      dayOfWeek: fields[3] as dynamic,
+      classroom: fields[4] as dynamic,
+      startAt: fields[5] as dynamic,
+      endAt: fields[6] as dynamic,
+      weeks: fields[7] as dynamic,
     );
   }
 
   @override
-  void write(BinaryWriter writer, Schedule obj) {
+  void write(BinaryWriter writer, ScheduleModel obj) {
     writer
       ..writeByte(8)
+      ..writeByte(2)
+      ..write(obj.registerableClass)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.lecturer)
-      ..writeByte(2)
-      ..write(obj.registerableClass)
       ..writeByte(3)
       ..write(obj.dayOfWeek)
       ..writeByte(4)
@@ -56,7 +56,7 @@ class ScheduleAdapter extends TypeAdapter<Schedule> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ScheduleAdapter &&
+      other is ScheduleModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

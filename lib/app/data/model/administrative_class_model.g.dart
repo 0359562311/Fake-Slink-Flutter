@@ -1,42 +1,42 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'administrative_class_detail.dart';
+part of 'administrative_class_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class AdministrativeClassDetailsAdapter
-    extends TypeAdapter<AdministrativeClassDetails> {
+class AdministrativeClassModelAdapter
+    extends TypeAdapter<AdministrativeClassModel> {
   @override
-  final int typeId = 31;
+  final int typeId = 7;
 
   @override
-  AdministrativeClassDetails read(BinaryReader reader) {
+  AdministrativeClassModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return AdministrativeClassDetails(
-      lecturer: fields[0] as Lecturer,
-      faculty: fields[1] as String,
-      administrativeClassId: fields[2] as String,
-      students: (fields[3] as List).cast<Student>(),
+    return AdministrativeClassModel(
+      id: fields[0] as dynamic,
+      administrativeClassId: fields[1] as dynamic,
+      faculty: fields[4] as dynamic,
+      lecturer: fields[3] as dynamic,
     );
   }
 
   @override
-  void write(BinaryWriter writer, AdministrativeClassDetails obj) {
+  void write(BinaryWriter writer, AdministrativeClassModel obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.lecturer)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.faculty)
-      ..writeByte(2)
       ..write(obj.administrativeClassId)
+      ..writeByte(4)
+      ..write(obj.faculty)
       ..writeByte(3)
-      ..write(obj.students);
+      ..write(obj.lecturer);
   }
 
   @override
@@ -45,7 +45,7 @@ class AdministrativeClassDetailsAdapter
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AdministrativeClassDetailsAdapter &&
+      other is AdministrativeClassModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

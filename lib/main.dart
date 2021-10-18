@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fakeslink/app/data/model/student_model.dart';
 import 'package:fakeslink/app/data/repositories/administrative_class_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/repositories/notification_repository_impl.dart';
@@ -21,7 +22,6 @@ import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
-import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/entities/subject.dart';
 import 'package:fakeslink/app/domain/repositories/administrative_class_repository.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
@@ -52,6 +52,13 @@ import 'package:hive/hive.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+import 'app/data/model/administrative_class_details_model.dart';
+import 'app/data/model/administrative_class_model.dart';
+import 'app/data/model/lecturer_model.dart';
+import 'app/data/model/register_model.dart';
+import 'app/data/model/registerable_class_model.dart';
+import 'app/data/model/schedule_model.dart';
+import 'app/data/model/subject_model.dart';
 import 'app/domain/entities/session.dart';
 import 'app/domain/use_cases/mark_notification_as_read_use_case.dart';
 import 'app/presentation/administrative_class/bloc/administrative_class_details_bloc.dart';
@@ -75,17 +82,17 @@ void main() async {
   String appDocPath = appDocDir?.path ?? "";
   Hive
     ..init(appDocPath)
-    ..registerAdapter(StudentAdapter())
-    ..registerAdapter(ScheduleAdapter())
-    ..registerAdapter(RegisterableClassAdapter())
-    ..registerAdapter(SubjectAdapter())
-    ..registerAdapter(AdministrativeClassAdapter())
-    ..registerAdapter(AdministrativeClassDetailsAdapter())
-    ..registerAdapter(RegisterAdapter())
+    ..registerAdapter(StudentModelAdapter())
+    ..registerAdapter(ScheduleModelAdapter())
+    ..registerAdapter(RegisterableClassModelAdapter())
+    ..registerAdapter(SubjectModelAdapter())
+    ..registerAdapter(AdministrativeClassModelAdapter())
+    ..registerAdapter(AdministrativeClassDetailsModelAdapter())
+    ..registerAdapter(RegisterModelAdapter())
     ..registerAdapter(NotificationAdapter())
     ..registerAdapter(NotificationDetailsAdapter())
     ..registerAdapter(SenderAdapter())
-    ..registerAdapter(LecturerAdapter());
+    ..registerAdapter(LecturerModelAdapter());
   await init();
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
@@ -108,7 +115,7 @@ Future<void> init() async {
   }
 
   var options = BaseOptions(
-      baseUrl: 'http://192.168.0.100:8000',
+      baseUrl: 'http://192.168.0.101:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
       responseType: ResponseType.json);
