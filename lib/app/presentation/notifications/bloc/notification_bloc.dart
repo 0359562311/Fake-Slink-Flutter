@@ -3,7 +3,6 @@ import 'package:fakeslink/app/domain/use_cases/get_list_notifications_use_case.d
 import 'package:fakeslink/app/domain/use_cases/mark_notification_as_read_use_case.dart';
 import 'package:fakeslink/app/presentation/notifications/bloc/notification_event.dart';
 import 'package:fakeslink/app/presentation/notifications/bloc/notification_state.dart';
-import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {

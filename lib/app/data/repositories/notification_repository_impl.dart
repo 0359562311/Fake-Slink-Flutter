@@ -2,6 +2,7 @@ import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/domain/entities/notification.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
+import 'package:get_it/get_it.dart';
 
 class NotificationRepositoryImpl extends NotificationRepository {
   final NotificationRemoteSource _remoteSource;
@@ -18,7 +19,7 @@ class NotificationRepositoryImpl extends NotificationRepository {
   @override
   Future<List<Notification>> getListNotifications(
       int offset, String type) async {
-    if (NetworkInfo.isConnecting) {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
       final res = await _remoteSource.getListNotifications(offset, type);
       if (res.isNotEmpty) _localSource.cache(res, offset, type);
       return res;

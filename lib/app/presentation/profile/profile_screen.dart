@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/utils/share_preferences.dart';

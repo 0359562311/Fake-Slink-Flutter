@@ -15,14 +15,8 @@ import 'package:fakeslink/app/data/sources/notification_sources.dart';
 import 'package:fakeslink/app/data/sources/register_source.dart';
 import 'package:fakeslink/app/data/sources/schedule_sources.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
-import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart';
-import 'package:fakeslink/app/domain/entities/lecturer.dart';
 import 'package:fakeslink/app/domain/entities/notification.dart';
-import 'package:fakeslink/app/domain/entities/register.dart';
-import 'package:fakeslink/app/domain/entities/registerable_class.dart';
-import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
-import 'package:fakeslink/app/domain/entities/subject.dart';
 import 'package:fakeslink/app/domain/repositories/administrative_class_repository.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/repositories/notification_repository.dart';
@@ -105,8 +99,12 @@ Future<void> init() async {
       endAt: DateTime(2021, 12, 31),
       weeks: 20));
   getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
-  await DeviceInfo.init();
-  await NetworkInfo.init();
+  final deviceInfo = DeviceInfo();
+  await deviceInfo.init();
+  getIt.registerSingleton(deviceInfo);
+  final networkInfo = NetworkInfo();
+  await networkInfo.init();
+  getIt.registerSingleton(networkInfo);
   await SharePreferencesUtils.init();
   if (SharePreferencesUtils.getString("refresh") != null) {
     getIt.registerSingleton(Session(

@@ -33,8 +33,9 @@ class _MainScreenState extends State<MainScreen> {
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
       // Got a new connectivity status!
-      NetworkInfo.isConnecting = result != ConnectivityResult.none;
-      if (!NetworkInfo.isConnecting) {
+      GetIt.instance<NetworkInfo>().isConnecting =
+          result != ConnectivityResult.none;
+      if (!GetIt.instance<NetworkInfo>().isConnecting) {
         showMyAlertDialog(
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       }
@@ -59,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _checkConnectivity() async {
     await Future.delayed(Duration(seconds: 2));
-    if (!NetworkInfo.isConnecting) {
+    if (!GetIt.instance<NetworkInfo>().isConnecting) {
       showMyAlertDialog(
           context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
     }

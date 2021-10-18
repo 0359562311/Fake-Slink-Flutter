@@ -12,11 +12,11 @@ class StudentRepositoryImpl extends StudentRepository {
 
   @override
   Future<Student?> getProfile() async {
-    if (NetworkInfo.isConnecting) {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final user = await _remoteSource.getProfile();
         _localSource.cacheUser(user);
-        if(GetIt.instance.isRegistered<Student>())
+        if (GetIt.instance.isRegistered<Student>())
           GetIt.instance.unregister<Student>();
         GetIt.instance.registerSingleton<Student>(user);
         return user;
@@ -29,7 +29,8 @@ class StudentRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Student> updateProfile(String avatar, String cover, String address, String phoneNumber) {
+  Future<Student> updateProfile(
+      String avatar, String cover, String address, String phoneNumber) {
     throw UnimplementedError();
   }
 }

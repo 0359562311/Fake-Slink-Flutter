@@ -5,6 +5,7 @@ import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
+import 'package:get_it/get_it.dart';
 
 class RegisterRepositoryImpl extends RegisterRepository {
   final RegisterLocalSource _localSource;
@@ -14,7 +15,7 @@ class RegisterRepositoryImpl extends RegisterRepository {
 
   @override
   Future<Pair<String, List<Register>>> getListRegister() async {
-    if (NetworkInfo.isConnecting) {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final res = await _remoteSource.getListRegister();
         _localSource.cacheListRegisters(res);
@@ -30,14 +31,15 @@ class RegisterRepositoryImpl extends RegisterRepository {
   }
 
   @override
-  Future<Pair<String,RegisterableClass>> getDetails(int registerableClassId) async {
-    if(NetworkInfo.isConnecting) {
+  Future<Pair<String, RegisterableClass>> getDetails(
+      int registerableClassId) async {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final res = await _remoteSource.getDetails(registerableClassId);
         _localSource.cacheRegisterableClassDetails(res);
         return Pair(result: res);
       } on DioError catch (e) {
-        return Pair(error: e.response?.data['detail']??"Đã có lỗi xảy ra");
+        return Pair(error: e.response?.data['detail'] ?? "Đã có lỗi xảy ra");
       }
     } else {
       return Pair(result: await _localSource.getDetails(registerableClassId));

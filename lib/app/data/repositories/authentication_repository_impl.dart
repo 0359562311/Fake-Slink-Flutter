@@ -4,6 +4,7 @@ import 'package:fakeslink/app/domain/entities/session.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
+import 'package:get_it/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepository {
@@ -15,7 +16,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
   @override
   Future<Result<Failure, Session>> logIn(
       String username, String password) async {
-    if (NetworkInfo.isConnecting) {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final res = await _remoteSource.logIn(username, password);
         _localSource.cacheSession(res);

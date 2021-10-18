@@ -1,16 +1,15 @@
 import 'package:device_info_plus/device_info_plus.dart';
 
-class DeviceInfo{
-  static String? deviceId;
-  static String? deviceName;
+class DeviceInfo {
+  String? deviceId;
+  String? deviceName;
 
-  static Future init() async{
+  Future init() async {
     try {
       final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
       final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
       deviceId = androidInfo.androidId;
       deviceName = androidInfo.device;
-    } on Exception {
-    }
+    } on Exception {}
   }
 }

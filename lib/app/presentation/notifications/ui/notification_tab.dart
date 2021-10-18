@@ -1,6 +1,3 @@
-import 'dart:async';
-
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:fakeslink/app/domain/entities/notification.dart' as noti;
 import 'package:fakeslink/app/presentation/notifications/bloc/notification_bloc.dart';
 import 'package:fakeslink/app/presentation/notifications/bloc/notification_event.dart';
@@ -62,7 +59,7 @@ class _NotificationTabState extends State<NotificationTab>
           if (state is NotificationSuccessfulState) {
             return RefreshIndicator(
               onRefresh: () async {
-                if (NetworkInfo.isConnecting)
+                if (GetIt.instance<NetworkInfo>().isConnecting)
                   _bloc.add(NotificationRefreshEvent(widget.type));
               },
               child: _bloc.notification[widget.type]!.length == 0

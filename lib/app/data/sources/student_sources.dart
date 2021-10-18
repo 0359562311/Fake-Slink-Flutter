@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/student_model.dart';
-import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
