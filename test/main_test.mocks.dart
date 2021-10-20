@@ -13,6 +13,7 @@ import 'package:dio/src/response.dart' as _i6;
 import 'package:dio/src/transformer.dart' as _i4;
 import 'package:fakeslink/core/utils/device_info.dart' as _i9;
 import 'package:fakeslink/core/utils/network_info.dart' as _i7;
+import 'package:fakeslink/core/utils/share_preferences.dart' as _i12;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: avoid_redundant_argument_values
@@ -431,6 +432,45 @@ class MockDio extends _i1.Mock implements _i10.Dio {
       (super.noSuchMethod(Invocation.method(#fetch, [requestOptions]),
               returnValue: Future<_i6.Response<T>>.value(_FakeResponse_4<T>()))
           as _i8.Future<_i6.Response<T>>);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [SharePreferencesUtils].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockSharePreferencesUtils extends _i1.Mock
+    implements _i12.SharePreferencesUtils {
+  MockSharePreferencesUtils() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i8.Future<dynamic> init() =>
+      (super.noSuchMethod(Invocation.method(#init, []),
+          returnValue: Future<dynamic>.value()) as _i8.Future<dynamic>);
+  @override
+  _i8.Future<dynamic> setInt(String? key, int? value) =>
+      (super.noSuchMethod(Invocation.method(#setInt, [key, value]),
+          returnValue: Future<dynamic>.value()) as _i8.Future<dynamic>);
+  @override
+  int? getInt(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getInt, [key])) as int?);
+  @override
+  _i8.Future<dynamic> setString(String? key, String? value) =>
+      (super.noSuchMethod(Invocation.method(#setString, [key, value]),
+          returnValue: Future<dynamic>.value()) as _i8.Future<dynamic>);
+  @override
+  String? getString(String? key) =>
+      (super.noSuchMethod(Invocation.method(#getString, [key])) as String?);
+  @override
+  _i8.Future<dynamic> reset() =>
+      (super.noSuchMethod(Invocation.method(#reset, []),
+          returnValue: Future<dynamic>.value()) as _i8.Future<dynamic>);
+  @override
+  void clearSession() =>
+      super.noSuchMethod(Invocation.method(#clearSession, []),
+          returnValueForMissingStub: null);
   @override
   String toString() => super.toString();
 }

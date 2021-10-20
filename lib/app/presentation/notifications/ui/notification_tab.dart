@@ -47,26 +47,33 @@ class _NotificationTabState extends State<NotificationTab>
     super.build(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: BlocBuilder(
+      child: BlocBuilder<NotificationBloc, NotificationState>(
         buildWhen: (previous, next) {
-          if (next is NotificationLoadingState)
-            return next.type == widget.type;
-          else if (next is NotificationSuccessfulState)
-            return next.type == widget.type;
-          return false;
+          return next.type == widget.type;
         },
         builder: (context, state) {
-          if (state is NotificationSuccessfulState) {
+          if (state is NotificationErrorState) {
+            return Center(
+                child: GestureDetector(
+              child: Text("Chạm để thử lại"),
+              onTap: () {
+                _bloc.add(NotificationInitEvent(widget.type));
+              },
+            ));
+          } else if (state is NotificationSuccessfulState) {
             return RefreshIndicator(
               onRefresh: () async {
                 if (GetIt.instance<NetworkInfo>().isConnecting)
                   _bloc.add(NotificationRefreshEvent(widget.type));
               },
               child: _bloc.notification[widget.type]!.length == 0
-                  ? Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: Text("Không có thông báo nào!"),
-                    )
+                  ? ListView.builder(
+                      itemCount: 1,
+                      itemBuilder: (context, index) => Center(
+                              child: Padding(
+                            padding: const EdgeInsets.only(top: 48.0),
+                            child: Text("Không có thông báo mới!"),
+                          )))
                   : ListView.builder(
                       itemCount: _bloc.notification[widget.type]!.length + 1,
                       physics: const BouncingScrollPhysics(

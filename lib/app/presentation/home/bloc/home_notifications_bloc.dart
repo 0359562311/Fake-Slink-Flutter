@@ -17,6 +17,11 @@ class HomeNotificationsLoadingState extends HomeNotificationsState {
   const HomeNotificationsLoadingState();
 }
 
+class HomeNotificationErrorState extends HomeNotificationsState {
+  final String message;
+  const HomeNotificationErrorState(this.message);
+}
+
 class HomeNotificationsSuccessfulState extends HomeNotificationsState {
   final List<Notification> notifications;
 
@@ -44,8 +49,11 @@ class HomeNotificationsBloc
                   GetIt.instance<DeviceInfo>().deviceId!, value.userId!);
           });
         yield HomeNotificationsLoadingState();
-        yield HomeNotificationsSuccessfulState(
-            await _getListNotificationsUseCase.execute(0, "General"));
+        final res = await _getListNotificationsUseCase.execute(0, "General");
+        if (res.isSuccess())
+          yield HomeNotificationsSuccessfulState(res.getSuccess()!);
+        else
+          yield HomeNotificationErrorState(res.getError()!.message);
       }
     } on DioError {
       yield HomeNotificationsSuccessfulState([]);

@@ -24,9 +24,9 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
         err.type == DioErrorType.receiveTimeout ||
         err.type == DioErrorType.sendTimeout) {
       GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
-      if (err.requestOptions.path.contains(APIPath.me) ||
-          err.requestOptions.path.contains(APIPath.listSchedules))
-        handler.next(err);
+      // if (err.requestOptions.path.contains(APIPath.me) ||
+      //     err.requestOptions.path.contains(APIPath.listSchedules))
+      handler.next(err);
     } else if (err.response?.requestOptions.path.startsWith("/auth") ?? true) {
       handler.next(err);
     } else if (err.response?.statusCode == 401) {

@@ -2,10 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/session_model.dart';
 import 'package:fakeslink/app/data/repositories/authentication_repository_impl.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
-import 'package:fakeslink/app/domain/entities/session.dart';
 import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/const/api_path.dart';
-import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mockito/annotations.dart';
@@ -40,27 +38,33 @@ void main() {
   });
 
   group('when network is on', () {
+    setUp(() => when(networkInfo.isConnecting).thenReturn(true));
     test('wrong credentials', () async {
       final options = RequestOptions(path: APIPath.logIn);
-      when(networkInfo.isConnecting).thenReturn(true);
+
       when(remoteSource.logIn(any, any)).thenThrow(DioError(
           requestOptions: options,
           response:
               Response(data: {"detail": "any"}, requestOptions: options)));
 
-      final res = await repositoryImpl.logIn("any", "any");
+      final res = await repositoryImpl.logIn("", "");
 
+      expect(res.isError(), true);
       expect(res.getError(), APIFailure("any"));
+      verify(remoteSource.logIn("", ""));
     });
 
     test('right credentials', () async {
-      when(networkInfo.isConnecting).thenReturn(true);
-      when(remoteSource.logIn(any, any)).thenAnswer((realInvocation) async =>
-          SessionModel.fromJson({"access": "", "refresh": ""}));
+      final model = SessionModel.fromJson({"access": "", "refresh": ""});
+      when(remoteSource.logIn(any, any))
+          .thenAnswer((realInvocation) async => model);
 
       final res = await repositoryImpl.logIn("", "");
 
-      expect(res.getSuccess(), Session(access: "", refresh: ""));
+      expect(res.isSuccess(), true);
+      expect(res.getSuccess(), model);
+      verify(localSource.cacheSession(model));
+      verify(remoteSource.logIn("", ""));
     });
   });
 }

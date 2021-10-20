@@ -33,8 +33,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             .whenComplete(() {
           _isLoading[event.type] = false;
         });
-        _notifications[event.type] = res;
-        yield NotificationSuccessfulState(event.type);
+        if (res.isSuccess()) {
+          _notifications[event.type] = res.getSuccess()!;
+          yield NotificationSuccessfulState(event.type);
+        } else {
+          yield NotificationErrorState(event.type, res.getError()!.message);
+        }
       }
     } else if (event is NotificationMarkAsSeenEvent) {
       _markNotificationAsReadUseCase.execute(event.details);
@@ -46,7 +50,9 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
             .whenComplete(() {
           _isLoading[event.type] = false;
         });
-        _notifications[event.type]?.addAll(res);
+        if (res.isSuccess()) {
+          _notifications[event.type]?.addAll(res.getSuccess()!);
+        }
         yield NotificationSuccessfulState(event.type);
       }
     }

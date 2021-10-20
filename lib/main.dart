@@ -99,17 +99,22 @@ Future<void> init() async {
       endAt: DateTime(2021, 12, 31),
       weeks: 20));
   getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
+
   final deviceInfo = DeviceInfo();
   await deviceInfo.init();
   getIt.registerSingleton(deviceInfo);
+
   final networkInfo = NetworkInfo();
   await networkInfo.init();
   getIt.registerSingleton(networkInfo);
-  await SharePreferencesUtils.init();
-  if (SharePreferencesUtils.getString("refresh") != null) {
+
+  final spUtils = SharePreferencesUtils();
+  await spUtils.init();
+  getIt.registerFactory(() => spUtils);
+  if (spUtils.getString("refresh") != null) {
     getIt.registerSingleton(Session(
-        access: SharePreferencesUtils.getString("access")!,
-        refresh: SharePreferencesUtils.getString("refresh")!));
+        access: spUtils.getString("access")!,
+        refresh: spUtils.getString("refresh")!));
   }
 
   var options = BaseOptions(

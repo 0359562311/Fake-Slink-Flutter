@@ -16,7 +16,6 @@ class HomeNotifications extends StatefulWidget {
 }
 
 class _HomeNotificationsState extends State<HomeNotifications> {
-
   late HomeNotificationsBloc _bloc;
 
   @override
@@ -24,57 +23,65 @@ class _HomeNotificationsState extends State<HomeNotifications> {
     super.initState();
     _bloc = GetIt.instance()..add(HomeNotificationsEvent.init);
   }
-  
-  void navigateToDetail(context, n.Notification notification){
-    Navigator.of(context).pushNamed(AppRoute.notificationDetails,arguments: notification.details);
+
+  void navigateToDetail(context, n.Notification notification) {
+    Navigator.of(context).pushNamed(AppRoute.notificationDetails,
+        arguments: notification.details);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<HomeNotificationsBloc, HomeNotificationsState>(
       bloc: _bloc,
-      builder: (context, state){
-        if(state is HomeNotificationsLoadingState)
-          return Center(child: CircularProgressIndicator(
-            strokeWidth: 5,
-            color: AppColor.black,
-          ),);
-        final notifications = (state as HomeNotificationsSuccessfulState).notifications;
+      builder: (context, state) {
+        if (state is HomeNotificationsLoadingState)
+          return Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 5,
+              color: AppColor.black,
+            ),
+          );
+        else if (state is HomeNotificationErrorState)
+          return Center(child: Text("\n\nKhông có thông báo mới"));
+        final notifications =
+            (state as HomeNotificationsSuccessfulState).notifications;
         return CarouselSlider(
-            items: notifications.length == 0 ? [Center(child: Text("Không có thông báo mới"))] 
-            :notifications.map((e) {
-              return GestureDetector(
-              onTap: (){
-                navigateToDetail(context, e);
-              },
-              child: Column(
-                  children: [
-                    Expanded(
-                      child: Container(margin: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: Colors.blue,
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                                image: AssetImage("assets/images/notification.png"),
-                                fit: BoxFit.fill
-                            )
-                        ),
+            items: notifications.length == 0
+                ? [Center(child: Text("Không có thông báo mới"))]
+                : notifications.map((e) {
+                    return GestureDetector(
+                      onTap: () {
+                        navigateToDetail(context, e);
+                      },
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: Colors.blue,
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/notification.png"),
+                                      fit: BoxFit.fill)),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Text(
+                              e.details.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      child: Text(e.details.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    )
-                  ],
-                ),
-            );
-            }).toList(),
+                    );
+                  }).toList(),
             options: CarouselOptions(
               height: 120,
-              aspectRatio: 16/10,
+              aspectRatio: 16 / 10,
               viewportFraction: 0.5,
               initialPage: 0,
               enableInfiniteScroll: false,
@@ -86,8 +93,7 @@ class _HomeNotificationsState extends State<HomeNotifications> {
               enlargeCenterPage: false,
               disableCenter: true,
               scrollDirection: Axis.horizontal,
-            )
-        );
+            ));
       },
     );
   }

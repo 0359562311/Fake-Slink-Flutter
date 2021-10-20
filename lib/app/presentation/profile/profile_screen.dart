@@ -2,6 +2,7 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/utils/share_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CircularProgressIndicator(),
             GestureDetector(
               onTap: () async {
-                SharePreferencesUtils.clearSession();
+                GetIt.instance<SharePreferencesUtils>().clearSession();
                 Hive.deleteBoxFromDisk("user");
                 Hive.deleteBoxFromDisk("schedules");
                 Hive.deleteBoxFromDisk("notifications");
