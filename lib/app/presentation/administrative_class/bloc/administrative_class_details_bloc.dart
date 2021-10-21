@@ -15,11 +15,11 @@ class AdministrativeClassDetailsBloc extends Bloc<
       AdministrativeClassDetailsEvent event) async* {
     if (event is AdministrativeClassDetailsInitEvent) {
       final res = await _getAdministrativeClassDetails.execute();
-      if (res.error != null) {
-        yield AdministrativeClassDetailsErrorState(res.error!);
+      if (res.isError()) {
+        yield AdministrativeClassDetailsErrorState("Đã có lỗi xảy ra");
       }
-      if (res.result != null) {
-        yield AdministrativeClassDetailsSuccessState(res.result!);
+      if (res.isSuccess()) {
+        yield AdministrativeClassDetailsSuccessState(res.getSuccess()!);
       }
     }
   }

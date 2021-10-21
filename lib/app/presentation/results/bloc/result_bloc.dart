@@ -16,12 +16,11 @@ class ResultBloc extends Bloc<ResultEvent, ResultState> {
     if (event is ResultInitEvent) {
       yield ResultLoadingState();
       final res = await _getListRegisterUseCase.execute();
-      if (res.result != null) {
-        _registers = res.result!;
+      if (res.isSuccess()) {
+        _registers = res.getSuccess()!;
         yield ResultSuccessfulState();
-      }
-      if (res.error != null) {
-        yield ResultErrorState(res.error!);
+      } else {
+        yield ResultErrorState("Đã có lỗi xảy ra");
       }
     }
   }

@@ -22,8 +22,7 @@ class _AdministrativeClassScreenState extends State<AdministrativeClassScreen> {
   @override
   void initState() {
     super.initState();
-    _bloc = GetIt.instance()
-      ..add(AdministrativeClassDetailsInitEvent());
+    _bloc = GetIt.instance()..add(AdministrativeClassDetailsInitEvent());
   }
 
   @override
@@ -52,19 +51,23 @@ class _AdministrativeClassScreenState extends State<AdministrativeClassScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: BlocConsumer<AdministrativeClassDetailsBloc,
+        child: BlocBuilder<AdministrativeClassDetailsBloc,
             AdministrativeClassDetailsState>(
           bloc: _bloc,
-          listener: (context, state) {
-            if (state is AdministrativeClassDetailsErrorState)
-              showMyAlertDialog(context, "Lỗi", state.message);
-          },
-          listenWhen: (pre, next) =>
-              next is AdministrativeClassDetailsErrorState,
-          buildWhen: (pre, next) =>
-              !(next is AdministrativeClassDetailsErrorState),
           builder: (context, state) {
-            if (state is AdministrativeClassDetailsSuccessState) {
+            if (state is AdministrativeClassDetailsErrorState) {
+              return InkWell(
+                onTap: () {
+                  _bloc.add(AdministrativeClassDetailsInitEvent());
+                },
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Đã có lỗi xảy ra\n Chạm để thử lại"),
+                  ),
+                ),
+              );
+            } else if (state is AdministrativeClassDetailsSuccessState) {
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(

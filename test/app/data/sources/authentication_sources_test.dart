@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/model/session_model.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
-import 'package:fakeslink/app/domain/entities/session.dart';
 import 'package:fakeslink/core/const/api_path.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';

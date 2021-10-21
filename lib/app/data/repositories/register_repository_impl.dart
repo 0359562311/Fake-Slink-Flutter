@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/register_source.dart';
-import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/register.dart';
 import 'package:fakeslink/app/domain/entities/registerable_class.dart';
 import 'package:fakeslink/app/domain/repositories/register_repository.dart';
+import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:get_it/get_it.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 class RegisterRepositoryImpl extends RegisterRepository {
   final RegisterLocalSource _localSource;
@@ -14,35 +15,36 @@ class RegisterRepositoryImpl extends RegisterRepository {
   RegisterRepositoryImpl(this._localSource, this._remoteSource);
 
   @override
-  Future<Pair<String, List<Register>>> getListRegister() async {
+  Future<Result<Failure, List<Register>>> getListRegister() async {
     if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final res = await _remoteSource.getListRegister();
         _localSource.cacheListRegisters(res);
-        return Pair(result: res);
+        return Success(res);
       } on DioError catch (e) {
-        return Pair(
-            result: await _localSource.getListRegister(),
-            error: e.response?.data['detail'] ?? "Đã có lỗi xảy ra");
+        return Error(
+            APIFailure(e.response?.data['detail'] ?? "Đã có lỗi xảy ra"));
       }
     } else {
-      return Pair(result: await _localSource.getListRegister());
+      return Success(await _localSource.getListRegister());
     }
   }
 
   @override
-  Future<Pair<String, RegisterableClass>> getDetails(
+  Future<Result<Failure, RegisterableClass>> getDetails(
       int registerableClassId) async {
     if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final res = await _remoteSource.getDetails(registerableClassId);
         _localSource.cacheRegisterableClassDetails(res);
-        return Pair(result: res);
+        return Success(res);
       } on DioError catch (e) {
-        return Pair(error: e.response?.data['detail'] ?? "Đã có lỗi xảy ra");
+        return Error(e.response?.data['detail'] ?? "Đã có lỗi xảy ra");
       }
     } else {
-      return Pair(result: await _localSource.getDetails(registerableClassId));
+      final res = await _localSource.getDetails(registerableClassId);
+      if (res != null) return Success(res);
+      return Error(CacheFailure(""));
     }
   }
 }

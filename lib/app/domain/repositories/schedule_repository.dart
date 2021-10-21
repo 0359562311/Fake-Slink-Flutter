@@ -1,7 +1,8 @@
-import 'package:fakeslink/app/domain/entities/pair.dart';
 import 'package:fakeslink/app/domain/entities/schedule.dart';
+import 'package:fakeslink/core/architecture/failure.dart';
+import 'package:multiple_result/multiple_result.dart';
 
-abstract class ScheduleRepository{
+abstract class ScheduleRepository {
   const ScheduleRepository();
-  Future<Pair<String,List<Schedule>>> getListSchedule();
+  Future<Result<Failure, List<Schedule>>> getListSchedule();
 }

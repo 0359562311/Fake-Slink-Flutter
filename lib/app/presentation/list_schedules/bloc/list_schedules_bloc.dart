@@ -22,11 +22,10 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState> {
     if (event is ListScheduleInitEvent) {
       yield ListScheduleLoadingState();
       final res = await _getListScheduleUseCase.execute();
-      if (res.error != null) {
-        yield ListScheduleErrorState(res.error!);
-      }
-      if (res.result != null) {
-        _schedules = res.result!;
+      if (res.isError()) {
+        yield ListScheduleErrorState("");
+      } else {
+        _schedules = res.getSuccess()!;
         final t = _getMapScheduleItems(event.dateTime);
         yield ListScheduleSuccessfulState(t);
       }

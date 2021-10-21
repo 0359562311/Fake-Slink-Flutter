@@ -16,8 +16,9 @@ class HomeHeaderProvider extends ChangeNotifier {
   }
 
   Future<void> init() async {
-    _user = await _getProfileUseCase.execute();
-    if(_user != null) {
+    final res = await _getProfileUseCase.execute();
+    _user = res.getSuccess();
+    if (_user != null) {
       if (GetIt.instance.isRegistered<Student>())
         GetIt.instance.unregister<Student>();
       GetIt.instance.registerLazySingleton<Student>(() => _user!);

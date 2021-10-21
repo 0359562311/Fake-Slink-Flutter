@@ -4,19 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'list_registerable_class_event.dart';
 import 'list_registerable_class_state.dart';
 
-class ListRegisterableClassBloc extends Bloc<ListRegisterableClassEvent, ListRegisterableClassState> {
+class ListRegisterableClassBloc
+    extends Bloc<ListRegisterableClassEvent, ListRegisterableClassState> {
   final GetListRegisterUseCase _getListRegisterUseCase;
-  ListRegisterableClassBloc(this._getListRegisterUseCase) : super(ListRegisterableClassLoadingState());
+  ListRegisterableClassBloc(this._getListRegisterUseCase)
+      : super(ListRegisterableClassLoadingState());
 
   @override
-  Stream<ListRegisterableClassState> mapEventToState(ListRegisterableClassEvent event) async* {
+  Stream<ListRegisterableClassState> mapEventToState(
+      ListRegisterableClassEvent event) async* {
     if (event is ListRegisterableClassInitEvent) {
       final res = await _getListRegisterUseCase.execute();
-      if(res.error!=null) {
-        yield ListRegisterableClassErrorState(res.error!);
-      }
-      if(res.result!=null) {
-        yield ListRegisterableClassSuccessfulState(res.result!);
+      if (res.isError()) {
+        yield ListRegisterableClassErrorState("Đã có lỗi xảy ra!");
+      } else {
+        yield ListRegisterableClassSuccessfulState(res.getSuccess()!);
       }
     }
   }

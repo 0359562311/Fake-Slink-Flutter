@@ -63,20 +63,26 @@ class _ListRegisterableClassScreenState
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12),
         child:
-            BlocConsumer<ListRegisterableClassBloc, ListRegisterableClassState>(
+            BlocBuilder<ListRegisterableClassBloc, ListRegisterableClassState>(
           bloc: _bloc,
-          listener: (context, state) {
-            if (state is ListRegisterableClassErrorState)
-              showMyAlertDialog(context, "Lỗi", state.message);
-          },
-          listenWhen: (pre, next) =>
-              (next is ListRegisterableClassErrorState) && next != pre,
           builder: (context, state) {
             if (state is ListRegisterableClassLoadingState)
               return Center(
                 child: CircularProgressIndicator(
                   color: AppColor.black,
                   strokeWidth: 5,
+                ),
+              );
+            else if (state is ListRegisterableClassErrorState)
+              return InkWell(
+                onTap: () {
+                  _bloc.add(ListRegisterableClassInitEvent());
+                },
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text("Đã có lỗi xảy ra\n Chạm để thử lại"),
+                  ),
                 ),
               );
             return SingleChildScrollView(
@@ -104,7 +110,7 @@ class _ListRegisterableClassScreenState
             .where((element) => element.registerableClass.semester == current)
             .map((e) {
       return _RegisterableClassItem(
-        callback: (){
+        callback: () {
           Navigator.pushNamed(context, AppRoute.registerableClassDetails,
               arguments: e.registerableClass.id);
         },
@@ -204,12 +210,10 @@ class _RegisterableClassItemState extends State<_RegisterableClassItem> {
                 children: [
                   Text(
                     "Lớp: ${widget.register.registerableClass.subject.subjectName}",
-                    style: TextStyle(fontSize: 16,
-                      color: _getColor(Colors.black)
-                    ),
+                    style:
+                        TextStyle(fontSize: 16, color: _getColor(Colors.black)),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    
                   ),
                   SizedBox(
                     height: 12,

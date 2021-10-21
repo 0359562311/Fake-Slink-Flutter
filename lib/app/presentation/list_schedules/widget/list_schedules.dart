@@ -57,15 +57,26 @@ class _ListScheduleState extends State<ListSchedule> {
           centerTitle: true,
           backgroundColor: AppColor.red,
         ),
-        body: BlocConsumer<ListScheduleBloc, ListScheduleState>(
+        body: BlocBuilder<ListScheduleBloc, ListScheduleState>(
           bloc: _bloc,
-          listener: (context, state) {},
-          listenWhen: (previous, next) => next is ListScheduleErrorState,
           builder: (context, state) {
             if (state is ListScheduleLoadingState)
               return Center(
                 child: CircularProgressIndicator(),
               );
+            else if (state is ListScheduleErrorState) {
+              return InkWell(
+                onTap: () {
+                  _bloc.add(ListScheduleInitEvent(_focusedDate));
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("Đã có lỗi xảy ra\n Chạm để thử lại"),
+                  ),
+                ),
+              );
+            }
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

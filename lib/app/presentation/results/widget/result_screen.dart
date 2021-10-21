@@ -11,23 +11,24 @@ import 'package:get_it/get_it.dart';
 import 'second_tab/list_result_detail.dart';
 
 class ResultScreen extends StatefulWidget {
-  const ResultScreen({ Key? key }) : super(key: key);
+  const ResultScreen({Key? key}) : super(key: key);
 
   @override
   _ResultScreenState createState() => _ResultScreenState();
 }
 
-class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderStateMixin {
-
+class _ResultScreenState extends State<ResultScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late ResultBloc _bloc;
-  final _items = [const ResultFirstTab(), ListResultDetail()];
+  late final _items;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _bloc = GetIt.instance()..add(ResultInitEvent());
+    _items = [const ResultFirstTab(), ListResultDetail()];
   }
 
   @override
@@ -42,38 +43,52 @@ class _ResultScreenState extends State<ResultScreen> with SingleTickerProviderSt
     return Scaffold(
       // backgroundColor: AppColor.background,
       appBar: AppBar(
-        leading: IconButton(icon: Icon(Icons.arrow_back_ios, color: Colors.white, size: 20,),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        ),
-        title: Text("Góc học tập",
-          style: TextStyle(color: Colors.white)
-        ),
-        centerTitle: true,
-        backgroundColor: AppColor.red,
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          tabs: [
-            Tab(text: "Môn học",),
-            Tab(text: "Điểm thi",),
-          ],
-        )
-      ),
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 20,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text("Góc học tập", style: TextStyle(color: Colors.white)),
+          centerTitle: true,
+          backgroundColor: AppColor.red,
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorColor: Colors.white,
+            tabs: [
+              Tab(
+                text: "Môn học",
+              ),
+              Tab(
+                text: "Điểm thi",
+              ),
+            ],
+          )),
       body: BlocProvider<ResultBloc>(
         create: (context) => _bloc,
-        child: BlocConsumer<ResultBloc, ResultState>(
-          listener: (context, state) {
-            if(state is ResultErrorState) 
-              showMyAlertDialog(context, "Lỗi", state.message);
-          },
-          listenWhen: (o,n) => n is ResultErrorState,
+        child: BlocBuilder<ResultBloc, ResultState>(
           builder: (context, state) {
-            if(state is ResultLoadingState)
+            if (state is ResultLoadingState)
               return Center(
                 child: CircularProgressIndicator(),
               );
+            else if (state is ResultErrorState) {
+              return InkWell(
+                onTap: () {
+                  _bloc.add(ResultInitEvent());
+                },
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Text("Đã có lỗi xảy ra\n Chạm để thử lại"),
+                  ),
+                ),
+              );
+            }
             return TabBarView(
               controller: _tabController,
               children: _items,

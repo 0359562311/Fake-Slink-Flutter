@@ -2,8 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/repositories/student_repository.dart';
+import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:get_it/get_it.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 class StudentRepositoryImpl extends StudentRepository {
   final StudentRemoteSouce _remoteSource;
@@ -11,7 +13,7 @@ class StudentRepositoryImpl extends StudentRepository {
   StudentRepositoryImpl(this._remoteSource, this._localSource);
 
   @override
-  Future<Student?> getProfile() async {
+  Future<Result<Failure, Student>> getProfile() async {
     if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final user = await _remoteSource.getProfile();
@@ -19,17 +21,19 @@ class StudentRepositoryImpl extends StudentRepository {
         if (GetIt.instance.isRegistered<Student>())
           GetIt.instance.unregister<Student>();
         GetIt.instance.registerSingleton<Student>(user);
-        return user;
+        return Success(user);
       } on DioError {
-        return _localSource.getProfile();
+        final res = await _localSource.getProfile();
+        return res == null ? Error(CacheFailure("")) : Success(res);
       }
     } else {
-      return _localSource.getProfile();
+      final res = await _localSource.getProfile();
+      return res == null ? Error(CacheFailure("")) : Success(res);
     }
   }
 
   @override
-  Future<Student> updateProfile(
+  Future<Result<Failure, Student>> updateProfile(
       String avatar, String cover, String address, String phoneNumber) {
     throw UnimplementedError();
   }

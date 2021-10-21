@@ -3,19 +3,21 @@ import 'package:fakeslink/app/presentation/registerable_class_details/bloc/regis
 import 'package:fakeslink/app/presentation/registerable_class_details/bloc/registerable_class_details_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterableClassDetailsBloc extends Bloc<RegisterableClassDetailsEvent, RegisterableClassDetailsState> {
+class RegisterableClassDetailsBloc
+    extends Bloc<RegisterableClassDetailsEvent, RegisterableClassDetailsState> {
   final GetRegisterableClassDetailsUseCase _getRegisterableClassDetailsUseCase;
-  RegisterableClassDetailsBloc(this._getRegisterableClassDetailsUseCase) : super(RegisterableClassDetailsLoadingState());
+  RegisterableClassDetailsBloc(this._getRegisterableClassDetailsUseCase)
+      : super(RegisterableClassDetailsLoadingState());
 
   @override
-  Stream<RegisterableClassDetailsState> mapEventToState(RegisterableClassDetailsEvent event) async* {
+  Stream<RegisterableClassDetailsState> mapEventToState(
+      RegisterableClassDetailsEvent event) async* {
     if (event is RegisterableClassDetailsInitEvent) {
       final res = await _getRegisterableClassDetailsUseCase.execute(event.id);
-      if(res.error!=null){
-        yield RegisterableClassDetailsErrorState(res.error!);
-      }
-      if(res.result!=null) {
-        yield RegisterableClassDetailsSuccessfulState(res.result!);
+      if (res.isError()) {
+        yield RegisterableClassDetailsErrorState("Đã có lỗi xảy ra!");
+      } else {
+        yield RegisterableClassDetailsSuccessfulState(res.getSuccess()!);
       }
     }
   }
