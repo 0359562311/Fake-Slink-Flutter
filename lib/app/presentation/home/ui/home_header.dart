@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
-  final double _maxExtent = 150;
+  final double _maxExtent = 180;
   final double _minExtent = 80;
 
   @override
@@ -28,7 +28,7 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: 60),
                   Text(
                     "Fake S-Link",
                     style: TextStyle(
@@ -43,10 +43,10 @@ class SliverHeaderChildDelegateImpl extends SliverPersistentHeaderDelegate {
             bottom: 0,
             left: shrinkOffset > _maxExtent - _minExtent
                 ? 0
-                : (-shrinkOffset + _maxExtent - _minExtent) / 4,
+                : (-shrinkOffset + _maxExtent - _minExtent - 30) / 4,
             right: shrinkOffset > _maxExtent - _minExtent
                 ? 0
-                : (-shrinkOffset + _maxExtent - _minExtent) / 4,
+                : (-shrinkOffset + _maxExtent - _minExtent - 30) / 4,
             height: 80,
             child: Container(
               decoration: BoxDecoration(

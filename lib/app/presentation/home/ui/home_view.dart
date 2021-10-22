@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void dispose() {
-    _homeHeaderProvider.dispose();
+    // _homeHeaderProvider.dispose();
     super.dispose();
   }
 

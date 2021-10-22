@@ -16,12 +16,14 @@ class AdministrativeClassRemoteSource {
 
 class AdministrativeClassLocalSource {
   Future<AdministrativeClassDetails?> getDetails() async {
-    final _box = await Hive.openBox("administrativeClassDetails");
+    final _box = await GetIt.instance<HiveInterface>()
+        .openBox("administrativeClassDetails");
     return _box.get("data");
   }
 
   Future<void> cache(AdministrativeClassDetails model) async {
-    final _box = await Hive.openBox("administrativeClassDetails");
+    final _box = await GetIt.instance<HiveInterface>()
+        .openBox("administrativeClassDetails");
     _box.put("data", model);
   }
 }

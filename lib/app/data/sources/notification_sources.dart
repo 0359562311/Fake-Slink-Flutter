@@ -35,7 +35,7 @@ class NotificationRemoteSource {
 class NotificationLocalSource {
   Future<List<Notification>> getListNotifications(
       int offset, String type) async {
-    final _box = await Hive.openBox("notifications");
+    final _box = await GetIt.instance<HiveInterface>().openBox("notifications");
     final res = <Notification>[];
     for (var i
         in _box.get(type + offset.toString(), defaultValue: <Notification>[]) ??
@@ -46,7 +46,8 @@ class NotificationLocalSource {
   }
 
   Future cache(List<Notification> notis, int offset, String type) async {
-    Box notiBox = await Hive.openBox("notifications");
+    Box notiBox =
+        await GetIt.instance<HiveInterface>().openBox("notifications");
     notiBox.put(type + offset.toString(), notis);
   }
 }

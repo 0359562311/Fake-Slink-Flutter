@@ -10,7 +10,9 @@ import 'package:hive/hive.dart';
 class RegisterRemoteSource {
   Future<List<RegisterModel>> getListRegister() async {
     final response = await GetIt.instance<Dio>().get(APIPath.listRegister);
-    return (response.data as List).map((e) => RegisterModel.fromJson(e)).toList();
+    return (response.data as List)
+        .map((e) => RegisterModel.fromJson(e))
+        .toList();
   }
 
   Future<RegisterableClassModel> getDetails(int id) async {
@@ -21,26 +23,28 @@ class RegisterRemoteSource {
 
 class RegisterLocalSource {
   Future<void> cacheListRegisters(List<Register> registers) async {
-    final _box =  await Hive.openBox("register");
+    final _box = await GetIt.instance<HiveInterface>().openBox("register");
     _box.put("data", registers);
   }
 
   Future<List<Register>> getListRegister() async {
-    final _box =  await Hive.openBox("register");
+    final _box = await GetIt.instance<HiveInterface>().openBox("register");
     final res = <Register>[];
-    for(var i in _box.get("data",defaultValue: <Register>[])) {
-        res.add(i);
+    for (var i in _box.get("data", defaultValue: <Register>[])) {
+      res.add(i);
     }
     return res;
   }
 
   Future<RegisterableClass?> getDetails(int id) async {
-    final _box =  await Hive.openBox("registerableClassDetails");
-    return _box.get(id,defaultValue: null);
+    final _box = await GetIt.instance<HiveInterface>()
+        .openBox("registerableClassDetails");
+    return _box.get(id, defaultValue: null);
   }
 
-  Future<void> cacheRegisterableClassDetails(RegisterableClass registerableClass) async {
-    final _box =  await Hive.openBox("register");
+  Future<void> cacheRegisterableClassDetails(
+      RegisterableClass registerableClass) async {
+    final _box = await GetIt.instance<HiveInterface>().openBox("register");
     _box.put(registerableClass.id, registerableClass);
   }
 }

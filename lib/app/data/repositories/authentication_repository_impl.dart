@@ -23,7 +23,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
         return Success(res);
       } on DioError catch (e) {
         return Error(
-            APIFailure(e.response?.data['detail'] ?? "Da co loi xay ra"));
+            APIFailure(e.response?.data['detail'] ?? "Đã có lỗi xảy ra"));
       }
     } else {
       return Error(NetworkFailure());

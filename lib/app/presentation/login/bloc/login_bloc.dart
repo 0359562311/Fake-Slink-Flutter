@@ -24,7 +24,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } else {
         final failure = result.getError()!;
         if (failure is APIFailure)
-          yield LoginFailState("Tên đăng nhập hoặc mật khẩu không chính xác");
+          yield LoginFailState(failure.message);
         else if (failure is NetworkFailure)
           yield LoginFailState("Kiểm tra lại kết nối Internet");
       }

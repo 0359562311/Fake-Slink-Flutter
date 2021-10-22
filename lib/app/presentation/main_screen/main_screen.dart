@@ -10,6 +10,7 @@ import 'package:fakeslink/app/presentation/utilities/utilities.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class MainScreen extends StatefulWidget {
@@ -40,6 +41,8 @@ class _MainScreenState extends State<MainScreen> {
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       }
     });
+    GetIt.instance.registerSingleton<StreamController<String>>(
+        StreamController<String>());
     _errorSubscription = GetIt.instance<StreamController<String>>()
         .stream
         .asBroadcastStream()
@@ -70,12 +73,16 @@ class _MainScreenState extends State<MainScreen> {
   void dispose() {
     _networkSubscription.cancel();
     _errorSubscription.cancel();
+    GetIt.instance.unregister<StreamController<String>>();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return AnnotatedRegion(
+      value: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: Brightness.dark),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(children: [

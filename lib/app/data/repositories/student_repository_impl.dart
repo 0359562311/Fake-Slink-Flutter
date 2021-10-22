@@ -22,9 +22,8 @@ class StudentRepositoryImpl extends StudentRepository {
           GetIt.instance.unregister<Student>();
         GetIt.instance.registerSingleton<Student>(user);
         return Success(user);
-      } on DioError {
-        final res = await _localSource.getProfile();
-        return res == null ? Error(CacheFailure("")) : Success(res);
+      } on DioError catch (e) {
+        return Error(APIFailure(e.response?.data['detail'] ?? ""));
       }
     } else {
       final res = await _localSource.getProfile();
@@ -34,7 +33,21 @@ class StudentRepositoryImpl extends StudentRepository {
 
   @override
   Future<Result<Failure, Student>> updateProfile(
-      String avatar, String cover, String address, String phoneNumber) {
-    throw UnimplementedError();
+      String avatar, String cover, String address, String phoneNumber) async {
+    if (GetIt.instance<NetworkInfo>().isConnecting) {
+      try {
+        final user = await _remoteSource.updateProfile(
+            avatar, cover, address, phoneNumber);
+        _localSource.cacheUser(user);
+        if (GetIt.instance.isRegistered<Student>())
+          GetIt.instance.unregister<Student>();
+        GetIt.instance.registerSingleton<Student>(user);
+        return Success(user);
+      } on DioError catch (e) {
+        return Error(APIFailure(e.response?.data['detail'] ?? ""));
+      }
+    } else {
+      return Error(NetworkFailure());
+    }
   }
 }

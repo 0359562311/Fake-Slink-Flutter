@@ -36,6 +36,7 @@ import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/notification_details.dart';
+import 'package:fakeslink/app/presentation/profile/bloc/profile_bloc.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
@@ -116,13 +117,14 @@ Future<void> init() async {
         access: spUtils.getString("access")!,
         refresh: spUtils.getString("refresh")!));
   }
+  getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
       baseUrl: 'http://192.168.0.101:8000',
       connectTimeout: 15000,
       receiveTimeout: 15000,
       responseType: ResponseType.json);
-  getIt.registerSingleton<StreamController<String>>(StreamController<String>());
+
   getIt.registerSingleton(Dio(options)
     ..interceptors.addAll([
       AuthenticationInterceptor(),
@@ -184,6 +186,7 @@ Future<void> init() async {
   getIt.registerFactory(() => NotificationBloc(getIt(), getIt()));
   getIt.registerFactory(() => ResultBloc(getIt()));
   getIt.registerFactory(() => RegisterableClassDetailsBloc(getIt()));
+  getIt.registerFactory(() => ProfileBloc(getIt()));
 }
 
 class MyApp extends StatefulWidget {
