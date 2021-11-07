@@ -4,4 +4,6 @@ import 'package:multiple_result/multiple_result.dart';
 
 abstract class AuthenticationRepository {
   Future<Result<Failure, Session>> logIn(String username, String password);
+  Future<Result<Failure, Session>> logInWithFingerprint();
+  Future<Result<Failure, void>> setUpFingerprintAuth(String password);
 }

@@ -30,3 +30,7 @@ class APIFailure extends Failure {
 class NetworkFailure extends Failure {
   const NetworkFailure() : super("Kiểm tra kết nối internet");
 }
+
+class PlatformFailure extends Failure {
+  const PlatformFailure(String message) : super(message);
+}

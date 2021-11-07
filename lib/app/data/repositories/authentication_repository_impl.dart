@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/authentication_sources.dart';
 import 'package:fakeslink/app/domain/entities/session.dart';
+import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/core/architecture/failure.dart';
+import 'package:fakeslink/core/utils/local_auth_api.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -28,5 +30,28 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
     } else {
       return Error(NetworkFailure());
     }
+  }
+
+  @override
+  Future<Result<Failure, Session>> logInWithFingerprint() async {
+    final hasFingerprint = await LocalAuthAPI.hasFingerpint();
+    if (!hasFingerprint)
+      return Error(PlatformFailure("Thiết bị không hỗ trợ."));
+
+    final setUpFingerprintAuth = await _localSource.getFingerPrintAuthType();
+    if (!setUpFingerprintAuth['data'])
+      return Error(PlatformFailure("Chưa cài đặt vân tay cho thiết bị này."));
+    return logIn(
+        setUpFingerprintAuth['username'], setUpFingerprintAuth['password']);
+  }
+
+  @override
+  Future<Result<Failure, void>> setUpFingerprintAuth(String password) async {
+    final checkPassword =
+        await logIn(GetIt.instance<Student>().studentId, password);
+    if (checkPassword.isError()) return Error(checkPassword.getError()!);
+    _localSource.changeFingerPrintAuthType(
+        true, GetIt.instance<Student>().studentId, password);
+    return Success(null);
   }
 }
