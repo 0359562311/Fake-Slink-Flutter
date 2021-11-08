@@ -26,8 +26,10 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
       GetIt.instance<StreamController<String>>().add("Quá thời gian kết nối.");
       // if (err.requestOptions.path.contains(APIPath.me) ||
       //     err.requestOptions.path.contains(APIPath.listSchedules))
+      err.response?.data = err.response?.data['data'];
       handler.next(err);
     } else if (err.response?.requestOptions.path.startsWith("/auth") ?? true) {
+      err.response?.data = err.response?.data['data'];
       handler.next(err);
     } else if (err.response?.statusCode == 401) {
       var dio = GetIt.instance<Dio>();
@@ -63,6 +65,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
           dio.interceptors.responseLock.unlock();
           dio.interceptors.requestLock.unlock();
           dio.interceptors.errorLock.unlock();
+          err.response?.data = err.response?.data['data'];
           handler.reject(error);
         });
       }).catchError((error) {
@@ -71,12 +74,19 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
           dio.interceptors.responseLock.unlock();
           dio.interceptors.requestLock.unlock();
           dio.interceptors.errorLock.unlock();
-          GetIt.instance<StreamController<String>>()
-              .add("Phiên đăng nhập đã hết hạn.");
+          if (GetIt.instance.isRegistered<StreamController<String>>()) {
+            GetIt.instance<StreamController<String>>()
+                .add("Phiên đăng nhập đã hết.");
+          }
+        } else {
+          err.response?.data = err.response?.data['data'];
+          handler.next(err);
         }
       });
-    } else
+    } else {
+      err.response?.data = err.response?.data['data'];
       handler.next(err);
+    }
   }
 
   @override

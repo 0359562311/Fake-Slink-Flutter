@@ -31,6 +31,8 @@ import 'package:fakeslink/app/domain/use_cases/get_list_schedule_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/get_registerable_class_details_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
+import 'package:fakeslink/app/domain/use_cases/login_with_fingerprint_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/set_up_fingerprint_auth_use_case.dart';
 import 'package:fakeslink/app/presentation/administrative_class/administrative_screen.dart';
 import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
@@ -167,8 +169,10 @@ Future<void> init() async {
 
   /// use cases
   getIt.registerLazySingleton(() => LogInUseCase(getIt()));
+  getIt.registerLazySingleton(() => LogInWithFingeprintUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
+  getIt.registerLazySingleton(() => SetUpFingerPrintAuthUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
   getIt.registerLazySingleton(() => MarkNotificationAsReadUseCase(getIt()));
@@ -182,11 +186,11 @@ Future<void> init() async {
   getIt.registerFactory(() => AdministrativeClassDetailsBloc(getIt()));
   getIt.registerFactory(() => HomeNotificationsBloc(getIt(), getIt()));
   getIt.registerFactory(() => ListScheduleBloc(getIt()));
-  getIt.registerFactory(() => LoginBloc(getIt()));
+  getIt.registerFactory(() => LoginBloc(getIt(), getIt()));
   getIt.registerFactory(() => NotificationBloc(getIt(), getIt()));
   getIt.registerFactory(() => ResultBloc(getIt()));
   getIt.registerFactory(() => RegisterableClassDetailsBloc(getIt()));
-  getIt.registerFactory(() => ProfileBloc(getIt()));
+  getIt.registerFactory(() => ProfileBloc(getIt(), getIt()));
 }
 
 class MyApp extends StatefulWidget {

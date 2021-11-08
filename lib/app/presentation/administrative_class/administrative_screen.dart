@@ -3,7 +3,6 @@ import 'package:fakeslink/app/presentation/administrative_class/bloc/administrat
 import 'package:fakeslink/app/presentation/administrative_class/bloc/administrative_class_details_event.dart';
 import 'package:fakeslink/app/presentation/administrative_class/bloc/administrative_class_details_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
-import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';

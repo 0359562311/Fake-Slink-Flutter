@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void showMyAlertDialog(BuildContext context, String title, String message) {
+Future showMyAlertDialog(BuildContext context, String title, String message) {
   Widget okButton = TextButton(
     child: Text("OK"),
     onPressed: () {
@@ -19,7 +19,7 @@ void showMyAlertDialog(BuildContext context, String title, String message) {
   );
 
   // show the dialog
-  showDialog(
+  return showDialog(
     context: context,
     builder: (BuildContext context) {
       return alert;

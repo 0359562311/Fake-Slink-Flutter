@@ -6,3 +6,5 @@ class LoginWithUsernameEvent extends LoginEvent {
 
   LoginWithUsernameEvent(this.username, this.password);
 }
+
+class LoginWithFingerprintEvent extends LoginEvent {}

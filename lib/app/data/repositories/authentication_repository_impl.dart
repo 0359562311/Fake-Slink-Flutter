@@ -40,9 +40,12 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
     final setUpFingerprintAuth = await _localSource.getFingerPrintAuthType();
     if (!setUpFingerprintAuth['data'])
-      return Error(PlatformFailure("Chưa cài đặt vân tay cho thiết bị này."));
-    return logIn(
-        setUpFingerprintAuth['username'], setUpFingerprintAuth['password']);
+      return Error(PlatformFailure("Chưa cài đặt vân tay cho ứng dụng."));
+    if (await LocalAuthAPI.authenticate())
+      return logIn(
+          setUpFingerprintAuth['username'], setUpFingerprintAuth['password']);
+    else
+      return Error(PlatformFailure("Xác thực thất bại"));
   }
 
   @override

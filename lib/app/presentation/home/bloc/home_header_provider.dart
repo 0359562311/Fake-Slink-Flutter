@@ -1,5 +1,6 @@
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
+import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -22,6 +23,9 @@ class HomeHeaderProvider extends ChangeNotifier {
       if (GetIt.instance.isRegistered<Student>())
         GetIt.instance.unregister<Student>();
       GetIt.instance.registerLazySingleton<Student>(() => _user!);
+    } else {
+      final e = res.getError()!;
+      if (e is APIFailure && e.message == "Phiên đăng nhập đã hết.") {}
     }
     notifyListeners();
   }

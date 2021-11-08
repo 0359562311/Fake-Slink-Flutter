@@ -4,12 +4,13 @@ import 'package:fakeslink/app/presentation/profile/bloc/profile_event.dart';
 import 'package:fakeslink/app/presentation/profile/bloc/profile_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
-import 'package:fakeslink/core/utils/share_preferences.dart';
+import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+
+import 'fingerprint_dialog.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -30,40 +31,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: BlocBuilder<ProfileBloc, ProfileState>(
-      bloc: _bloc,
-      builder: (context, state) {
-        if (state is ProfileLoadingState)
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColor.black,
-              strokeWidth: 5,
-            ),
-          );
-        else if (state is ProfileErrorState) {
-          return Center(
-              child: InkWell(
-            child: Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Text("Chạm để thử lại"),
-            ),
-            onTap: () {
-              _bloc.add(ProfileInitEvent());
-            },
-          ));
-        }
-        return Column(
-          children: [_UpperLayout(student: GetIt.instance()), _BelowLayout()],
-        );
-      },
-    ));
+        resizeToAvoidBottomInset: false,
+        body: BlocConsumer<ProfileBloc, ProfileState>(
+          bloc: _bloc,
+          listenWhen: (preState, nextState) {
+            return nextState is ProfileErrorState ||
+                (nextState is ProfileSuccessState && nextState.message != null);
+          },
+          listener: (context, state) {
+            if (state is ProfileErrorState) {
+              showMyAlertDialog(context, "Lỗi", state.message);
+            } else if (state is ProfileSuccessState) {
+              showMyAlertDialog(context, "Thành công", state.message!);
+            }
+          },
+          builder: (context, state) {
+            if (state is ProfileLoadingState)
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColor.black,
+                  strokeWidth: 5,
+                ),
+              );
+            else if (state is ProfileErrorState) {
+              return Center(
+                  child: InkWell(
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Text("Chạm để thử lại"),
+                ),
+                onTap: () {
+                  _bloc.add(ProfileInitEvent());
+                },
+              ));
+            }
+            return Column(
+              children: [
+                _UpperLayout(student: GetIt.instance()),
+                _BelowLayout(bloc: _bloc)
+              ],
+            );
+          },
+        ));
   }
 }
 
 class _BelowLayout extends StatelessWidget {
-  const _BelowLayout({
-    Key? key,
-  }) : super(key: key);
+  late final ProfileBloc _bloc;
+  _BelowLayout({Key? key, required ProfileBloc bloc}) : super(key: key) {
+    _bloc = bloc;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,28 +115,40 @@ class _BelowLayout extends StatelessWidget {
                   switch (index ~/ 2) {
                     case 0:
                       return _Items(
-                          iconData: Icons.person,
-                          color: Colors.blue,
-                          title: "Thông tin cá nhân",
-                          nextRoute: "nextRoute");
+                        iconData: Icons.person,
+                        color: Colors.blue,
+                        title: "Thông tin cá nhân",
+                        callback: () {
+                          _nextRoute(context, "nextRoute");
+                        },
+                      );
                     case 1:
                       return _Items(
-                          iconData: Icons.event_available_outlined,
-                          color: Colors.red,
-                          title: "Lịch thi, sự kiện sắp tới",
-                          nextRoute: "nextRoute");
+                        iconData: Icons.event_available_outlined,
+                        color: Colors.red,
+                        title: "Lịch thi, sự kiện sắp tới",
+                        callback: () {
+                          _nextRoute(context, "nextRoute");
+                        },
+                      );
                     case 2:
                       return _Items(
-                          iconData: Icons.mail,
-                          color: Colors.orange,
-                          title: "Đang chờ phản hồi",
-                          nextRoute: "nextRoute");
+                        iconData: Icons.mail,
+                        color: Colors.orange,
+                        title: "Đang chờ phản hồi",
+                        callback: () {
+                          _nextRoute(context, "nextRoute");
+                        },
+                      );
                     default:
                       return _Items(
-                          iconData: Icons.fingerprint,
-                          color: Colors.red,
-                          title: "Cài đặt vân tay/FaceID",
-                          nextRoute: "nextRoute");
+                        iconData: Icons.fingerprint,
+                        color: Colors.red,
+                        title: "Cài đặt vân tay/FaceID",
+                        callback: () {
+                          showFingerprintDialog(context, _bloc);
+                        },
+                      );
                   }
                 },
               ),
@@ -141,14 +170,58 @@ class _BelowLayout extends StatelessWidget {
                       offset: Offset(0, 1)),
                 ]),
             child: _Items(
-                iconData: Icons.logout_rounded,
-                color: Colors.black26,
-                title: "Đăng xuất",
-                nextRoute: AppRoute.login),
+              iconData: Icons.logout_rounded,
+              color: Colors.black26,
+              title: "Đăng xuất",
+              callback: () {
+                _logout(context);
+              },
+            ),
           )
         ],
       ),
     ));
+  }
+
+  void _nextRoute(BuildContext context, String nextRoute) {}
+
+  void _logout(BuildContext context) async {
+    Widget confirmButton = TextButton(
+      child: Text("Thoát"),
+      onPressed: () {
+        Navigator.pop(context, "yes");
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      child: Text("Hủy"),
+      onPressed: () {
+        Navigator.pop(context, "no");
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Đăng xuất"),
+      content: Text("Bạn có đồng ý đăng xuất?"),
+      actions: [
+        cancelButton,
+        confirmButton,
+      ],
+    );
+
+    // show the dialog
+    final res = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+    if (res == "yes") {
+      _bloc.add(ProfileLogoutEvent());
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(AppRoute.login, (route) => false);
+    }
   }
 }
 
@@ -156,13 +229,13 @@ class _Items extends StatefulWidget {
   final IconData iconData;
   final Color color;
   final String title;
-  final String nextRoute;
+  final void Function() callback;
   const _Items(
       {Key? key,
       required this.iconData,
       required this.color,
       required this.title,
-      required this.nextRoute})
+      required this.callback})
       : super(key: key);
 
   @override
@@ -186,49 +259,7 @@ class __ItemsState extends State<_Items> {
           setState(() {
             _opacity = 1;
           });
-          if (widget.nextRoute == AppRoute.login) {
-            Widget confirmButton = TextButton(
-              child: Text("Thoát"),
-              onPressed: () {
-                Navigator.pop(context, "yes");
-              },
-            );
-
-            Widget cancelButton = TextButton(
-              child: Text("Hủy"),
-              onPressed: () {
-                Navigator.pop(context, "no");
-              },
-            );
-
-            // set up the AlertDialog
-            AlertDialog alert = AlertDialog(
-              title: Text("Đăng xuất"),
-              content: Text("Bạn có đồng ý đăng xuất?"),
-              actions: [
-                cancelButton,
-                confirmButton,
-              ],
-            );
-
-            // show the dialog
-            final res = await showDialog<String>(
-              context: context,
-              builder: (BuildContext context) {
-                return alert;
-              },
-            );
-            if (res == "yes") {
-              GetIt.instance<SharePreferencesUtils>().clearSession();
-              Hive.deleteBoxFromDisk("user");
-              Hive.deleteBoxFromDisk("schedules");
-              Hive.deleteBoxFromDisk("notifications");
-              Hive.deleteBoxFromDisk("register");
-              Hive.deleteBoxFromDisk("administrativeClassDetails");
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(AppRoute.login, (route) => false);
-            }
-          }
+          widget.callback();
           // await Navigator.of(context).pushNamed(widget.nextRoute);
         });
       },

@@ -6,7 +6,6 @@ import 'package:fakeslink/app/presentation/list_registerable_class/bloc/list_reg
 import 'package:fakeslink/app/presentation/list_registerable_class/bloc/list_registerable_class_state.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
-import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';

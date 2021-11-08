@@ -7,6 +7,7 @@ import 'package:fakeslink/app/presentation/notifications/ui/list_notification.da
 import 'package:fakeslink/app/presentation/profile/profile_screen.dart';
 import 'package:fakeslink/app/presentation/study_corner/study_corner.dart';
 import 'package:fakeslink/app/presentation/utilities/utilities.dart';
+import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _MainScreenState extends State<MainScreen> {
   late List<Widget> _screens;
   late final StreamSubscription _networkSubscription;
   late final StreamSubscription _errorSubscription;
+  late final StreamController<String> _streamController;
   String? _lastEvent;
 
   void initState() {
@@ -41,15 +43,19 @@ class _MainScreenState extends State<MainScreen> {
             context, "Lỗi kết nối", "Kiểm tra lại kết nối internet của bạn");
       }
     });
-    GetIt.instance.registerSingleton<StreamController<String>>(
-        StreamController<String>());
+    _streamController = StreamController<String>();
+    GetIt.instance
+        .registerSingleton<StreamController<String>>(_streamController);
     _errorSubscription = GetIt.instance<StreamController<String>>()
         .stream
         .asBroadcastStream()
-        .listen((event) {
-      if (event != _lastEvent) {
+        .listen((event) async {
+      if (event == "Phiên đăng nhập đã hết.") {
+        await showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoute.login, (route) => false);
+      } else if (event != _lastEvent) {
         _lastEvent = event;
-        showMyAlertDialog(context, "Đã có lỗi xảy ra", event);
       }
     });
     _screens = [
@@ -71,8 +77,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
+    print("TanKiem: dispose main");
     _networkSubscription.cancel();
     _errorSubscription.cancel();
+    _streamController.close();
     GetIt.instance.unregister<StreamController<String>>();
     super.dispose();
   }

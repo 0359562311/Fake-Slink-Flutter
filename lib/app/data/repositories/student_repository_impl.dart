@@ -23,6 +23,8 @@ class StudentRepositoryImpl extends StudentRepository {
         GetIt.instance.registerSingleton<Student>(user);
         return Success(user);
       } on DioError catch (e) {
+        if (e.response?.statusCode == 401)
+          return Error(APIFailure("Phiên đăng nhập đã hết."));
         return Error(APIFailure(e.response?.data['detail'] ?? ""));
       }
     } else {
