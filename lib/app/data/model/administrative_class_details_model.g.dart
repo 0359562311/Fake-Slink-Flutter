@@ -21,7 +21,7 @@ class AdministrativeClassDetailsModelAdapter
       lecturer: fields[0] as dynamic,
       faculty: fields[1] as dynamic,
       administrativeClassId: fields[2] as dynamic,
-      students: fields[3] as dynamic,
+      students: (fields[3] as List).cast<Student>(),
     );
   }
 

@@ -39,5 +39,18 @@ class MockAuthenticationRepository extends _i1.Mock
                   _FakeResult_0<_i5.Failure, _i6.Session>()))
           as _i4.Future<_i2.Result<_i5.Failure, _i6.Session>>);
   @override
+  _i4.Future<_i2.Result<_i5.Failure, _i6.Session>> logInWithFingerprint() =>
+      (super.noSuchMethod(Invocation.method(#logInWithFingerprint, []),
+              returnValue: Future<_i2.Result<_i5.Failure, _i6.Session>>.value(
+                  _FakeResult_0<_i5.Failure, _i6.Session>()))
+          as _i4.Future<_i2.Result<_i5.Failure, _i6.Session>>);
+  @override
+  _i4.Future<_i2.Result<_i5.Failure, void>> setUpFingerprintAuth(
+          String? password) =>
+      (super.noSuchMethod(Invocation.method(#setUpFingerprintAuth, [password]),
+              returnValue: Future<_i2.Result<_i5.Failure, void>>.value(
+                  _FakeResult_0<_i5.Failure, void>()))
+          as _i4.Future<_i2.Result<_i5.Failure, void>>);
+  @override
   String toString() => super.toString();
 }

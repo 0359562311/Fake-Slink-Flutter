@@ -44,7 +44,6 @@ class _ListResultDetailState extends State<ListResultDetail>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("TanKiem: didChangeDependencies in result_detail");
   }
 
   @override

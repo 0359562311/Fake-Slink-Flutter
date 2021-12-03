@@ -77,7 +77,6 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void dispose() {
-    print("TanKiem: dispose main");
     _networkSubscription.cancel();
     _errorSubscription.cancel();
     _streamController.close();

@@ -19,7 +19,6 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
 
   @override
   void onError(DioError err, ErrorInterceptorHandler handler) async {
-    print("in interceptor  ${err.response}");
     if (err.type == DioErrorType.connectTimeout ||
         err.type == DioErrorType.receiveTimeout ||
         err.type == DioErrorType.sendTimeout) {

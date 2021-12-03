@@ -25,7 +25,6 @@ class _NotificationTabState extends State<NotificationTab>
   @override
   void initState() {
     super.initState();
-    print("initState ${widget.type}");
     _scrollController = ScrollController()
       ..addListener(() {
         if (_scrollController.offset ==

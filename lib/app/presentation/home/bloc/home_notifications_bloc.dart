@@ -43,7 +43,6 @@ class HomeNotificationsBloc
       if (event == HomeNotificationsEvent.init) {
         if (GetIt.instance<DeviceInfo>().deviceId != null)
           OneSignal.shared.getDeviceState().then((value) {
-            print("TanKiem: ${value?.userId}");
             if (value != null)
               _createNotificationDeviceUseCase.execute(
                   GetIt.instance<DeviceInfo>().deviceId!, value.userId!);

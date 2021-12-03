@@ -72,16 +72,24 @@ class _HomeCommonItemState extends State<_HomeCommonItem> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
+    return GestureDetector(
+      onTapDown: (details) {
+        print("onPanStart");
         setState(() {
           _opacity = 0.5;
         });
+      },
+      onTapUp: (details) {
         Future.delayed(Duration(milliseconds: 200)).whenComplete(() {
-          widget.callback();
           setState(() {
             _opacity = 1;
           });
+          widget.callback();
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _opacity = 1;
         });
       },
       child: Container(
@@ -91,7 +99,8 @@ class _HomeCommonItemState extends State<_HomeCommonItem> {
               : EdgeInsets.only(right: 16, left: 8),
           padding: EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-              color: _getColor(Colors.white), borderRadius: BorderRadius.circular(6)),
+              color: _getColor(Colors.white),
+              borderRadius: BorderRadius.circular(6)),
           child: Row(
             children: [
               Container(
@@ -111,9 +120,7 @@ class _HomeCommonItemState extends State<_HomeCommonItem> {
                   child: Text(
                     widget.item.name,
                     maxLines: 2,
-                    style: TextStyle(
-                      color: _getColor(Colors.black)
-                    ),
+                    style: TextStyle(color: _getColor(Colors.black)),
                   ),
                 ),
               )

@@ -34,7 +34,6 @@ class _HomeViewState extends State<HomeView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("didchangedependencies home");
   }
 
   @override

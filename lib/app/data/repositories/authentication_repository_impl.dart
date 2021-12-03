@@ -34,7 +34,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepository {
 
   @override
   Future<Result<Failure, Session>> logInWithFingerprint() async {
-    final hasFingerprint = await LocalAuthAPI.hasFingerpint();
+    final hasFingerprint = await LocalAuthAPI.hasFingerprint();
     if (!hasFingerprint)
       return Error(PlatformFailure("Thiết bị không hỗ trợ."));
 

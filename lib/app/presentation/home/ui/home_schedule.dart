@@ -120,6 +120,7 @@ class _HomeScheduleState extends State<HomeSchedule> {
     );
   }
 }
+
 class _HeaderItem extends StatefulWidget {
   final String title;
   final int index;
@@ -141,16 +142,23 @@ class _HeaderItemState extends State<_HeaderItem> {
   double _opacity = 1;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
+    return GestureDetector(
+      onTapDown: (details) {
         setState(() {
           _opacity = 0.5;
         });
+      },
+      onTapUp: (details) async {
         Future.delayed(Duration(milliseconds: 200)).whenComplete(() {
           widget.callback();
           setState(() {
             _opacity = 1;
           });
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _opacity = 1;
         });
       },
       child: Container(
@@ -205,16 +213,23 @@ class _BodyItemState extends State<_BodyItem> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
+    return GestureDetector(
+      onTapDown: (details) {
         setState(() {
           _opacity = 0.5;
         });
+      },
+      onTapUp: (details) {
         Future.delayed(Duration(milliseconds: 200)).whenComplete(() {
           widget.callback();
           setState(() {
             _opacity = 1;
           });
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _opacity = 1;
         });
       },
       child: Column(

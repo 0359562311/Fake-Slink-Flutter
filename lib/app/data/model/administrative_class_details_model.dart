@@ -10,7 +10,10 @@ part 'administrative_class_details_model.g.dart';
 @HiveType(typeId: 31)
 class AdministrativeClassDetailsModel extends AdministrativeClassDetails {
   AdministrativeClassDetailsModel(
-      {lecturer, faculty, administrativeClassId, students})
+      {lecturer,
+      faculty,
+      administrativeClassId,
+      required List<Student> students})
       : super(
             lecturer: lecturer,
             faculty: faculty,

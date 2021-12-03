@@ -4,7 +4,7 @@ import 'package:local_auth/local_auth.dart';
 class LocalAuthAPI {
   static final _auth = LocalAuthentication();
 
-  static Future<bool> hasFingerpint() async {
+  static Future<bool> hasFingerprint() async {
     try {
       final canCheck = await _auth.canCheckBiometrics;
       if (canCheck) {

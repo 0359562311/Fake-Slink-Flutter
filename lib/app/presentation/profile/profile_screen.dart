@@ -250,17 +250,24 @@ class __ItemsState extends State<_Items> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
+    return GestureDetector(
+      onTapDown: (details) {
         setState(() {
           _opacity = 0.5;
         });
-        Future.delayed(Duration(milliseconds: 120)).whenComplete(() async {
+      },
+      onTapUp: (details) {
+        Future.delayed(Duration(milliseconds: 120)).whenComplete(() {
           setState(() {
             _opacity = 1;
           });
           widget.callback();
           // await Navigator.of(context).pushNamed(widget.nextRoute);
+        });
+      },
+      onTapCancel: () {
+        setState(() {
+          _opacity = 1;
         });
       },
       child: Padding(

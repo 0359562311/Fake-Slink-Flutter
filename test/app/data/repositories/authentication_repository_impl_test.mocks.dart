@@ -53,5 +53,19 @@ class MockAuthenticationLocalSource extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
   @override
+  _i4.Future<void> changeFingerPrintAuthType(
+          bool? b, String? username, String? password) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #changeFingerPrintAuthType, [b, username, password]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
+  @override
+  _i4.Future<Map<String, dynamic>> getFingerPrintAuthType() =>
+      (super.noSuchMethod(Invocation.method(#getFingerPrintAuthType, []),
+              returnValue:
+                  Future<Map<String, dynamic>>.value(<String, dynamic>{}))
+          as _i4.Future<Map<String, dynamic>>);
+  @override
   String toString() => super.toString();
 }
