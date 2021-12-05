@@ -99,10 +99,14 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
                 SliverToBoxAdapter(
-                  child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 16),
-                      child: HomeNotifications()),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.width / 2.4,
+                    width: double.infinity,
+                    child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 16),
+                        child: HomeNotifications()),
+                  ),
                 ),
                 SliverToBoxAdapter(
                   child: SizedBox(

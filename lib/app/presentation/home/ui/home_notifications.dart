@@ -1,4 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
+
 import 'package:fakeslink/app/domain/entities/notification.dart' as n;
 import 'package:fakeslink/app/presentation/home/bloc/home_notifications_bloc.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
@@ -15,16 +16,38 @@ class HomeNotifications extends StatefulWidget {
   _HomeNotificationsState createState() => _HomeNotificationsState();
 }
 
-class _HomeNotificationsState extends State<HomeNotifications> {
-  late HomeNotificationsBloc _bloc;
+class _HomeNotificationsState extends State<HomeNotifications>
+    with SingleTickerProviderStateMixin {
+  late final HomeNotificationsBloc _bloc;
+  late final ScrollController _scrollController;
+  int _currentIndex = 0;
+  bool _isUserInteracting = false;
+  double _itemWidth = 0;
+  late final Timer _timer;
 
   @override
   void initState() {
     super.initState();
     _bloc = GetIt.instance()..add(HomeNotificationsEvent.init);
+    _scrollController = new ScrollController();
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      if (!_isUserInteracting && _scrollController.hasClients) {
+        _currentIndex++;
+        _scrollController.animateTo(_itemWidth * _currentIndex,
+            duration: Duration(milliseconds: 250), curve: Curves.easeIn);
+      }
+    });
   }
 
-  void navigateToDetail(context, n.Notification notification) {
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _timer.cancel();
+    _bloc.close();
+    super.dispose();
+  }
+
+  void _navigateToDetail(context, n.Notification notification) {
     Navigator.of(context).pushNamed(AppRoute.notificationDetails,
         arguments: notification.details);
   }
@@ -45,55 +68,54 @@ class _HomeNotificationsState extends State<HomeNotifications> {
           return Center(child: Text("\n\nKhông có thông báo mới"));
         final notifications =
             (state as HomeNotificationsSuccessfulState).notifications;
-        return CarouselSlider(
-            items: notifications.length == 0
-                ? [Center(child: Text("Không có thông báo mới"))]
-                : notifications.map((e) {
-                    return GestureDetector(
-                      onTap: () {
-                        navigateToDetail(context, e);
-                      },
-                      child: Column(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              margin: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: Colors.blue,
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: DecorationImage(
-                                      image: AssetImage(
-                                          "assets/images/notification.png"),
-                                      fit: BoxFit.fill)),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: Text(
-                              e.details.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          )
-                        ],
-                      ),
-                    );
-                  }).toList(),
-            options: CarouselOptions(
-              height: 120,
-              aspectRatio: 16 / 10,
-              viewportFraction: 0.5,
-              initialPage: 0,
-              enableInfiniteScroll: false,
-              reverse: false,
-              autoPlay: true,
-              autoPlayInterval: Duration(seconds: 3),
-              autoPlayAnimationDuration: Duration(milliseconds: 800),
-              autoPlayCurve: Curves.fastOutSlowIn,
-              enlargeCenterPage: false,
-              disableCenter: true,
+        if (notifications.length == 0) {
+          return Center(child: Text("\n\nKhông có thông báo mới"));
+        } else {
+          _itemWidth = (MediaQuery.of(context).size.width / 2 - 16);
+          print(_itemWidth);
+          return ListView.builder(
               scrollDirection: Axis.horizontal,
-            ));
+              controller: _scrollController,
+              itemBuilder: (context, index) {
+                final e = notifications[index % notifications.length];
+                return GestureDetector(
+                  onPanStart: (_) {
+                    _isUserInteracting = true;
+                  },
+                  onTap: () {
+                    _navigateToDetail(context, e);
+                  },
+                  onPanEnd: (_) {
+                    _isUserInteracting = false;
+                  },
+                  child: Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.width / 2.4 - 70,
+                        width: MediaQuery.of(context).size.width / 2 - 32,
+                        margin: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10),
+                            image: const DecorationImage(
+                                image: AssetImage(
+                                    "assets/images/notification.png"),
+                                fit: BoxFit.fill)),
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 2 - 16,
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: Text(
+                          e.details.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              });
+        }
       },
     );
   }
