@@ -179,7 +179,8 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => GetListRegisterUseCase(getIt()));
   getIt
       .registerLazySingleton(() => GetRegisterableClassDetailsUseCase(getIt()));
-  getIt.registerLazySingleton(() => GetAdministrativeClassDetails(getIt()));
+  getIt.registerLazySingleton(
+      () => GetAdministrativeClassDetailsUseCase(getIt()));
 
   /// bloc
   getIt.registerFactory(() => ListRegisterableClassBloc(getIt()));

@@ -28,7 +28,7 @@ class _HomeNotificationsState extends State<HomeNotifications>
   @override
   void initState() {
     super.initState();
-    _bloc = GetIt.instance()..add(HomeNotificationsEvent.init);
+    _bloc = GetIt.instance()..add(HomeNotificationsInitEvent());
     _scrollController = new ScrollController();
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
       if (!_isUserInteracting && _scrollController.hasClients) {

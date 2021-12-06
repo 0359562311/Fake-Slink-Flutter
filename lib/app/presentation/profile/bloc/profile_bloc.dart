@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/use_cases/get_profile_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/set_up_fingerprint_auth_use_case.dart';
@@ -13,37 +15,45 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final SetUpFingerPrintAuthUseCase _setUpFingerPrintAuth;
 
   ProfileBloc(this._usecase, this._setUpFingerPrintAuth)
-      : super(ProfileLoadingState());
+      : super(ProfileLoadingState()) {
+    on<ProfileInitEvent>(_onInit);
+    on<ProfileLogoutEvent>(_onLogout);
+    on<ProfileSetUpFingerprintEvent>(_onSetUpFingerprint);
+  }
 
-  @override
-  Stream<ProfileState> mapEventToState(ProfileEvent event) async* {
-    if (event is ProfileInitEvent) {
-      if (GetIt.instance.isRegistered<Student>()) {
-        await Future.delayed(Duration(milliseconds: 200));
-        yield ProfileSuccessState();
-      } else {
-        final res = await _usecase.execute();
-        if (res.isSuccess())
-          yield ProfileSuccessState();
-        else
-          yield ProfileErrorState(res.getError()!.message);
-      }
-    } else if (event is ProfileLogoutEvent) {
-      GetIt.instance<SharePreferencesUtils>().clearSession();
-      Hive.deleteBoxFromDisk("user");
-      Hive.deleteBoxFromDisk("schedules");
-      Hive.deleteBoxFromDisk("notifications");
-      Hive.deleteBoxFromDisk("register");
-      Hive.deleteBoxFromDisk("administrativeClassDetails");
-    } else if (event is ProfileSetUpFingerprintEvent) {
-      yield ProfileLoadingState();
-      final res = await _setUpFingerPrintAuth.execute(event.password);
-      if (res.isError()) {
-        yield ProfileErrorState(res.getError()!.message);
-        yield ProfileSuccessState();
-      } else {
-        yield ProfileSuccessState(message: "Cài đặt thành công");
-      }
+  FutureOr<void> _onInit(
+      ProfileInitEvent event, Emitter<ProfileState> emit) async {
+    if (GetIt.instance.isRegistered<Student>()) {
+      await Future.delayed(Duration(milliseconds: 200));
+      emit(ProfileSuccessState());
+    } else {
+      final res = await _usecase.execute();
+      if (res.isSuccess())
+        emit(ProfileSuccessState());
+      else
+        emit(ProfileErrorState(res.getError()!.message));
+    }
+  }
+
+  FutureOr<void> _onLogout(
+      ProfileLogoutEvent event, Emitter<ProfileState> emit) async {
+    GetIt.instance<SharePreferencesUtils>().clearSession();
+    Hive.deleteBoxFromDisk("user");
+    Hive.deleteBoxFromDisk("schedules");
+    Hive.deleteBoxFromDisk("notifications");
+    Hive.deleteBoxFromDisk("register");
+    Hive.deleteBoxFromDisk("administrativeClassDetails");
+  }
+
+  FutureOr<void> _onSetUpFingerprint(
+      ProfileSetUpFingerprintEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoadingState());
+    final res = await _setUpFingerPrintAuth.execute(event.password);
+    if (res.isError()) {
+      emit(ProfileErrorState(res.getError()!.message));
+      emit(ProfileSuccessState());
+    } else {
+      emit(ProfileSuccessState(message: "Cài đặt thành công"));
     }
   }
 }

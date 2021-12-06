@@ -1,16 +1,12 @@
 import 'package:fakeslink/app/domain/entities/session.dart';
-import 'package:fakeslink/app/domain/repositories/authentication_repository.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-import 'login_usecase_test.mocks.dart';
+import '../repositories/generate_mock_repositories_test.mocks.dart';
 
 // import '../repositories/authentication_repository_test.dart';
-
-@GenerateMocks([AuthenticationRepository])
 void main() {
   late LogInUseCase useCase;
   late MockAuthenticationRepository mockRepo;

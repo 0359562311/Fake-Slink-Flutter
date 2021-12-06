@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fakeslink/app/domain/entities/session.dart';
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_with_fingerprint_use_case.dart';
@@ -13,32 +15,39 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LogInWithFingeprintUseCase _fingeprintUseCase;
 
   LoginBloc(this._loginUseCase, this._fingeprintUseCase)
-      : super(LoginInitState());
+      : super(LoginInitState()) {
+    on<LoginWithUsernameEvent>(_onLoginUsername);
+    on<LoginWithFingerprintEvent>(_onLoginByfingerprint);
+  }
 
-  @override
-  Stream<LoginState> mapEventToState(LoginEvent event) async* {
-    late Result result;
-    if (event is LoginWithUsernameEvent) {
-      yield LoginLoadingState();
-      result = await _loginUseCase.execute(event.username, event.password);
-    } else if (event is LoginWithFingerprintEvent) {
-      yield LoginLoadingState();
-      result = await _fingeprintUseCase.execute();
-    }
+  FutureOr<void> _onLoginUsername(
+      LoginWithUsernameEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
+    Result result = await _loginUseCase.execute(event.username, event.password);
+    _handleResult(emit, result);
+  }
 
+  FutureOr<void> _onLoginByfingerprint(
+      LoginWithFingerprintEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
+    Result result = await _fingeprintUseCase.execute();
+    _handleResult(emit, result);
+  }
+
+  void _handleResult(Emitter<LoginState> emit, Result result) async {
     if (result.isSuccess()) {
       if (GetIt.instance.isRegistered<Session>())
         await GetIt.instance.unregister<Session>();
       GetIt.instance.registerSingleton<Session>(result.getSuccess()!);
-      yield LoginSuccessfulState();
+      emit(LoginSuccessfulState());
     } else {
       final failure = result.getError()!;
       if (failure is APIFailure)
-        yield LoginFailState(failure.message);
+        emit(LoginFailState(failure.message));
       else if (failure is NetworkFailure)
-        yield LoginFailState("Kiểm tra lại kết nối Internet");
+        emit(LoginFailState("Kiểm tra lại kết nối Internet"));
       else if (failure is PlatformFailure)
-        yield LoginFailState(failure.message);
+        emit(LoginFailState(failure.message));
     }
   }
 }

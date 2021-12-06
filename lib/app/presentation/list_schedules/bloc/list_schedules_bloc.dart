@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fakeslink/app/domain/entities/schedule.dart';
 import 'package:fakeslink/app/domain/entities/schedule_item.dart';
 import 'package:fakeslink/app/domain/entities/semester.dart';
@@ -12,28 +14,13 @@ import 'list_schedule_event.dart';
 class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState> {
   late final GetListScheduleUseCase _getListScheduleUseCase;
   ListScheduleBloc(this._getListScheduleUseCase)
-      : super(ListScheduleLoadingState());
+      : super(ListScheduleLoadingState()) {
+    on<ListScheduleInitEvent>(_onInit);
+    on<ListScheduleMonthChangeEvent>(_onMonchange);
+  }
   final DateFormat _formatter = DateFormat('yyyy-MM-dd');
 
   List<Schedule> _schedules = [];
-
-  @override
-  Stream<ListScheduleState> mapEventToState(ListScheduleEvent event) async* {
-    if (event is ListScheduleInitEvent) {
-      yield ListScheduleLoadingState();
-      final res = await _getListScheduleUseCase.execute();
-      if (res.isError()) {
-        yield ListScheduleErrorState("");
-      } else {
-        _schedules = res.getSuccess()!;
-        final t = _getMapScheduleItems(event.dateTime);
-        yield ListScheduleSuccessfulState(t);
-      }
-    } else if (event is ListScheduleMonthChangeEvent) {
-      final t = _getMapScheduleItems(event.dateTime);
-      yield ListScheduleSuccessfulState(t);
-    }
-  }
 
   Map<String, List<ScheduleItem>> _getMapScheduleItems(DateTime d) {
     int month = d.month;
@@ -111,5 +98,24 @@ class ListScheduleBloc extends Bloc<ListScheduleEvent, ListScheduleState> {
       default:
         return 12;
     }
+  }
+
+  FutureOr<void> _onInit(
+      ListScheduleInitEvent event, Emitter<ListScheduleState> emit) async {
+    emit(ListScheduleLoadingState());
+    final res = await _getListScheduleUseCase.execute();
+    if (res.isError()) {
+      emit(ListScheduleErrorState(""));
+    } else {
+      _schedules = res.getSuccess()!;
+      final t = _getMapScheduleItems(event.dateTime);
+      emit(ListScheduleSuccessfulState(t));
+    }
+  }
+
+  FutureOr<void> _onMonchange(ListScheduleMonthChangeEvent event,
+      Emitter<ListScheduleState> emit) async {
+    final t = _getMapScheduleItems(event.dateTime);
+    emit(ListScheduleSuccessfulState(t));
   }
 }
