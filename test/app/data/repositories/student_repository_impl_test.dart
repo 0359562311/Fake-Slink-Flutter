@@ -18,14 +18,14 @@ void main() {
   late MockStudentLocalSource localSource;
   late MockStudentRemoteSouce remoteSource;
   late MockNetworkInfo networkInfo;
-  setUpAll(() {
+  setUp(() {
     registerDependencies();
     localSource = MockStudentLocalSource();
     remoteSource = MockStudentRemoteSouce();
     networkInfo = GetIt.instance<MockNetworkInfo>();
     repositoryImpl = new StudentRepositoryImpl(remoteSource, localSource);
   });
-  tearDownAll(() => unregisterDependencies());
+  tearDown(() => unregisterDependencies());
   group('get Profile test', () {
     test('network is on and get result', () async {
       // Arrange

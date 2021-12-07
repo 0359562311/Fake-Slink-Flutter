@@ -23,14 +23,16 @@ void main() {
   late MockNotificationLocalSource localSource;
   late MockNotificationRemoteSource remoteSource;
   late MockNetworkInfo networkInfo;
-  setUpAll(() {
+  setUp(() {
     registerDependencies();
     localSource = MockNotificationLocalSource();
     remoteSource = MockNotificationRemoteSource();
     networkInfo = GetIt.instance<MockNetworkInfo>();
     repositoryImpl = new NotificationRepositoryImpl(remoteSource, localSource);
   });
-  tearDownAll(() => unregisterDependencies());
+  tearDown(() {
+    unregisterDependencies();
+  });
 
   group('get notifications', () {
     test('when network is on and get notifications successfully', () async {
@@ -76,18 +78,17 @@ void main() {
 
   test('create notification device', () async {
     // Arrange
-
+    when(networkInfo.isConnecting).thenReturn(true);
     // Action
     await repositoryImpl.createNotificationDevice("deviceId", "oneSignalId");
     // Assert
     verify(remoteSource.createNotificationDevice(any, any));
     verifyZeroInteractions(localSource);
-    verifyNoMoreInteractions(remoteSource);
   });
 
   test('delete notification device', () async {
     // Arrange
-
+    when(networkInfo.isConnecting).thenReturn(true);
     // Action
     await repositoryImpl.deleteNotificationDevice("deviceId");
     // Assert
@@ -98,7 +99,7 @@ void main() {
 
   test('mark as seen', () async {
     // Arrange
-
+    when(networkInfo.isConnecting).thenReturn(true);
     // Action
     await repositoryImpl.markeAsRead(MockNotificationDetails());
     // Assert

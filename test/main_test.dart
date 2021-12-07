@@ -57,6 +57,7 @@ void unregisterDependencies() {
   GetIt.I.unregister<DeviceInfo>();
   GetIt.I.unregister<MockDeviceInfo>();
   GetIt.I.unregister<MockSharePreferencesUtils>();
+  GetIt.I.unregister<SharePreferencesUtils>();
   GetIt.I.unregister<HiveInterface>();
   GetIt.I.unregister<MockHiveInterface>();
   GetIt.I.unregister<Box>();
