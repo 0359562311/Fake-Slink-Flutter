@@ -30,6 +30,8 @@ abstract class Student extends HiveObject {
   String updateAt;
   @HiveField(13)
   double gpa;
+  @HiveField(14)
+  String email;
 
   Student(
       {required this.studentId,
@@ -45,5 +47,6 @@ abstract class Student extends HiveObject {
       required this.createAt,
       required this.gpa,
       required this.updateAt,
+      required this.email,
       administrativeClass});
 }

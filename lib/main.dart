@@ -33,7 +33,11 @@ import 'package:fakeslink/app/domain/use_cases/get_registerable_class_details_us
 import 'package:fakeslink/app/domain/use_cases/login_usecase.dart';
 import 'package:fakeslink/app/domain/use_cases/login_with_fingerprint_use_case.dart';
 import 'package:fakeslink/app/domain/use_cases/set_up_fingerprint_auth_use_case.dart';
+import 'package:fakeslink/app/domain/use_cases/update_avatar_usecase.dart';
+import 'package:fakeslink/app/domain/use_cases/update_profile_usecase.dart';
 import 'package:fakeslink/app/presentation/administrative_class/administrative_screen.dart';
+import 'package:fakeslink/app/presentation/edit_profile/bloc/edit_profile_bloc.dart';
+import 'package:fakeslink/app/presentation/edit_profile/ui/edit_profile.dart';
 import 'package:fakeslink/app/presentation/list_schedules/widget/list_schedules.dart';
 import 'package:fakeslink/app/presentation/login/ui/login_screen.dart';
 import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
@@ -173,6 +177,8 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => LogInWithFingeprintUseCase(getIt()));
   getIt.registerLazySingleton(() => CreateNotificationDeviceUseCase(getIt()));
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt()));
+  getIt.registerLazySingleton(() => UpdateProfileUseCase(getIt()));
+  getIt.registerLazySingleton(() => UpdateAvatarUseCase(getIt()));
   getIt.registerLazySingleton(() => SetUpFingerPrintAuthUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListScheduleUseCase(getIt()));
   getIt.registerLazySingleton(() => GetListNotificationsUseCase(getIt()));
@@ -193,6 +199,7 @@ Future<void> init() async {
   getIt.registerFactory(() => ResultBloc(getIt()));
   getIt.registerFactory(() => RegisterableClassDetailsBloc(getIt()));
   getIt.registerFactory(() => ProfileBloc(getIt(), getIt()));
+  getIt.registerFactory(() => EditProfileBloc(getIt(), getIt()));
 }
 
 class MyApp extends StatefulWidget {
@@ -275,6 +282,7 @@ class _MyAppState extends State<MyApp> {
               AdministrativeClassScreen(),
           AppRoute.listRegisterableClass: (context) =>
               ListRegisterableClassScreen(),
+              AppRoute.editProfile: (_) => EditProfileScreen()
         },
         onGenerateRoute: (settings) {
           if (settings.name == AppRoute.registerableClassDetails) {

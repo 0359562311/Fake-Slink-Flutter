@@ -30,6 +30,7 @@ class StudentModelAdapter extends TypeAdapter<StudentModel> {
       phoneNumber: fields[10] as dynamic,
       createAt: fields[11] as dynamic,
       gpa: fields[13] as dynamic,
+      email: fields[14] as dynamic,
       updateAt: fields[12] as dynamic,
     );
   }
@@ -37,7 +38,7 @@ class StudentModelAdapter extends TypeAdapter<StudentModel> {
   @override
   void write(BinaryWriter writer, StudentModel obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(1)
       ..write(obj.administrativeClass)
       ..writeByte(0)
@@ -65,7 +66,9 @@ class StudentModelAdapter extends TypeAdapter<StudentModel> {
       ..writeByte(12)
       ..write(obj.updateAt)
       ..writeByte(13)
-      ..write(obj.gpa);
+      ..write(obj.gpa)
+      ..writeByte(14)
+      ..write(obj.email);
   }
 
   @override

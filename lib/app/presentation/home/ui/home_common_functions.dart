@@ -74,7 +74,6 @@ class _HomeCommonItemState extends State<_HomeCommonItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTapDown: (details) {
-        print("onPanStart");
         setState(() {
           _opacity = 0.5;
         });

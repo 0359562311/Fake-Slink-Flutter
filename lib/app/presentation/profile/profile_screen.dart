@@ -125,7 +125,7 @@ class _BelowLayout extends StatelessWidget {
                         color: Colors.blue,
                         title: "Thông tin cá nhân",
                         callback: () {
-                          _nextRoute(context, "nextRoute");
+                          _nextRoute(context, AppRoute.editProfile);
                         },
                       );
                     case 1:
@@ -189,7 +189,9 @@ class _BelowLayout extends StatelessWidget {
     ));
   }
 
-  void _nextRoute(BuildContext context, String nextRoute) {}
+  void _nextRoute(BuildContext context, String nextRoute) {
+    Navigator.of(context).pushNamed(nextRoute);
+  }
 
   void _logout(BuildContext context) async {
     Widget confirmButton = TextButton(

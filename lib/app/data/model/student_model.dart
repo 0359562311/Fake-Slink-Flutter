@@ -24,6 +24,7 @@ class StudentModel extends Student {
       phoneNumber,
       createAt,
       gpa,
+      email,
       updateAt})
       : super(
             studentId: studentId,
@@ -38,6 +39,7 @@ class StudentModel extends Student {
             phoneNumber: phoneNumber,
             createAt: createAt,
             updateAt: updateAt,
+            email: email,
             gpa: gpa);
 
   factory StudentModel.fromJson(Map<String, dynamic> json) {
@@ -56,6 +58,7 @@ class StudentModel extends Student {
         phoneNumber: json['phoneNumber'],
         createAt: json['createAt'],
         updateAt: json['updateAt'],
+        email: json['email'],
         gpa: json['gpa']);
   }
 

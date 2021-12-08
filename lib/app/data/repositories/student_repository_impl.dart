@@ -37,24 +37,33 @@ class StudentRepositoryImpl extends StudentRepository {
   }
 
   @override
-  Future<Result<Failure, Student>> updateProfile(
-      File? avatar, String cover, String address, String phoneNumber) async {
+  Future<Result<Failure, Student>> updateProfile(String address, String phoneNumber) async {
     if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
-        final user = await _remoteSource.updateProfile(
-            avatar != null ? await _remoteSource.updateAvatar(avatar) : null , cover, address, phoneNumber);
+        final user = await _remoteSource.updateProfile(address, phoneNumber);
         _localSource.cacheUser(user);
         if (GetIt.instance.isRegistered<Student>())
           GetIt.instance.unregister<Student>();
         GetIt.instance.registerSingleton<Student>(user);
         return Success(user);
       } on DioError catch (e) {
-        return Error(APIFailure(e.response?.data['detail'] ?? ""));
-      } on FirebaseException {
-        return Error(APIFailure("Không thể cập nhật ảnh đại diện"));
-      }
+        return Error(APIFailure(e.response?.data['detail'].toString() ?? ""));
+      } 
     } else {
       return Error(NetworkFailure());
+    }
+  }
+
+  @override
+  Future<Result<Failure, Student>> updateAvatar(File file) async {
+    try {
+      final user = await _remoteSource.updateAvatar(file);
+      if (GetIt.instance.isRegistered<Student>())
+          GetIt.instance.unregister<Student>();
+        GetIt.instance.registerSingleton<Student>(user);
+      return Success(user);
+    } on Exception catch (e) {
+      return Error(APIFailure("Không thể cập nhật ảnh đại diện"));
     }
   }
 }

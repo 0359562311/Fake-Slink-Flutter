@@ -7,4 +7,5 @@ abstract class AppRoute {
   static const String administrativeClass = "/administrativeClass";
   static const String listRegisterableClass = "/listRegisterableClass";
   static const String registerableClassDetails = "/registerableClassDetails";
+  static const String editProfile = "/editProfile";
 }

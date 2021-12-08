@@ -13,21 +13,22 @@ class StudentRemoteSouce {
       .get(APIPath.me)
       .then((value) => StudentModel.fromJson(value.data));
 
-  Future<StudentModel> updateProfile(
-      String? avatar, String cover, String address, String phoneNumber) async {
+  Future<StudentModel> updateProfile(String address, String phoneNumber) async {
     final res = await GetIt.instance<Dio>().put(APIPath.me, data: {
-      if(avatar != null) "avatar": avatar,
-      "cover": cover,
-      "address": address,
+      // "address": address,
       "phoneNumber": phoneNumber
     });
     return StudentModel.fromJson(res.data);
   }
 
-  Future<String> updateAvatar(File file) async {
+  Future<StudentModel> updateAvatar(File file) async {
     final firebaseStorage = FirebaseStorage.instance;
     await firebaseStorage.ref("avatar/${GetIt.I<Student>().id}.png").putFile(file);
-    return firebaseStorage.ref("avatar/${GetIt.I<Student>().id}.png").getDownloadURL();
+    final url = await firebaseStorage.ref("avatar/${GetIt.I<Student>().id}.png").getDownloadURL();
+    final res = await GetIt.instance<Dio>().put(APIPath.me, data: {
+      "avatar": url
+    });
+    return StudentModel.fromJson(res.data);
   }
 }
 

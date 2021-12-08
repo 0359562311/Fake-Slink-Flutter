@@ -79,30 +79,30 @@ void main() {
   test('update profile successful', () async {
     // Arrange
     when(networkInfo.isConnecting).thenReturn(true);
-    when(remoteSource.updateProfile(any, any, any, any))
+    when(remoteSource.updateProfile(any, any))
         .thenAnswer((realInvocation) async => MockStudentModel());
     // Action
     final res = await repositoryImpl.updateProfile(
-        any, "cover", "address", "phoneNumber");
+        "address", "phoneNumber");
     // Assert
     expect(res.isSuccess(), true);
-    verify(remoteSource.updateProfile(any, any, any, any)).called(1);
+    verify(remoteSource.updateProfile(any, any)).called(1);
     verifyNoMoreInteractions(remoteSource);
   });
 
   test('update profile fail on making request', () async {
     // Arrange
     when(networkInfo.isConnecting).thenReturn(true);
-    when(remoteSource.updateProfile(any, any, any, any))
+    when(remoteSource.updateProfile(any,any))
         .thenThrow(DioError(requestOptions: RequestOptions(path: "")));
     // Action
     final res = await repositoryImpl.updateProfile(
-        any, "cover", "address", "phoneNumber");
+        "address", "phoneNumber");
     // Assert
     expect(res.isError(), true);
     expect(res.getError(), TypeMatcher<APIFailure>());
     verifyZeroInteractions(localSource);
-    verify(remoteSource.updateProfile(any, any, any, any));
+    verify(remoteSource.updateProfile(any, any));
     verifyNoMoreInteractions(remoteSource);
   });
 }

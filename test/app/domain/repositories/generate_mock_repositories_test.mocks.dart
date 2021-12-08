@@ -3,7 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i4;
-import 'dart:io';
+import 'dart:io' as _i18;
 
 import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart'
     as _i6;
@@ -202,13 +202,16 @@ class MockStudentRepository extends _i1.Mock implements _i16.StudentRepository {
           as _i4.Future<_i2.Result<_i5.Failure, _i17.Student>>);
   @override
   _i4.Future<_i2.Result<_i5.Failure, _i17.Student>> updateProfile(
-          File? avatar,
-          String? cover,
-          String? address,
-          String? phoneNumber) =>
+          String? address, String? phoneNumber) =>
       (super.noSuchMethod(
-              Invocation.method(
-                  #updateProfile, [avatar, cover, address, phoneNumber]),
+              Invocation.method(#updateProfile, [address, phoneNumber]),
+              returnValue: Future<_i2.Result<_i5.Failure, _i17.Student>>.value(
+                  _FakeResult_0<_i5.Failure, _i17.Student>()))
+          as _i4.Future<_i2.Result<_i5.Failure, _i17.Student>>);
+  @override
+  _i4.Future<_i2.Result<_i5.Failure, _i17.Student>> updateAvatar(
+          _i18.File? file) =>
+      (super.noSuchMethod(Invocation.method(#updateAvatar, [file]),
               returnValue: Future<_i2.Result<_i5.Failure, _i17.Student>>.value(
                   _FakeResult_0<_i5.Failure, _i17.Student>()))
           as _i4.Future<_i2.Result<_i5.Failure, _i17.Student>>);

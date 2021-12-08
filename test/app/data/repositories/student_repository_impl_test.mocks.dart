@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i5;
+import 'dart:io' as _i6;
 
 import 'package:fakeslink/app/data/model/administrative_class_model.dart'
     as _i3;
@@ -39,11 +40,16 @@ class MockStudentRemoteSouce extends _i1.Mock
           returnValue: Future<_i2.StudentModel>.value(_FakeStudentModel_0()))
       as _i5.Future<_i2.StudentModel>);
   @override
-  _i5.Future<_i2.StudentModel> updateProfile(String? avatar, String? cover,
+  _i5.Future<_i2.StudentModel> updateProfile(
           String? address, String? phoneNumber) =>
       (super.noSuchMethod(
-              Invocation.method(
-                  #updateProfile, [avatar, cover, address, phoneNumber]),
+              Invocation.method(#updateProfile, [address, phoneNumber]),
+              returnValue:
+                  Future<_i2.StudentModel>.value(_FakeStudentModel_0()))
+          as _i5.Future<_i2.StudentModel>);
+  @override
+  _i5.Future<_i2.StudentModel> updateAvatar(_i6.File? file) =>
+      (super.noSuchMethod(Invocation.method(#updateAvatar, [file]),
               returnValue:
                   Future<_i2.StudentModel>.value(_FakeStudentModel_0()))
           as _i5.Future<_i2.StudentModel>);
@@ -165,6 +171,14 @@ class MockStudentModel extends _i1.Mock implements _i2.StudentModel {
   @override
   set gpa(double? _gpa) => super.noSuchMethod(Invocation.setter(#gpa, _gpa),
       returnValueForMissingStub: null);
+  @override
+  String get email =>
+      (super.noSuchMethod(Invocation.getter(#email), returnValue: '')
+          as String);
+  @override
+  set email(String? _email) =>
+      super.noSuchMethod(Invocation.setter(#email, _email),
+          returnValueForMissingStub: null);
   @override
   bool get isInBox =>
       (super.noSuchMethod(Invocation.getter(#isInBox), returnValue: false)

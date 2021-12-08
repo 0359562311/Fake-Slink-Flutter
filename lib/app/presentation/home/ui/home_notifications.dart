@@ -72,7 +72,6 @@ class _HomeNotificationsState extends State<HomeNotifications>
           return Center(child: Text("\n\nKhông có thông báo mới"));
         } else {
           _itemWidth = (MediaQuery.of(context).size.width / 2 - 16);
-          print(_itemWidth);
           return ListView.builder(
               scrollDirection: Axis.horizontal,
               controller: _scrollController,
