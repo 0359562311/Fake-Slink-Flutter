@@ -3,6 +3,7 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i4;
+import 'dart:io';
 
 import 'package:fakeslink/app/domain/entities/administrative_class_detail.dart'
     as _i6;
@@ -201,7 +202,7 @@ class MockStudentRepository extends _i1.Mock implements _i16.StudentRepository {
           as _i4.Future<_i2.Result<_i5.Failure, _i17.Student>>);
   @override
   _i4.Future<_i2.Result<_i5.Failure, _i17.Student>> updateProfile(
-          String? avatar,
+          File? avatar,
           String? cover,
           String? address,
           String? phoneNumber) =>

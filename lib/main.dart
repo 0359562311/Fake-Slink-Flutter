@@ -42,6 +42,7 @@ import 'package:fakeslink/app/presentation/profile/bloc/profile_bloc.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
@@ -74,7 +75,7 @@ import 'core/utils/share_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  await Firebase.initializeApp();
   Directory? appDocDir = await getExternalStorageDirectory();
   String appDocPath = appDocDir?.path ?? "";
   Hive
@@ -123,8 +124,8 @@ Future<void> init() async {
 
   var options = BaseOptions(
       baseUrl: 'http://192.168.0.101:8000',
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: 60000,
+      receiveTimeout: 60000,
       responseType: ResponseType.json);
 
   getIt.registerSingleton(Dio(options)

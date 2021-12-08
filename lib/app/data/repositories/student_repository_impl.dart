@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:fakeslink/app/data/sources/student_sources.dart';
 import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/repositories/student_repository.dart';
 import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -35,11 +38,11 @@ class StudentRepositoryImpl extends StudentRepository {
 
   @override
   Future<Result<Failure, Student>> updateProfile(
-      String avatar, String cover, String address, String phoneNumber) async {
+      File? avatar, String cover, String address, String phoneNumber) async {
     if (GetIt.instance<NetworkInfo>().isConnecting) {
       try {
         final user = await _remoteSource.updateProfile(
-            avatar, cover, address, phoneNumber);
+            avatar != null ? await _remoteSource.updateAvatar(avatar) : null , cover, address, phoneNumber);
         _localSource.cacheUser(user);
         if (GetIt.instance.isRegistered<Student>())
           GetIt.instance.unregister<Student>();
@@ -47,6 +50,8 @@ class StudentRepositoryImpl extends StudentRepository {
         return Success(user);
       } on DioError catch (e) {
         return Error(APIFailure(e.response?.data['detail'] ?? ""));
+      } on FirebaseException {
+        return Error(APIFailure("Không thể cập nhật ảnh đại diện"));
       }
     } else {
       return Error(NetworkFailure());

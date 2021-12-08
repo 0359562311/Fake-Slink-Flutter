@@ -83,7 +83,7 @@ void main() {
         .thenAnswer((realInvocation) async => MockStudentModel());
     // Action
     final res = await repositoryImpl.updateProfile(
-        "avatar", "cover", "address", "phoneNumber");
+        any, "cover", "address", "phoneNumber");
     // Assert
     expect(res.isSuccess(), true);
     verify(remoteSource.updateProfile(any, any, any, any)).called(1);
@@ -97,7 +97,7 @@ void main() {
         .thenThrow(DioError(requestOptions: RequestOptions(path: "")));
     // Action
     final res = await repositoryImpl.updateProfile(
-        "avatar", "cover", "address", "phoneNumber");
+        any, "cover", "address", "phoneNumber");
     // Assert
     expect(res.isError(), true);
     expect(res.getError(), TypeMatcher<APIFailure>());

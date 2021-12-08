@@ -45,6 +45,7 @@ class HomeNotificationsBloc
       Emitter<HomeNotificationsState> emit) async {
     if (GetIt.instance<DeviceInfo>().deviceId != null)
       OneSignal.shared.getDeviceState().then((value) {
+        print("TanKiem: onesignal id: ${value?.userId}");
         if (value != null)
           _createNotificationDeviceUseCase.execute(
               GetIt.instance<DeviceInfo>().deviceId!, value.userId!);
