@@ -12,11 +12,14 @@ void showFingerprintDialog(BuildContext context, ProfileBloc bloc) {
     barrierColor: Colors.black.withOpacity(0.5),
     transitionDuration: Duration(milliseconds: 350),
     context: context,
-    pageBuilder: (_, __, ___) {
+    pageBuilder: (context, __, ___) {
+      print("TanKiem: resize on general Dialog");
       return Align(
-        alignment: Alignment.center,
+        alignment: Alignment.bottomCenter,
         child: Container(
-          height: 300,
+          margin: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom + 24),
+          height: 150,
           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -51,7 +54,7 @@ void showFingerprintDialog(BuildContext context, ProfileBloc bloc) {
               ],
             ),
           ),
-          margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
+          // margin: EdgeInsets.only(bottom: 50, left: 12, right: 12),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(40),

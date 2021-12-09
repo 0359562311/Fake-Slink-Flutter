@@ -53,27 +53,30 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     int? res = await showModalBottomSheet<int>(
         context: context,
         builder: (context) {
-          return Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context, 1);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Text("Xem ảnh đại diện"),
+          return SizedBox(
+            height: 100,
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context, 1);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text("Xem ảnh đại diện"),
+                  ),
                 ),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context, 2);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Text("Đổi ảnh đại diện"),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context, 2);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Text("Đổi ảnh đại diện"),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
         shape: RoundedRectangleBorder(
@@ -82,10 +85,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 topRight: const Radius.circular(20))));
 
     if (res == 1) {
-      showDialog(
+      showGeneralDialog(
           context: context,
-          builder: (context) => student.avatar == null ? Image.asset("assets/images/user.jpg")
-                                : Image.network(student.avatar!));
+          barrierLabel: "Barrier",
+          barrierDismissible: true,
+          barrierColor: Colors.black.withOpacity(0.5),
+          transitionDuration: Duration(milliseconds: 350),
+          pageBuilder: (context, _, __) => student.avatar == null
+              ? Image.asset("assets/images/user.jpg")
+              : Image.network(student.avatar!));
     } else if (res == 2) {
       final ImagePicker _picker = ImagePicker();
       // Pick an image
@@ -119,7 +127,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             showMyAlertDialog(context, "Thành công", "Thay đổi thành công");
           }
         },
-        listenWhen: (previous, current) => current is EditProfileErrorState || current is EditProfileSuccessfulState,
+        listenWhen: (previous, current) =>
+            current is EditProfileErrorState ||
+            current is EditProfileSuccessfulState,
         buildWhen: (previous, current) => !(current is EditProfileErrorState),
         builder: (context, state) {
           if (state is EditProfileLoadingState) return LoadingWidget();
@@ -157,8 +167,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ]),
                           child: CircleAvatar(
                             backgroundImage: (student.avatar == null
-                                ? AssetImage("assets/images/user.jpg")
-                                : NetworkImage(student.avatar!)) as ImageProvider,
+                                    ? AssetImage("assets/images/user.jpg")
+                                    : NetworkImage(student.avatar!))
+                                as ImageProvider,
                             radius: 41,
                           ),
                         ),
@@ -216,8 +227,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           },
                           decoration: _defaultInputDecoration.copyWith(
                               labelText: "Số điện thoại",
-                              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: AppColor.red))
-                              )),
+                              enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: AppColor.red)))),
                       const SizedBox(
                         height: 16,
                       ),
@@ -233,7 +245,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(AppColor.red)),
                   onPressed: () {
-                    if ((_formKey.currentState?.validate() ?? false) && _phoneNumberController.text != student.phoneNumber ) {
+                    if ((_formKey.currentState?.validate() ?? false) &&
+                        _phoneNumberController.text != student.phoneNumber) {
                       _bloc.add(
                           EditProfileIn4Event(_phoneNumberController.text));
                     }

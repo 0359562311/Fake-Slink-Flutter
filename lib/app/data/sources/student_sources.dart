@@ -23,11 +23,14 @@ class StudentRemoteSouce {
 
   Future<StudentModel> updateAvatar(File file) async {
     final firebaseStorage = FirebaseStorage.instance;
-    await firebaseStorage.ref("avatar/${GetIt.I<Student>().id}.png").putFile(file);
-    final url = await firebaseStorage.ref("avatar/${GetIt.I<Student>().id}.png").getDownloadURL();
-    final res = await GetIt.instance<Dio>().put(APIPath.me, data: {
-      "avatar": url
-    });
+    await firebaseStorage
+        .ref("avatar/${GetIt.I<Student>().id}.png")
+        .putFile(file);
+    final url = await firebaseStorage
+        .ref("avatar/${GetIt.I<Student>().id}.png")
+        .getDownloadURL();
+    final res =
+        await GetIt.instance<Dio>().put(APIPath.me, data: {"avatar": url});
     return StudentModel.fromJson(res.data);
   }
 }
