@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 class MyBottomBar extends StatefulWidget {
   final Function(int) onChange;
-  const MyBottomBar({Key? key, required this.onChange}) : super(key: key);
+  final double bottomInset;
+  const MyBottomBar({Key? key, required this.onChange, required this.bottomInset}) : super(key: key);
   @override
   _MyBottomBarState createState() => _MyBottomBarState();
 }
@@ -76,7 +77,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
         Positioned(
           bottom: 0,
           left: 0,
-          height: 60,
+          height: 60 + widget.bottomInset,
           width: size.width,
           child: Stack(
             children: [
@@ -84,7 +85,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                 top: 0,
                 left: 0,
                 width: size.width,
-                height: 60,
+                height: 60 + widget.bottomInset,
                 child: AnimatedBuilder(
                   animation: _edgeAnimation,
                   builder: (context, child) => CustomPaint(
@@ -97,7 +98,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
                   top: 0,
                   left: 0,
                   width: size.width,
-                  height: 60,
+                  height: 60 + widget.bottomInset,
                   child: Row(
                       children: List.generate(items.length, (i) => InkWell(
                         onTap: (){
@@ -136,7 +137,7 @@ class _MyBottomBarState extends State<MyBottomBar> with TickerProviderStateMixin
           ),
         ),
         Positioned(
-          bottom: -30,
+          bottom: -30 + widget.bottomInset,
           left: 0,
           width: size.width,
           child: Row(

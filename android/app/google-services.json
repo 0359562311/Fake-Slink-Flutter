@@ -29,6 +29,13 @@
             {
               "client_id": "497561287311-44s4nqpq45u2kflmnbq7fkjtfpm164ab.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "497561287311-d9pvs8m70htrf7ouqno0l71ijrilifm8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.tankiem.fakeslink"
+              }
             }
           ]
         }
