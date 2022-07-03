@@ -1,7 +1,6 @@
 import 'package:fakeslink/app/presentation/profile/bloc/profile_bloc.dart';
 import 'package:fakeslink/app/presentation/profile/bloc/profile_event.dart';
 import 'package:fakeslink/core/const/app_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void showFingerprintDialog(BuildContext context, ProfileBloc bloc) {

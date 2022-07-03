@@ -83,7 +83,7 @@ class AuthenticationInterceptor extends InterceptorsWrapper {
         }
       });
     } else {
-      err.response?.data = err.response?.data['data'];
+      if(err.response?.data is Map) err.response?.data = err.response?.data['data'];
       handler.next(err);
     }
   }

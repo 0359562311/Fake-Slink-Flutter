@@ -24,17 +24,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       LoginWithUsernameEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
     Result result = await _loginUseCase.execute(event.username, event.password);
-    _handleResult(emit, result);
+    return await _handleResult(emit, result);
   }
 
   FutureOr<void> _onLoginByfingerprint(
       LoginWithFingerprintEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
     Result result = await _fingeprintUseCase.execute();
-    _handleResult(emit, result);
+    return await _handleResult(emit, result);
   }
 
-  void _handleResult(Emitter<LoginState> emit, Result result) async {
+  Future _handleResult(Emitter<LoginState> emit, Result result) async {
     if (result.isSuccess()) {
       if (GetIt.instance.isRegistered<Session>())
         await GetIt.instance.unregister<Session>();

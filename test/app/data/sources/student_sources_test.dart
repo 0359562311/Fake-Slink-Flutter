@@ -49,6 +49,7 @@ void main() {
               "https://i.pinimg.com/originals/5b/b9/59/5bb95935defd974fa87b44eaa8ed9bcd.jpg",
           "gender": "Male",
           "role": "Student",
+          "email": "anhtanhangxom@gmail.com",
           "phoneNumber": "0359562311",
           "createAt": "2021-08-17T06:19:27.424211+07:00",
           "updateAt": "2021-08-22T21:32:58.833699+07:00"

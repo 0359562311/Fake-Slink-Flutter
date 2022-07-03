@@ -32,8 +32,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   FutureOr<void> _onInit(
       NotificationInitEvent event, Emitter<NotificationState> emit) async {
     if (!(_isLoading[event.type] ?? false)) {
-      if (event is NotificationInitEvent)
-        emit(NotificationLoadingState(event.type));
+      emit(NotificationLoadingState(event.type));
       final res = await _listNotificationsUseCase
           .execute(0, event.type)
           .whenComplete(() {

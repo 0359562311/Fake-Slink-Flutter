@@ -7,7 +7,6 @@ import 'package:fakeslink/core/const/app_colors.dart';
 import 'package:fakeslink/core/const/app_routes.dart';
 import 'package:fakeslink/core/custom_widgets/custom_dialog.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
@@ -110,6 +109,7 @@ class _LoginState extends State<Login> {
                               if (value == null || value.isEmpty) {
                                 return "Không được bỏ trống";
                               }
+                              return null;
                             },
                             decoration: InputDecoration(
                                 prefixIcon: Icon(
@@ -153,6 +153,7 @@ class _LoginState extends State<Login> {
                                   value.isEmpty ||
                                   value.length < 8)
                                 return "Mật khẩu phải có ít nhất 8 ký tự";
+                              return null;
                             },
                             decoration: InputDecoration(
                               prefixIcon: Icon(

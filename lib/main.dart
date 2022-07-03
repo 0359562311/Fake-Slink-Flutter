@@ -255,7 +255,7 @@ class _MyAppState extends State<MyApp> {
         SystemUiOverlayStyle(statusBarColor: Colors.red[900]));
     return NotificationListener<OverscrollIndicatorNotification>(
       onNotification: (overscroll) {
-        overscroll.disallowGlow();
+        overscroll.disallowIndicator();
         return true;
       },
       child: MaterialApp(
@@ -291,6 +291,7 @@ class _MyAppState extends State<MyApp> {
                       id: settings.arguments as int,
                     ));
           }
+          return null;
         },
       ),
     );

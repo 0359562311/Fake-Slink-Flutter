@@ -6,7 +6,6 @@ import 'package:fakeslink/app/domain/entities/student.dart';
 import 'package:fakeslink/app/domain/repositories/student_repository.dart';
 import 'package:fakeslink/core/architecture/failure.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -62,7 +61,7 @@ class StudentRepositoryImpl extends StudentRepository {
           GetIt.instance.unregister<Student>();
         GetIt.instance.registerSingleton<Student>(user);
       return Success(user);
-    } on Exception catch (e) {
+    } on Exception catch (_) {
       return Error(APIFailure("Không thể cập nhật ảnh đại diện"));
     }
   }

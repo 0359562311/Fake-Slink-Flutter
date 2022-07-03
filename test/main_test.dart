@@ -20,6 +20,7 @@ import 'main_test.mocks.dart';
   Box
 ])
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(registerDependencies);
   tearDownAll(unregisterDependencies);
 }
