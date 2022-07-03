@@ -29,11 +29,11 @@ class _HomeNotificationsState extends State<HomeNotifications>
     super.initState();
     _bloc = GetIt.instance()..add(HomeNotificationsInitEvent());
     _scrollController = new ScrollController();
-    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+    _timer = Timer.periodic(Duration(seconds: 3), (_) {
       if (!_isUserInteracting && _scrollController.hasClients) {
         _currentIndex++;
         _scrollController.animateTo(_itemWidth * _currentIndex,
-            duration: Duration(milliseconds: 250), curve: Curves.easeIn);
+            duration: Duration(milliseconds: 350), curve: Curves.linear);
       }
     });
   }

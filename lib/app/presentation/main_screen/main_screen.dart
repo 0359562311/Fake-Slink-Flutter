@@ -105,13 +105,14 @@ class _MainScreenState extends State<MainScreen> {
             bottom: 0,
             left: 0,
             width: MediaQuery.of(context).size.width,
-            height: 110,
+            height: 110 + MediaQuery.of(context).padding.bottom,
             child: MyBottomBar(
               onChange: (index) {
                 setState(() {
                   _index = index;
                 });
               },
+              bottomInset: MediaQuery.of(context).padding.bottom,
             ),
           )
         ]),

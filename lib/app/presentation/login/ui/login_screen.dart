@@ -157,109 +157,151 @@ class _LoginState extends State<Login> {
                             },
                             decoration: InputDecoration(
                               prefixIcon: Icon(
-                                Icons.lock,
-                                color: Colors.grey[400]!,
+                                Icons.person_pin,
+                                color: Colors.grey[400],
                                 size: 23,
                               ),
-                              suffixIcon: showPassword
-                                  ? IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          showPassword = false;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.visibility_off,
-                                        color: Colors.grey[500]!,
-                                        size: 23,
-                                      ),
-                                    )
-                                  : IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          showPassword = true;
-                                        });
-                                      },
-                                      icon: Icon(
-                                        Icons.remove_red_eye,
-                                        color: Colors.grey[500]!,
-                                      ),
-                                    ),
-                              labelText: 'Mật khẩu',
-                              labelStyle:
-                                  TextStyle(fontSize: 15, color: Colors.black),
-                              hintText: 'Mật khẩu',
-                              alignLabelWithHint: false,
+                              labelText: 'Tài khoản',
+                              labelStyle: TextStyle(
+                                  fontSize: 15, color: Colors.black),
+                              alignLabelWithHint: true,
+                              hintText: 'Tài khoản',
                               hintStyle: TextStyle(
                                   fontSize: 15, color: Colors.grey[400]!),
                               errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.red[900]!)),
                               focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.red),
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.red[900]!)),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      BorderSide(color: Colors.red[900]!)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.red[900]!)),
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
-                                  borderSide:
-                                      BorderSide(color: Colors.grey[400]!)),
+                                  borderSide: BorderSide(
+                                      width: 1, color: Colors.grey[400]!))),
+                        ),
+                      ),
+                      //Password
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        child: TextFormField(
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value.length < 8)
+                              return "Mật khẩu phải có ít nhất 8 ký tự";
+                          },
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey[400]!,
+                              size: 23,
                             ),
-                            obscureText: showPassword ? false : true,
+                            suffixIcon: showPassword
+                                ? IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        showPassword = false;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.visibility_off,
+                                      color: Colors.grey[500]!,
+                                      size: 23,
+                                    ),
+                                  )
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        showPassword = true;
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.remove_red_eye,
+                                      color: Colors.grey[500]!,
+                                    ),
+                                  ),
+                            labelText: 'Mật khẩu',
+                            labelStyle:
+                                TextStyle(fontSize: 15, color: Colors.black),
+                            hintText: 'Mật khẩu',
+                            alignLabelWithHint: false,
+                            hintStyle: TextStyle(
+                                fontSize: 15, color: Colors.grey[400]!),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide:
+                                    BorderSide(color: Colors.red[900]!)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide:
+                                    BorderSide(color: Colors.grey[400]!)),
+                          ),
+                          obscureText: showPassword ? false : true,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 20, horizontal: 20),
+                        child: SizedBox(
+                          height: size.height * 0.08,
+                          width: size.width * 0.8,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState?.validate() ??
+                                  false) {
+                                _bloc.add(LoginWithUsernameEvent(
+                                    usernameController.text,
+                                    passwordController.text));
+                              }
+                            },
+                            child: Text(
+                              'Đăng nhập',
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(10), // <-- Radius
+                                ),
+                                primary: Colors.red[900],
+                                onPrimary: Colors.white,
+                                textStyle: TextStyle(
+                                  fontSize: 18,
+                                )),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 20),
-                          child: SizedBox(
-                            height: size.height * 0.08,
-                            width: size.width * 0.8,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState?.validate() ??
-                                    false) {
-                                  _bloc.add(LoginWithUsernameEvent(
-                                      usernameController.text,
-                                      passwordController.text));
-                                }
-                              },
-                              child: Text(
-                                'Đăng nhập',
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(10), // <-- Radius
-                                  ),
-                                  primary: Colors.red[900],
-                                  onPrimary: Colors.white,
-                                  textStyle: TextStyle(
-                                    fontSize: 18,
-                                  )),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.fingerprint,
-                      color: AppColor.red,
-                      size: 50,
-                    ),
-                    onPressed: () {
-                      _bloc.add(LoginWithFingerprintEvent());
-                    },
-                  )
-                ]),
-              );
-            }),
-      ),
-    );
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.fingerprint,
+                    color: AppColor.red,
+                    size: 50,
+                  ),
+                  onPressed: () {
+                    _bloc.add(LoginWithFingerprintEvent());
+                  },
+                )
+              ]),
+            );
+          }),
+    ));
   }
 }

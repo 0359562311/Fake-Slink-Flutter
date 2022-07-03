@@ -44,16 +44,16 @@ import 'package:fakeslink/app/presentation/main_screen/main_screen.dart';
 import 'package:fakeslink/app/presentation/notifications/ui/notification_details.dart';
 import 'package:fakeslink/app/presentation/profile/bloc/profile_bloc.dart';
 import 'package:fakeslink/app/presentation/results/widget/result_screen.dart';
+import 'package:fakeslink/core/const/firebase_config.dart';
 import 'package:fakeslink/core/utils/device_info.dart';
 import 'package:fakeslink/core/utils/network_info.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:path_provider/path_provider.dart';
 import 'app/data/model/administrative_class_details_model.dart';
 import 'app/data/model/administrative_class_model.dart';
 import 'app/data/model/lecturer_model.dart';
@@ -79,11 +79,19 @@ import 'core/utils/share_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  Directory? appDocDir = await getExternalStorageDirectory();
-  String appDocPath = appDocDir?.path ?? "";
+  FirebaseOptions? options;
+  if(Platform.isAndroid) {
+    options = FirebaseOptions(
+      apiKey: FirebaseConfig.ANDROID_API_KEY,
+      appId: FirebaseConfig.ANDROID_APP_ID,
+      messagingSenderId: FirebaseConfig.SENDER_ID,
+      projectId: "fake-slink"
+    );
+  }
+  await Firebase.initializeApp(
+      options: options);
   Hive
-    ..init(appDocPath)
+    ..initFlutter()
     ..registerAdapter(StudentModelAdapter())
     ..registerAdapter(ScheduleModelAdapter())
     ..registerAdapter(RegisterableClassModelAdapter())
@@ -103,8 +111,8 @@ Future<void> init() async {
   GetIt getIt = GetIt.instance;
   getIt.registerLazySingleton(() => Semester(
       semesterId: "20211",
-      startAt: DateTime(2021, 08, 23),
-      endAt: DateTime(2021, 12, 31),
+      startAt: DateTime(2021, 12, 27),
+      endAt: DateTime(2022, 3, 13),
       weeks: 20));
   getIt.registerLazySingleton(() => GlobalKey<NavigatorState>());
 
@@ -127,7 +135,7 @@ Future<void> init() async {
   getIt.registerLazySingleton(() => Hive);
 
   var options = BaseOptions(
-      baseUrl: 'http://192.168.0.101:8000',
+      baseUrl: 'http://192.168.0.103:8000',
       connectTimeout: 60000,
       receiveTimeout: 60000,
       responseType: ResponseType.json);
@@ -282,7 +290,7 @@ class _MyAppState extends State<MyApp> {
               AdministrativeClassScreen(),
           AppRoute.listRegisterableClass: (context) =>
               ListRegisterableClassScreen(),
-              AppRoute.editProfile: (_) => EditProfileScreen()
+          AppRoute.editProfile: (_) => EditProfileScreen()
         },
         onGenerateRoute: (settings) {
           if (settings.name == AppRoute.registerableClassDetails) {

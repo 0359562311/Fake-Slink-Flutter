@@ -50,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
             return CustomScrollView(
               slivers: [
                 SliverPersistentHeader(
-                  delegate: SliverHeaderChildDelegateImpl(),
+                  delegate: SliverHeaderChildDelegateImpl(paddingTop: MediaQuery.of(context).padding.top),
                   pinned: true,
                 ),
                 const SliverToBoxAdapter(
