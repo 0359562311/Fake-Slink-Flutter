@@ -31,6 +31,6 @@ jobs:
       - name: build android
         run: |
           flutter pub get
-          flutter test
+          flutter test --coverage
           flutter build apk
     
