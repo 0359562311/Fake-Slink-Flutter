@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI-CD
 
 env:
   flutter_path: /opt/hostedtoolcache/flutter
@@ -42,14 +42,13 @@ jobs:
     runs-on: ubuntu-lastest
     needs: setup
     steps:
+      - uses: actions/checkout@v3
       - name: Verify Dockerfile changed
         uses: tj-actions/verify-changed-files@v5.5
         id: changed_files
         with:
           files: |
              pubspec.yaml
-      - uses: actions/checkout@v3
-        if: steps.changed_files.outputs.files_changed == 'true'
       - name: Cache Flutter
         if: steps.changed_files.outputs.files_changed == 'true'
         id: cache-flutter
