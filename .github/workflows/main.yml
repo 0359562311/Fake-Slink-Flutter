@@ -16,7 +16,7 @@ on:
     inputs:
       job:
         description: 'Job to run manually'
-        required: true
+        required: false
         default: 'build_ios'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -143,7 +143,7 @@ jobs:
       - name: build ios
         run: flutter build ios
           
-      - name: Archive apk artifacts
+      - name: Archive ipa artifacts
         uses: actions/upload-artifact@v3
         with:
           name: Dci.ipa
