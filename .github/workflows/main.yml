@@ -43,7 +43,7 @@ jobs:
     needs: setup
     steps:
       - uses: actions/checkout@v3
-      - name: Verify Dockerfile changed
+      - name: Verify pubspec.yaml changed
         uses: tj-actions/verify-changed-files@v5.5
         id: changed_files
         with:
@@ -98,6 +98,13 @@ jobs:
     needs: sync_dependencies
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v3
+      - name: Cache Flutter
+        id: cache-flutter
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.flutter_path }}
+          key: ${{ runner.os }}-flutter
       - name: build android
         run: flutter build apk
           
@@ -113,6 +120,13 @@ jobs:
     needs: sync_dependencies
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - uses: actions/checkout@v3
+      - name: Cache Flutter
+        id: cache-flutter
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.flutter_path }}
+          key: ${{ runner.os }}-flutter
       - name: build ios
         run: flutter build ios
           
