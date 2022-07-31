@@ -69,6 +69,7 @@ jobs:
           flutter pub get
           
       - name: Cache Flutter dependencies
+        if: steps.changed_files.outputs.files_changed == 'true'
         uses: actions/cache@v1
         with:
           path: ${{ env.flutter_path }}
