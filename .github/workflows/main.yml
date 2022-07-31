@@ -24,7 +24,7 @@ jobs:
 
   # Set up Flutter for all other tasks.
   setup:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v3
@@ -39,7 +39,7 @@ jobs:
           channel: 'stable'
 
   sync_dependencies:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-20.04
     needs: setup
     steps:
       - uses: actions/checkout@v3
@@ -75,7 +75,7 @@ jobs:
           key: ${{ runner.os }}-flutter
   
   test:
-    runs-on: ubuntu-lastest
+    runs-on: ubuntu-20.04
     needs: sync_dependencies
     steps:
       - uses: actions/checkout@v3
@@ -94,7 +94,7 @@ jobs:
 
   build_android_apk:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: sync_dependencies
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -109,7 +109,7 @@ jobs:
             build/app/outputs/flutter-apk/app.apk
             
   build_ios:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: sync_dependencies
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
